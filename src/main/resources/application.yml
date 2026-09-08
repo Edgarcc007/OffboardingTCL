@@ -16,21 +16,31 @@ spring:
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           time_zone: UTC
 
   flyway:
     enabled: true
     baseline-on-migrate: false
+    url: ${DATABASE_URL}
+    user: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jackson:
     default-property-inclusion: non_null
     serialization:
       write-dates-as-timestamps: false
 
+  sqlserver:
+    url: jdbc:sqlserver://10.138.96.98:1433;databaseName=TCL;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: "@Jun10r#08"
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
 server:
   address: 0.0.0.0
-  port: 8080
+  port: 8081
   error:
     include-message: never
     include-stacktrace: never

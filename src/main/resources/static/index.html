@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -692,14 +692,19 @@ td{
 
 
   <div class="grid">
-    <div>
-      <label>Employee name<span class="required-marker">*</span></label>
-      <input id="n" autocomplete="off" placeholder="Full name" required aria-required="true">
+        <div>
+      <label>Employee number<span class="required-marker">*</span></label>
+      <input id="idf" autocomplete="off"
+             placeholder="Type number and press Enter"
+             required aria-required="true"
+             onblur="buscarEmpleado()"
+             onkeydown="if(event.key==='Enter'){event.preventDefault();buscarEmpleado()}">
+      <div id="idf_status" style="font-size:11px;margin-top:3px;min-height:15px"></div>
     </div>
 
     <div>
-      <label>Employee number or identifier<span class="required-marker">*</span></label>
-      <input id="idf" autocomplete="off" placeholder="Employee number" required aria-required="true">
+      <label>Employee name<span class="required-marker">*</span></label>
+      <input id="n" autocomplete="off" placeholder="Auto-filled from employee number" required aria-required="true">
     </div>
 
     <div>
@@ -737,7 +742,7 @@ td{
     </div>
 
     <div>
-      <label>Offboarding type <span class="optional-marker">(optional)</span></label>
+      <label>Offboarding type<span class="required-marker">*</span></label>
       <select id="tipo">
         <option value="" selected disabled>Select a type</option>
         <option value="RENUNCIA">Resignation</option>
@@ -750,13 +755,13 @@ td{
     </div>
 
     <div>
-      <label>Effective date <span class="optional-marker">(optional)</span></label>
+      <label>Effective date<span class="required-marker">*</span></label>
       <input id="fecha" type="datetime-local">
     </div>
 
     <div>
-      <label>Risk level<span class="required-marker">*</span></label>
-      <select id="riesgo" required aria-required="true">
+      <label>Risk level <span class="optional-marker">(optional)</span></label>
+      <select id="riesgo">
         <option value="" selected disabled>Select a risk level</option>
         <option value="BAJO">Low</option>
         <option value="NORMAL">Normal</option>
@@ -2111,6 +2116,7 @@ async function validar(id) {
 }
 
 function limpiarCaptura() {
+  /* fecha default se setea al final */
   $('n').value = '';
   $('idf').value = '';
   $('mail').value = '';
@@ -2147,7 +2153,15 @@ function limpiarCaptura() {
     resultado.textContent = '';
   }
 
-  $('n').focus();
+  // Reset autocomplete styles
+  ['n', 'dep', 'work_area', 'jefe'].forEach(id => {
+    $(id).style.backgroundColor = '';
+    $(id).readOnly = false;
+  });
+  const idfStatus = $('idf_status');
+  if (idfStatus) { idfStatus.innerHTML = ''; }
+
+  $('idf').focus();
 }
 
 
@@ -2846,9 +2860,80 @@ async function recargar() {
   await Promise.all(tareas);
 }
 
+
+
+/* â”€â”€ AUTO-POPULATE desde premployee â”€â”€ */
+async function buscarEmpleado() {
+  const campo = $('idf');
+  const numero = (campo.value || '').trim();
+  const status = $('idf_status');
+  const autoCampos = ['n', 'dep', 'work_area', 'jefe'];
+
+  if (!numero) {
+    if (status) status.innerHTML = '';
+    autoCampos.forEach(function(id) {
+      $(id).style.backgroundColor = '';
+      $(id).readOnly = false;
+    });
+    return;
+  }
+
+  if (isNaN(numero)) {
+    if (status) status.innerHTML = '<span style="color:#a52314">Enter a numeric employee number</span>';
+    return;
+  }
+
+  if (status) status.innerHTML = '<span style="color:#5a6b7f">Searching...</span>';
+
+  try {
+    const resp = await api('/api/premployees/by-num/' + encodeURIComponent(numero));
+
+    if (resp.status === 200 && resp.data) {
+      const emp = resp.data;
+      $('n').value        = emp.employeeName || '';
+      $('dep').value      = emp.deptCode      || '';
+      $('work_area').value = emp.areaCode     || '';
+      $('jefe').value     = emp.superCode     || '';
+
+      autoCampos.forEach(function(id) {
+        $(id).style.backgroundColor = '#eef6ed';
+        $(id).readOnly = true;
+      });
+
+      if (status) status.innerHTML = '<span style="color:#146c42">&#10003; ' + esc(emp.employeeName) + '</span>';
+      log('Employee ' + numero + ' found: ' + (emp.employeeName || '-'));
+    } else {
+      autoCampos.forEach(function(id) {
+        $(id).style.backgroundColor = '';
+        $(id).readOnly = false;
+      });
+      if (status) status.innerHTML = '<span style="color:#a86e00">Not found - fill fields manually</span>';
+      log('Employee ' + numero + ' not found in premployee.', 'warn');
+    }
+  } catch (e) {
+    autoCampos.forEach(function(id) {
+      $(id).style.backgroundColor = '';
+      $(id).readOnly = false;
+    });
+    if (status) status.innerHTML = '<span style="color:#a52314">Connection error</span>';
+    log('Error looking up employee: ' + e.message, 'err');
+  }
+}
+
+/* â”€â”€ DEFAULT effective date = ahora â”€â”€ */
+function setDefaultFecha() {
+  const campo = $('fecha');
+  if (campo && !campo.value) {
+    const ahora = new Date();
+    ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+    campo.value = ahora.toISOString().slice(0, 16);
+  }
+}
+
 async function iniciar() {
   actualizarIndicadorSemana();
   limpiarCaptura();
+  setDefaultFecha();
 
   const sesionValida = await cargarSesion();
 
@@ -2896,7 +2981,7 @@ setInterval(() => {
     'INACTIVO': 'Inactive',
 
     'RECURSOS HUMANOS': 'Human Resources',
-    'TECNOLOGÍA DE LA INFORMACIÓN': 'Information Technology',
+    'TECNOLOGÁ DE LA INFORMACIÓN': 'Information Technology',
     'ADMINISTRADOR': 'Administrator',
 
     'CREADO': 'Created',
@@ -3044,3 +3129,4 @@ setInterval(() => {
 
 </body>
 </html>
+

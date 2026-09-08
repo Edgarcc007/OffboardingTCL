@@ -36,7 +36,6 @@ public record CreateOffboardingRequest(
         @Size(max = 150)
         String workArea,
 
-        @NotBlank(message = "Direct manager is required")
         @Size(max = 150)
         String managerName,
 
@@ -62,6 +61,17 @@ public record CreateOffboardingRequest(
 
         @Size(max = 250)
         String phoneDetails,
+        boolean fingerprintRegistered,
+
+        boolean faceidRegistered,
+
+        boolean eppAssigned,
+
+        boolean parkingAccess,
+
+        @Size(max = 40)
+        String employeeCategory,
+
 
         Set<AccessType> accesses,
 

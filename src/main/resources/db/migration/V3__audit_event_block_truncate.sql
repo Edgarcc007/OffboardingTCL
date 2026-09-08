@@ -1,4 +1,4 @@
--- Un trigger BEFORE DELETE de fila NO se dispara con TRUNCATE.
+﻿-- Un trigger BEFORE DELETE de fila NO se dispara con TRUNCATE.
 -- Sin esta proteccion, la bitacora se podria vaciar de un solo golpe.
 CREATE OR REPLACE FUNCTION fn_audit_event_block_truncate()
 RETURNS trigger

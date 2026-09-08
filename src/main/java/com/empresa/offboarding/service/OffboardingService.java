@@ -128,7 +128,7 @@ Set<String> selectionCodes = new HashSet<>();
         offboardingCase.setWorkArea(
                 request.workArea().trim());
         offboardingCase.setManagerName(
-                request.managerName().trim());
+                cleanNullable(request.managerName()));
         offboardingCase.setTerminationType(
                 terminationType);
         offboardingCase.setEffectiveAt(
@@ -158,6 +158,21 @@ Set<String> selectionCodes = new HashSet<>();
                         : null
         );
 
+
+        offboardingCase.setFingerprintRegistered(
+                request.fingerprintRegistered());
+
+        offboardingCase.setFaceidRegistered(
+                request.faceidRegistered());
+
+        offboardingCase.setEppAssigned(
+                request.eppAssigned());
+
+        offboardingCase.setParkingAccess(
+                request.parkingAccess());
+
+        offboardingCase.setEmployeeCategory(
+                cleanNullable(request.employeeCategory()));
         offboardingCase.setAccesses(
                 new HashSet<>(accesses));
 
@@ -644,6 +659,12 @@ Set<String> selectionCodes = new HashSet<>();
                 c.getComputerDetails(),
                 c.isPhoneAssigned(),
                 c.getPhoneDetails(),
+                c.isFingerprintRegistered(),
+                c.isFaceidRegistered(),
+                c.isEppAssigned(),
+                c.isParkingAccess(),
+                c.getEmployeeCategory(),
+                c.getPhotoUrl(),
                 c.getAccesses(),
                 c.getOtherAccesses(),
                 c.getRequestedBy(),

@@ -95,6 +95,24 @@ public class OffboardingCase {
     @Column(name = "phone_details", length = 250)
     private String phoneDetails;
 
+    @Column(name = "fingerprint_registered", nullable = false)
+    private boolean fingerprintRegistered;
+
+    @Column(name = "faceid_registered", nullable = false)
+    private boolean faceidRegistered;
+
+    @Column(name = "epp_assigned", nullable = false)
+    private boolean eppAssigned;
+
+    @Column(name = "parking_access", nullable = false)
+    private boolean parkingAccess;
+
+    @Column(name = "employee_category", length = 40)
+    private String employeeCategory;
+
+    @Column(name = "photo_url", length = 500)
+    private String photoUrl;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "offboarding_case_access",

@@ -27,6 +27,13 @@ public record OffboardingResponse(
         String computerDetails,
         boolean phoneAssigned,
         String phoneDetails,
+        boolean fingerprintRegistered,
+        boolean faceidRegistered,
+        boolean eppAssigned,
+        boolean parkingAccess,
+        String employeeCategory,
+        String photoUrl,
+
         Set<AccessType> accesses,
         String otherAccesses,
         String requestedBy,

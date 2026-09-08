@@ -1,4 +1,4 @@
--- Stores an independent six-digit counter for each calendar month.
+﻿-- Stores an independent six-digit counter for each calendar month.
 -- The row update is atomic and safe for concurrent requests.
 
 CREATE TABLE offboarding_case_monthly_counter (

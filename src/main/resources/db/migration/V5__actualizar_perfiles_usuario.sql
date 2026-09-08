@@ -1,4 +1,4 @@
--- Eliminar temporalmente la restricción anterior para poder
+﻿-- Eliminar temporalmente la restricciÃ³n anterior para poder
 -- sustituir los nombres de los perfiles.
 ALTER TABLE app_user_role
     DROP CONSTRAINT IF EXISTS ck_app_user_role;
@@ -9,7 +9,7 @@ SET role = 'IT_ENGINEER'
 WHERE role = 'EJECUTOR';
 
 -- Si una cuenta ya tiene AUDITOR y SEGURIDAD,
--- eliminar primero la asignación duplicada de SEGURIDAD.
+-- eliminar primero la asignaciÃ³n duplicada de SEGURIDAD.
 DELETE FROM app_user_role seguridad
 WHERE seguridad.role = 'SEGURIDAD'
   AND EXISTS (
@@ -25,7 +25,7 @@ UPDATE app_user_role
 SET role = 'AUDITOR'
 WHERE role = 'SEGURIDAD';
 
--- Registrar el nuevo catálogo permitido de perfiles.
+-- Registrar el nuevo catÃ¡logo permitido de perfiles.
 ALTER TABLE app_user_role
     ADD CONSTRAINT ck_app_user_role
     CHECK (

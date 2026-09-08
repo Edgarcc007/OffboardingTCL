@@ -1,4 +1,4 @@
-ALTER TABLE offboarding_case
+﻿ALTER TABLE offboarding_case
     ADD COLUMN computer_assigned BOOLEAN NOT NULL DEFAULT FALSE,
     ADD COLUMN computer_details VARCHAR(250),
     ADD COLUMN phone_assigned BOOLEAN NOT NULL DEFAULT FALSE,
@@ -58,16 +58,16 @@ WHERE system_name = 'CMP';
 
 UPDATE task_template
 SET selection_code = 'COMPUTER',
-    system_name = 'Equipo de cómputo',
+    system_name = 'Equipo de cÃ³mputo',
     task_name =
         'Recuperar computadora, cargador y accesorios asignados'
 WHERE system_name = 'Activos asignados';
 
 UPDATE task_template
 SET selection_code = 'PHONE',
-    system_name = 'Telefonía',
+    system_name = 'TelefonÃ­a',
     task_name =
-        'Recuperar teléfono y cancelar o reasignar la línea corporativa'
+        'Recuperar telÃ©fono y cancelar o reasignar la lÃ­nea corporativa'
 WHERE system_name = 'Telefonia';
 
 ALTER TABLE task_template

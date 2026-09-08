@@ -1,4 +1,4 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -302,6 +302,36 @@ td{
   font-size:12px
 }
 
+
+.case-details-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:8px 16px;
+  padding:12px 16px;
+  margin-bottom:12px;
+  background:#f8fafc;
+  border-radius:6px;
+  border:1px solid #e2e8f0;
+  font-size:13px
+}
+
+.detail-group{
+  display:flex;
+  flex-direction:column;
+  gap:2px
+}
+
+.detail-label{
+  font-size:11px;
+  color:#5a6b7f;
+  text-transform:uppercase;
+  letter-spacing:.5px
+}
+
+.detail-value{
+  font-weight:500;
+  color:#1e293b
+}
 .caso-body{
   display:none
 }
@@ -733,7 +763,7 @@ td{
       <input
         id="work_area"
         autocomplete="off"
-        placeholder="Example: Second floor ‚Äì Finance" required aria-required="true">
+        placeholder="Example: Second floor ñ Finance" required aria-required="true">
     </div>
 
     <div>
@@ -834,6 +864,55 @@ td{
     </div>
   </fieldset>
 
+
+  <fieldset class="selection-panel">
+    <legend>Additional information <span class="optional-marker">(optional)</span></legend>
+
+    <p class="selection-help">
+      Select all that apply to this employee.
+    </p>
+
+    <div class="selection-options">
+      <label class="selection-option">
+        <input
+          id="eq_fingerprint"
+          type="checkbox">
+        Fingerprint registered
+      </label>
+
+      <label class="selection-option">
+        <input
+          id="eq_faceid"
+          type="checkbox">
+        Face ID registered
+      </label>
+
+      <label class="selection-option">
+        <input
+          id="eq_epp"
+          type="checkbox">
+        EPP assigned
+      </label>
+
+      <label class="selection-option">
+        <input
+          id="eq_parking"
+          type="checkbox">
+        Parking access
+      </label>
+    </div>
+
+    <div class="assignment-detail">
+      <label>Employee category <span class="optional-marker">(optional)</span></label>
+      <select id="employee_category">
+        <option value="">ó Select ó</option>
+        <option value="DIRECTO">Directo</option>
+        <option value="INDIRECTO">Indirecto</option>
+        <option value="STAFF">Staff</option>
+        <option value="TEMPORAL">Temporal</option>
+      </select>
+    </div>
+  </fieldset>
   <fieldset class="selection-panel">
     <legend>Employee access <span class="optional-marker">(optional)</span></legend>
 
@@ -936,7 +1015,7 @@ td{
           <th>Identifier</th>
           <th>Department</th>
           <th>Building</th>
-          <th>√Årea</th>
+          <th>¡rea</th>
           <th>Offboarding type</th>
           <th>Effective date</th>
           <th>Status</th>
@@ -946,7 +1025,7 @@ td{
       <tbody id="tabla_registros_rh">
         <tr>
           <td colspan="10" class="empty-row">
-            Todav√≠a no has registrado bajas en esta sesi√≥n.
+            TodavÌa no has registrado bajas en esta sesiÛn.
           </td>
         </tr>
       </tbody>
@@ -1002,7 +1081,7 @@ td{
         class="rol"
         value="RECURSOS_HUMANOS"
         style="width:auto">
-      <b>Human Resources</b> ‚Äî solamente captura
+      <b>Human Resources</b> ó solamente captura
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1011,7 +1090,7 @@ td{
         class="rol"
         value="IT_ENGINEER"
         style="width:auto">
-      <b>IT Engineer</b> ‚Äî procesa tareas
+      <b>IT Engineer</b> ó procesa tareas
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1020,7 +1099,7 @@ td{
         class="rol"
         value="AUDITOR"
         style="width:auto">
-      <b>Auditor</b> ‚Äî consulta de solo lectura
+      <b>Auditor</b> ó consulta de solo lectura
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1029,7 +1108,7 @@ td{
         class="rol"
         value="ADMIN"
         style="width:auto">
-      <b>Administrador</b> ‚Äî control completo
+      <b>Administrador</b> ó control completo
     </label>
   </div>
 
@@ -1140,7 +1219,7 @@ td{
     <h3>Reset password</h3>
 
     <p style="font-size:12px;color:#66788c">
-      Deja estos campos vac√≠os si no deseas cambiarla.
+      Deja estos campos vacÌos si no deseas cambiarla.
     </p>
 
     <div class="password-grid">
@@ -1195,10 +1274,10 @@ td{
       type="button"
       class="audit-toggle"
       aria-expanded="false"
-      title="Expandir bit√°cora"
+      title="Expandir bit·cora"
       onclick="toggleAuditoria()">
 
-      <span class="audit-arrow">‚ñ∂</span>
+      <span class="audit-arrow">&#9654;</span>
     </button>
 
     <h2>Audit log</h2>
@@ -1217,7 +1296,7 @@ td{
             <th>Semana</th>
             <th>Fecha</th>
             <th>Actor</th>
-            <th>Acci√≥n</th>
+            <th>AcciÛn</th>
             <th>Entity</th>
             <th>Detalle</th>
           </tr>
@@ -1290,7 +1369,7 @@ function textoSemanaISO(valor) {
 
   return 'S' +
     String(resultado.week).padStart(2, '0') +
-    ' ¬∑ ' +
+    ' ∑ ' +
     resultado.year;
 }
 
@@ -1306,7 +1385,7 @@ function actualizarIndicadorSemana() {
   indicador.textContent =
     'Week ' +
     resultado.week +
-    ' ¬∑ ' +
+    ' ∑ ' +
     resultado.year;
 }
 
@@ -1339,8 +1418,8 @@ function toggleAuditoria() {
   boton.setAttribute(
     'title',
     expandir
-      ? 'Contraer bit√°cora'
-      : 'Expandir bit√°cora'
+      ? 'Contraer bit·cora'
+      : 'Expandir bit·cora'
   );
 }
 
@@ -1492,8 +1571,8 @@ function agregarRegistroRH(caso, solicitud) {
   });
 
   /*
-   * Mantener como m√°ximo los √∫ltimos 100 registros
-   * de la sesi√≥n actual del navegador.
+   * Mantener como m·ximo los ˙ltimos 100 registros
+   * de la sesiÛn actual del navegador.
    */
   guardarRegistrosRH(
     registros.slice(0, 100)
@@ -1515,7 +1594,7 @@ function renderizarRegistrosRH() {
     tabla.innerHTML = `
       <tr>
         <td colspan="10" class="empty-row">
-          Todav√≠a no has registrado bajas en esta sesi√≥n.
+          TodavÌa no has registrado bajas en esta sesiÛn.
         </td>
       </tr>
     `;
@@ -1562,15 +1641,15 @@ function nombrePerfil() {
   }
 
   if (tieneRol('RECURSOS_HUMANOS')) {
-    return 'Human Resources ‚Äî solamente captura';
+    return 'Human Resources ó solamente captura';
   }
 
   if (tieneRol('IT_ENGINEER')) {
-    return 'IT Engineer ‚Äî procesamiento de bajas';
+    return 'IT Engineer ó procesamiento de bajas';
   }
 
   if (tieneRol('AUDITOR')) {
-    return 'Auditor ‚Äî solo lectura';
+    return 'Auditor ó solo lectura';
   }
 
   return 'No profile autorizado';
@@ -1615,11 +1694,11 @@ function aplicarPermisos() {
 
   if (esAuditor && !esAdmin) {
     $('titulo_casos').textContent =
-      'Consulta de casos y tareas ‚Äî solo lectura';
+      'Consulta de casos y tareas ó solo lectura';
   }
   else if (esEngineer && !esAdmin) {
     $('titulo_casos').textContent =
-      'Procesamiento de bajas ‚Äî IT Engineer';
+      'Procesamiento de bajas ó IT Engineer';
   }
   else {
     $('titulo_casos').textContent =
@@ -1732,7 +1811,7 @@ function toggleCase(id) {
 async function cargarCases() {
   /*
    * Conservar abiertos los casos que el usuario
-   * ya hab√≠a desplegado antes de la actualizaci√≥n.
+   * ya habÌa desplegado antes de la actualizaciÛn.
    */
   const casosAbiertos = new Set(
     Array.from(
@@ -1790,7 +1869,7 @@ async function cargarCases() {
               title="${estaAbierto ? 'Contraer caso' : 'Expandir caso'}"
               onclick="toggleCase(${caso.id})">
 
-              <span class="case-arrow">‚ñ∂</span>
+              <span class="case-arrow">&#9654;</span>
             </button>
 
             <div class="case-summary">
@@ -1818,7 +1897,7 @@ async function cargarCases() {
                 &middot;
                 Building ${esc(caso.building || '-')}
                 &middot;
-                √Årea ${esc(caso.workArea || '-')}
+                ¡rea ${esc(caso.workArea || '-')}
                 &middot;
                 ${esc(caso.terminationType)}
                 &middot;
@@ -1838,6 +1917,45 @@ async function cargarCases() {
 
         <div class="caso-body">
           <div class="table-wrapper">
+          <div class="case-details-grid">
+            <div class="detail-group">
+              <span class="detail-label">Manager</span>
+              <span class="detail-value">${esc(caso.managerName || '-')}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Category</span>
+              <span class="detail-value">${esc(caso.employeeCategory || '-')}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Computer</span>
+              <span class="detail-value">${caso.computerAssigned ? '? ' + esc(caso.computerDetails || '') : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">${caso.phoneAssigned ? '? ' + esc(caso.phoneDetails || '') : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Fingerprint</span>
+              <span class="detail-value">${caso.fingerprintRegistered ? '?' : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Face ID</span>
+              <span class="detail-value">${caso.faceidRegistered ? '?' : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">EPP</span>
+              <span class="detail-value">${caso.eppAssigned ? '?' : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Parking</span>
+              <span class="detail-value">${caso.parkingAccess ? '?' : 'ó'}</span>
+            </div>
+            <div class="detail-group">
+              <span class="detail-label">Observations</span>
+              <span class="detail-value">${esc(caso.observations || '-')}</span>
+            </div>
+          </div>
+
             <table>
               <thead>
                 <tr>
@@ -1846,8 +1964,8 @@ async function cargarCases() {
                   <th>Vence</th>
                   <th>Status</th>
                   <th>Evidence</th>
-                  <th>Ejecut√≥</th>
-                  <th>Valid√≥</th>
+                  <th>EjecutÛ</th>
+                  <th>ValidÛ</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -1908,7 +2026,7 @@ async function cargarAudit() {
     $('audit').innerHTML = `
       <tr>
         <td colspan="7">
-          No fue posible consultar la bit√°cora.
+          No fue posible consultar la bit·cora.
           HTTP ${respuesta.status}
         </td>
       </tr>
@@ -1935,7 +2053,7 @@ async function cargarAudit() {
     $('audit').innerHTML = `
       <tr>
         <td colspan="7" class="empty-row">
-          No existen eventos de auditor√≠a.
+          No existen eventos de auditorÌa.
         </td>
       </tr>
     `;
@@ -2038,9 +2156,9 @@ async function reabrir(id) {
   }
 
   const confirmar = confirm(
-    'La tarea regresar√° a estado PENDIENTE.\n\n' +
-    'Ser√° necesario procesarla nuevamente.\n\n' +
-    '¬øDeseas continuar?'
+    'La tarea regresar· a estado PENDIENTE.\n\n' +
+    'Ser· necesario procesarla nuevamente.\n\n' +
+    'øDeseas continuar?'
   );
 
   if (!confirmar) {
@@ -2101,7 +2219,7 @@ async function validar(id) {
   }
   else if (respuesta.status === 403) {
     log(
-      'La validaci√≥n debe realizarla una persona diferente a quien complet√≥ la tarea.',
+      'La validaciÛn debe realizarla una persona diferente a quien completÛ la tarea.',
       'warn'
     );
   }
@@ -2128,6 +2246,11 @@ function limpiarCaptura() {
   $('eq_computer').checked = false;
   $('eq_phone').checked = false;
   $('computer_details').value = '';
+  $('eq_fingerprint').checked = false;
+  $('eq_faceid').checked = false;
+  $('eq_epp').checked = false;
+  $('eq_parking').checked = false;
+  $('employee_category').value = '';
   $('phone_details').value = '';
   $('access_other').checked = false;
   $('other_accesses').value = '';
@@ -2337,6 +2460,22 @@ async function crearCase() {
       $('phone_details').value.trim()
         || null,
 
+
+    fingerprintRegistered:
+      $('eq_fingerprint').checked,
+
+    faceidRegistered:
+      $('eq_faceid').checked,
+
+    eppAssigned:
+      $('eq_epp').checked,
+
+    parkingAccess:
+      $('eq_parking').checked,
+
+    employeeCategory:
+      $('employee_category').value.trim()
+        || null,
     accesses:
       accesosSeleccionados,
 
@@ -2502,8 +2641,8 @@ async function crearUsername() {
     alert(
       'Username creado correctamente.\n\n'
       + 'Username: ' + username + '\n'
-      + 'Contrase√±a: ' + password + '\n\n'
-      + 'Esta contrase√±a no volver√° a mostrarse.'
+      + 'ContraseÒa: ' + password + '\n\n'
+      + 'Esta contraseÒa no volver· a mostrarse.'
     );
 
     $('nu_user').value = '';
@@ -2681,14 +2820,14 @@ async function guardarEditUsername() {
     if (password !== passwordConfirm) {
       aviso.className = 'notice error';
       aviso.textContent =
-        'La confirmaci√≥n no coincide.';
+        'La confirmaciÛn no coincide.';
       return;
     }
 
     if (!passwordSegura(password)) {
       aviso.className = 'notice error';
       aviso.textContent =
-        'La contrase√±a debe incluir may√∫scula, min√∫scula, n√∫mero y s√≠mbolo.';
+        'La contraseÒa debe incluir may˙scula, min˙scula, n˙mero y sÌmbolo.';
       return;
     }
   }
@@ -2731,7 +2870,7 @@ async function guardarEditUsername() {
         cambioPassword.data &&
         cambioPassword.data.detail
           ? cambioPassword.data.detail
-          : 'Los datos se actualizaron, pero la contrase√±a no pudo cambiarse. HTTP '
+          : 'Los datos se actualizaron, pero la contraseÒa no pudo cambiarse. HTTP '
             + cambioPassword.status;
 
       await cargarUsernames();
@@ -2747,7 +2886,7 @@ async function guardarEditUsername() {
 
   alert(
     password
-      ? 'Username y contrase√±a actualizados correctamente.'
+      ? 'Username y contraseÒa actualizados correctamente.'
       : 'Username actualizado correctamente.'
   );
 }
@@ -2756,14 +2895,14 @@ async function guardarEditUsername() {
 async function validarActive(taskId) {
   if (!tieneRol('ADMIN')) {
     alert(
-      'Solamente un administrador puede validar la recepci√≥n.'
+      'Solamente un administrador puede validar la recepciÛn.'
     );
 
     return;
   }
 
   const activoRecibido = confirm(
-    '¬øConfirmas que el equipo o tel√©fono fue recibido f√≠sicamente?'
+    'øConfirmas que el equipo o telÈfono fue recibido fÌsicamente?'
   );
 
   if (!activoRecibido) {
@@ -2771,7 +2910,7 @@ async function validarActive(taskId) {
   }
 
   const inventarioActualizado = confirm(
-    '¬øConfirmas que el inventario de activos ya fue actualizado?'
+    'øConfirmas que el inventario de activos ya fue actualizado?'
   );
 
   if (!inventarioActualizado) {
@@ -2779,7 +2918,7 @@ async function validarActive(taskId) {
   }
 
   const referencia = prompt(
-    'Escribe el n√∫mero de activo, folio o referencia de inventario:'
+    'Escribe el n˙mero de activo, folio o referencia de inventario:'
   );
 
   if (referencia === null) {
@@ -2795,7 +2934,7 @@ async function validarActive(taskId) {
   }
 
   const comentarios = prompt(
-    'Comments adicionales de validaci√≥n (optional):'
+    'Comments adicionales de validaciÛn (optional):'
   );
 
   if (comentarios === null) {
@@ -2818,7 +2957,7 @@ async function validarActive(taskId) {
 
   if (respuesta.status === 200) {
     alert(
-      'Recepci√≥n del activo e inventario validados correctamente.'
+      'RecepciÛn del activo e inventario validados correctamente.'
     );
 
     await cargarCases();
@@ -2862,12 +3001,12 @@ async function recargar() {
 
 
 
-/* √¢‚Äù‚Ç¨√¢‚Äù‚Ç¨ AUTO-POPULATE desde premployee √¢‚Äù‚Ç¨√¢‚Äù‚Ç¨ */
+/* ‚îÄ‚îÄ AUTO-POPULATE desde premployee ‚îÄ‚îÄ */
 async function buscarEmpleado() {
   const campo = $('idf');
   const numero = (campo.value || '').trim();
   const status = $('idf_status');
-  const autoCampos = ['n', 'dep', 'work_area', 'jefe'];
+  const autoCampos = ['n', 'dep', 'work_area'];
 
   if (!numero) {
     if (status) status.innerHTML = '';
@@ -2892,8 +3031,8 @@ async function buscarEmpleado() {
       const emp = resp.data;
       $('n').value        = emp.employeeName || '';
       $('dep').value      = emp.deptCode      || '';
-      $('work_area').value = emp.areaCode     || '';
-      $('jefe').value     = emp.superCode     || '';
+      $('work_area').value = emp.superCode    || '';
+      $('jefe').value     = '';
 
       autoCampos.forEach(function(id) {
         $(id).style.backgroundColor = '#eef6ed';
@@ -2920,7 +3059,7 @@ async function buscarEmpleado() {
   }
 }
 
-/* √¢‚Äù‚Ç¨√¢‚Äù‚Ç¨ DEFAULT effective date = ahora √¢‚Äù‚Ç¨√¢‚Äù‚Ç¨ */
+/* ‚îÄ‚îÄ DEFAULT effective date = ahora ‚îÄ‚îÄ */
 function setDefaultFecha() {
   const campo = $('fecha');
   if (campo && !campo.value) {
@@ -2981,7 +3120,7 @@ setInterval(() => {
     'INACTIVO': 'Inactive',
 
     'RECURSOS HUMANOS': 'Human Resources',
-    'TECNOLOG√Å DE LA INFORMACI√ìN': 'Information Technology',
+    'TECNOLOG¡ DE LA INFORMACI”N': 'Information Technology',
     'ADMINISTRADOR': 'Administrator',
 
     'CREADO': 'Created',
@@ -3020,7 +3159,7 @@ setInterval(() => {
       'User updated successfully.'
     ],
     [
-      'Contrase√±a actualizada correctamente.',
+      'ContraseÒa actualizada correctamente.',
       'Password updated successfully.'
     ]
   ];

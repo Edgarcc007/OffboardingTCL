@@ -1,0 +1,3046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Employee Offboarding Control</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  font-family:system-ui,Segoe UI,sans-serif;
+  margin:0;
+  background:#eef1f5;
+  color:#1c2530
+}
+
+header{
+  background:#12263f;
+  color:#fff;
+  padding:18px 26px
+}
+
+header h1{
+  margin:0;
+  font-size:19px;
+  letter-spacing:.3px
+}
+
+header p{
+  margin:4px 0 0;
+  font-size:13px;
+  opacity:.75
+}
+
+main{
+  max-width:1180px;
+  margin:22px auto;
+  padding:0 16px
+}
+
+.hidden{
+  display:none!important
+}
+
+.card{
+  background:#fff;
+  border-radius:8px;
+  padding:18px 20px;
+  margin-bottom:18px;
+  box-shadow:0 1px 3px rgba(0,0,0,.12)
+}
+
+.card h2{
+  margin:0 0 14px;
+  font-size:15px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:#3f5875;
+  border-bottom:2px solid #e3e8ee;
+  padding-bottom:8px
+}
+
+.session-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap
+}
+
+.session-info{
+  font-size:13px;
+  color:#42556c
+}
+
+.session-info strong{
+  color:#12263f
+}
+
+.session-roles{
+  margin-top:5px;
+  font-size:11px;
+  color:#66788c
+}
+
+.profile-label{
+  display:inline-block;
+  margin-top:7px;
+  padding:3px 10px;
+  border-radius:12px;
+  background:#d7e9fb;
+  color:#14548c;
+  font-size:11px;
+  font-weight:700
+}
+
+.session-actions{
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.session-actions form{
+  margin:0
+}
+
+.session-actions button{
+  margin-top:0
+}
+
+button.logout{
+  background:#b3261e
+}
+
+button.logout:hover{
+  background:#8e1d17
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  color:#5a6b7f;
+  margin:8px 0 3px
+}
+
+input,select,textarea{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid #c8d2de;
+  border-radius:5px;
+  font-size:13px;
+  font-family:inherit
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:0 14px
+}
+
+button{
+  background:#12263f;
+  color:#fff;
+  border:0;
+  padding:9px 16px;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  margin-top:12px
+}
+
+button:hover{
+  background:#1d3a5f
+}
+
+button.mini{
+  padding:5px 10px;
+  font-size:11px;
+  margin:2px 3px 2px 0
+}
+
+button.ok{
+  background:#1c7a4a
+}
+
+button.ok:hover{
+  background:#239159
+}
+
+button.val{
+  background:#8a5a00
+}
+
+button.val:hover{
+  background:#a86e00
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px
+}
+
+th{
+  background:#f4f7fa;
+  text-align:left;
+  padding:8px;
+  font-size:11px;
+  text-transform:uppercase;
+  color:#5a6b7f;
+  border-bottom:2px solid #e3e8ee
+}
+
+td{
+  padding:8px;
+  border-bottom:1px solid #eef1f5;
+  vertical-align:top
+}
+
+.table-wrapper{
+  width:100%;
+  overflow-x:auto
+}
+
+.pill{
+  display:inline-block;
+  padding:2px 9px;
+  border-radius:11px;
+  font-size:11px;
+  font-weight:700;
+  margin:1px
+}
+
+.PENDIENTE{
+  background:#fdf0d5;
+  color:#8a5a00
+}
+
+.COMPLETADA{
+  background:#d7e9fb;
+  color:#14548c
+}
+
+.VALIDADA{
+  background:#d5f0e0;
+  color:#146c42
+}
+
+.CRITICO,.ALTO{
+  background:#fbdcd8;
+  color:#a52314
+}
+
+.NORMAL,.BAJO{
+  background:#e2e7ee;
+  color:#42556c
+}
+
+.crit{
+  color:#a52314;
+  font-weight:700
+}
+
+
+.case-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%
+}
+
+.case-toggle{
+  flex:0 0 auto;
+  width:31px;
+  height:31px;
+  margin:0;
+  padding:0;
+  border-radius:50%;
+  background:#e5ebf2;
+  color:#12263f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer
+}
+
+.case-toggle:hover{
+  background:#d2dce8
+}
+
+.case-arrow{
+  display:inline-block;
+  font-size:13px;
+  transition:transform .18s ease
+}
+
+.caso.expanded .case-arrow{
+  transform:rotate(90deg)
+}
+
+.case-summary{
+  flex:1;
+  min-width:0
+}
+
+.case-summary-main{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap
+}
+
+.case-summary-secondary{
+  margin-top:3px;
+  color:#5a6b7f;
+  font-size:12px
+}
+
+.caso-body{
+  display:none
+}
+
+.caso.expanded .caso-body{
+  display:block
+}
+
+.case-count{
+  color:#5a6b7f;
+  font-size:11px;
+  white-space:nowrap
+}
+
+.empty-row{
+  padding:14px;
+  text-align:center;
+  color:#66788c
+}
+
+.caso{
+  border:1px solid #dde4ec;
+  border-radius:7px;
+  margin-bottom:14px;
+  overflow:hidden
+}
+
+.caso-h{
+  background:#f7f9fc;
+  padding:11px 14px;
+  border-bottom:1px solid #dde4ec
+}
+
+.caso-h b{
+  font-size:14px
+}
+
+.meta{
+  font-size:12px;
+  color:#5a6b7f;
+  margin-top:3px
+}
+
+.notice{
+  border-radius:6px;
+  padding:10px 12px;
+  margin-top:12px;
+  font-size:13px;
+  display:none
+}
+
+.notice.ok{
+  display:block;
+  color:#146c42;
+  background:#d5f0e0;
+  border:1px solid #acd9bf
+}
+
+.notice.error{
+  display:block;
+  color:#a52314;
+  background:#fbdcd8;
+  border:1px solid #e9b1aa
+}
+
+#log{
+  background:#0f1b2b;
+  color:#b8f0c8;
+  font-family:Consolas,monospace;
+  font-size:12px;
+  padding:12px;
+  border-radius:6px;
+  height:150px;
+  overflow-y:auto;
+  white-space:pre-wrap
+}
+
+.err{color:#ff8f7d}
+.warn{color:#ffd479}
+
+.header-content{
+  max-width:1180px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:17px
+}
+
+.brand-logo{
+  width:88px;
+  height:auto;
+  flex:0 0 auto;
+  display:block
+}
+
+.header-text{
+  min-width:0;
+  flex:1
+}
+
+.header-department{
+  margin-top:3px;
+  color:#ffffff;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.4px
+}
+
+.week-indicator{
+  flex:0 0 auto;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.23);
+  border-radius:18px;
+  padding:7px 13px;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap
+}
+
+.collapsible-card-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:2px solid #e3e8ee;
+  padding-bottom:8px;
+  margin-bottom:0
+}
+
+.collapsible-card-header h2{
+  flex:1;
+  margin:0;
+  padding:0;
+  border:0
+}
+
+.audit-toggle{
+  flex:0 0 auto;
+  width:31px;
+  height:31px;
+  margin:0;
+  padding:0;
+  border-radius:50%;
+  background:#e5ebf2;
+  color:#12263f;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.audit-toggle:hover{
+  background:#d2dce8
+}
+
+.audit-arrow{
+  display:inline-block;
+  transition:transform .18s ease
+}
+
+#seccion_auditoria.expanded .audit-arrow{
+  transform:rotate(90deg)
+}
+
+.audit-body{
+  margin-top:14px
+}
+
+.reopen{
+  background:#6d3fa0
+}
+
+.reopen:hover{
+  background:#8150b6
+}
+
+@media(max-width:700px){
+  .header-content{
+    align-items:flex-start;
+    flex-wrap:wrap
+  }
+
+  .brand-logo{
+    width:70px
+  }
+
+  .week-indicator{
+    width:100%;
+    text-align:center
+  }
+}
+
+
+/* FEATURE_V7_EQUIPOS_ACCESOS */
+.selection-panel{
+  margin:18px 0;
+  padding:16px;
+  border:1px solid #d8e0e8;
+  border-radius:8px;
+  background:#f8fafc
+}
+
+.selection-panel legend{
+  padding:0 8px;
+  font-weight:700;
+  color:#24364b
+}
+
+.selection-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 24px;
+  margin:8px 0
+}
+
+.selection-option{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin:0;
+  font-weight:500;
+  cursor:pointer
+}
+
+.selection-option input{
+  width:auto;
+  margin:0
+}
+
+.assignment-detail{
+  margin-top:13px
+}
+
+.assignment-detail label{
+  display:block;
+  margin-bottom:5px
+}
+
+.selection-help{
+  margin:5px 0 12px;
+  color:#66788c;
+  font-size:12px
+}
+
+
+/* FEATURE_ADMINISTRACION_USUARIOS_V3 */
+.password-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px
+}
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.55)
+}
+
+.modal-panel{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  padding:22px;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 18px 50px rgba(0,0,0,.3)
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px
+}
+
+.user-actions{
+  white-space:nowrap
+}
+
+
+/* FEATURE_CORREO_OPCIONAL_USUARIOS */
+.required-marker{
+  color:#c62828;
+  font-weight:800;
+  margin-left:3px
+}
+
+.optional-marker{
+  color:#66788c;
+  font-size:12px;
+  font-weight:400
+}
+
+.required-legend{
+  margin:4px 0 14px;
+  color:#66788c;
+  font-size:12px
+}
+
+.no-email{
+  color:#78899a;
+  font-size:12px;
+  font-style:italic
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-content">
+
+    <img
+      src="/images/tcl-logo.svg"
+      class="brand-logo"
+      alt="TCL">
+
+    <div class="header-text">
+      <h1>Employee Offboarding Control</h1>
+
+      <div class="header-department">
+        Human Resources
+      </div>
+
+      <p>
+        Access revocation with evidence,
+        dual validation and an immutable audit log
+      </p>
+    </div>
+
+    <div id="week_indicator" class="week-indicator">
+      Calculating week...
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+<div class="card session-card">
+  <div class="session-info">
+    <div>
+      <strong>Signed-in user:</strong>
+      <span id="usuario_actual">Loading...</span>
+    </div>
+
+    <div id="roles_actuales" class="session-roles"></div>
+    <div id="perfil_actual" class="profile-label hidden"></div>
+  </div>
+
+  <div class="session-actions">
+    <button
+      id="btn_recargar"
+      type="button"
+      onclick="recargar()">
+      Refresh information
+    </button>
+
+    <form method="post" action="/logout">
+      <button type="submit" class="logout">
+        Sign out
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<div id="sin_permisos" class="card hidden">
+  <h2>No assigned profile</h2>
+  <p>
+    Your account is active, but it does not have an authorized profile.
+    Contact the Offboarding administrator.
+  </p>
+</div>
+
+<div id="seccion_captura" class="card hidden">
+  <h2>Register employee offboarding</h2>
+  <!-- FEATURE_CAMPOS_CAPTURA_BAJA_FINAL -->
+  <p class="required-legend">
+    <span class="required-marker">*</span>
+    Required field. All other fields are optional.
+  </p>
+
+
+  <div class="grid">
+    <div>
+      <label>Employee name<span class="required-marker">*</span></label>
+      <input id="n" autocomplete="off" placeholder="Full name" required aria-required="true">
+    </div>
+
+    <div>
+      <label>Employee number or identifier<span class="required-marker">*</span></label>
+      <input id="idf" autocomplete="off" placeholder="Employee number" required aria-required="true">
+    </div>
+
+    <div>
+      <label>Corporate email <span class="optional-marker">(optional)</span></label>
+      <input id="mail" type="email" autocomplete="off" placeholder="employee@company.com">
+    </div>
+
+    <div>
+      <label>Department<span class="required-marker">*</span></label>
+      <input id="dep" autocomplete="off" placeholder="Department" required aria-required="true">
+    </div>
+
+
+    <div>
+      <label>Building <span class="optional-marker">(optional)</span></label>
+
+      <input
+        id="building"
+        autocomplete="off"
+        placeholder="Ejemplo: Building A">
+    </div>
+
+    <div>
+      <label>Work area<span class="required-marker">*</span></label>
+
+      <input
+        id="work_area"
+        autocomplete="off"
+        placeholder="Example: Second floor – Finance" required aria-required="true">
+    </div>
+
+    <div>
+      <label>Direct manager<span class="required-marker">*</span></label>
+      <input id="jefe" autocomplete="off" placeholder="Manager name" required aria-required="true">
+    </div>
+
+    <div>
+      <label>Offboarding type <span class="optional-marker">(optional)</span></label>
+      <select id="tipo">
+        <option value="" selected disabled>Select a type</option>
+        <option value="RENUNCIA">Resignation</option>
+        <option value="DESPIDO">Termination</option>
+        <option value="FIN_DE_CONTRATO">End of contract</option>
+        <option value="JUBILACION">Retirement</option>
+        <option value="MUTUO_ACUERDO">Mutual agreement</option>
+        <option value="FALLECIMIENTO">Deceased</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Effective date <span class="optional-marker">(optional)</span></label>
+      <input id="fecha" type="datetime-local">
+    </div>
+
+    <div>
+      <label>Risk level<span class="required-marker">*</span></label>
+      <select id="riesgo" required aria-required="true">
+        <option value="" selected disabled>Select a risk level</option>
+        <option value="BAJO">Low</option>
+        <option value="NORMAL">Normal</option>
+        <option value="ALTO">High</option>
+        <option value="CRITICO">Critical</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Confidential <span class="optional-marker">(optional)</span></label>
+      <select id="conf">
+        <option value="" selected disabled>Select an option</option>
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+      </select>
+    </div>
+  </div>
+
+
+  <fieldset class="selection-panel">
+    <legend>Equipment assigned to the employee <span class="optional-marker">(optional)</span></legend>
+
+    <p class="selection-help">
+      Seleccione los equipos que Human Resources tiene
+      registrados como asignados.
+    </p>
+
+    <div class="selection-options">
+      <label class="selection-option">
+        <input
+          id="eq_computer"
+          type="checkbox"
+          onchange="actualizarCamposAsignacion()">
+        Computer
+      </label>
+
+      <label class="selection-option">
+        <input
+          id="eq_phone"
+          type="checkbox"
+          onchange="actualizarCamposAsignacion()">
+        Phone
+      </label>
+    </div>
+
+    <div
+      id="computer_details_container"
+      class="assignment-detail hidden">
+
+      <label>Computer identification <span class="optional-marker">(optional)</span></label>
+
+      <input
+        id="computer_details"
+        maxlength="250"
+        autocomplete="off"
+        placeholder="Asset tag, hostname, model, or description">
+    </div>
+
+    <div
+      id="phone_details_container"
+      class="assignment-detail hidden">
+
+      <label>Phone identification <span class="optional-marker">(optional)</span></label>
+
+      <input
+        id="phone_details"
+        maxlength="250"
+        autocomplete="off"
+        placeholder="Asset tag, phone number, IMEI, or description">
+    </div>
+  </fieldset>
+
+  <fieldset class="selection-panel">
+    <legend>Employee access <span class="optional-marker">(optional)</span></legend>
+
+    <p class="selection-help">
+      Select all applicable access types.
+    </p>
+
+    <div class="selection-options">
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="offboarding-access"
+          value="WINDOWS">
+        Windows
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="offboarding-access"
+          value="OFFICE">
+        Office
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="offboarding-access"
+          value="SMES">
+        SMES
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="offboarding-access"
+          value="CMP">
+        CMP
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="offboarding-access"
+          value="VPN">
+        VPN
+      </label>
+
+      <label class="selection-option">
+        <input
+          id="access_other"
+          type="checkbox"
+          class="offboarding-access"
+          value="OTHER"
+          onchange="actualizarCamposAsignacion()">
+        Other
+      </label>
+    </div>
+
+    <div
+      id="other_access_container"
+      class="assignment-detail hidden">
+
+      <label>Specify other access <span class="optional-marker">(optional)</span></label>
+
+      <textarea
+        id="other_accesses"
+        rows="3"
+        maxlength="1000"
+        autocomplete="off"
+        placeholder="Additional systems, applications, portals, or permissions"></textarea>
+    </div>
+  </fieldset>
+
+  <label>Comments <span class="optional-marker">(optional)</span></label>
+  <textarea id="obs" autocomplete="off" rows="3"></textarea>
+
+  <button onclick="crearCase()">
+    Register offboarding
+  </button>
+
+  <div id="resultado_captura" class="notice"></div>
+</div>
+
+
+<div id="seccion_registros_rh" class="card hidden">
+  <h2>Records created during this session</h2>
+
+  <p style="font-size:12px;color:#66788c;margin-top:-5px">
+    Each registered offboarding case will be added as a new row.
+  </p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Case</th>
+          <th>Employee</th>
+          <th>Identifier</th>
+          <th>Department</th>
+          <th>Building</th>
+          <th>Área</th>
+          <th>Offboarding type</th>
+          <th>Effective date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody id="tabla_registros_rh">
+        <tr>
+          <td colspan="10" class="empty-row">
+            Todavía no has registrado bajas en esta sesión.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="seccion_usuarios" class="card hidden">
+  <h2>User administration</h2>
+  <p class="required-legend">
+    <span class="required-marker">*</span>
+    Campo obligatorio
+  </p>
+
+
+  <div class="grid">
+    <div>
+      <label>Username<span class="required-marker">*</span></label>
+      <input id="nu_user" autocomplete="off" placeholder="nombre.apellido">
+    </div>
+
+    <div>
+      <label>Full name<span class="required-marker">*</span></label>
+      <input id="nu_nombre" autocomplete="off" placeholder="First name Last name">
+    </div>
+
+    <div>
+      <label>Email <span class="optional-marker">(optional)</span></label>
+      <input id="nu_mail" autocomplete="off" placeholder="user@company.com">
+    </div>
+
+    <div>
+      <label>Temporary password<span class="required-marker">*</span></label>
+      <input id="nu_pass" type="password" autocomplete="new-password"
+        placeholder="At least 12 characters">
+
+      <button
+        class="mini"
+        type="button"
+        onclick="generarPass()">
+        Generar
+      </button>
+    </div>
+  </div>
+
+  <label>Assigned profiles<span class="required-marker">*</span></label>
+
+  <div style="font-size:13px;line-height:1.9;padding:6px 0">
+
+    <label style="display:inline-block;margin-right:20px;font-weight:400">
+      <input
+        type="checkbox"
+        class="rol"
+        value="RECURSOS_HUMANOS"
+        style="width:auto">
+      <b>Human Resources</b> — solamente captura
+    </label>
+
+    <label style="display:inline-block;margin-right:20px;font-weight:400">
+      <input
+        type="checkbox"
+        class="rol"
+        value="IT_ENGINEER"
+        style="width:auto">
+      <b>IT Engineer</b> — procesa tareas
+    </label>
+
+    <label style="display:inline-block;margin-right:20px;font-weight:400">
+      <input
+        type="checkbox"
+        class="rol"
+        value="AUDITOR"
+        style="width:auto">
+      <b>Auditor</b> — consulta de solo lectura
+    </label>
+
+    <label style="display:inline-block;margin-right:20px;font-weight:400">
+      <input
+        type="checkbox"
+        class="rol"
+        value="ADMIN"
+        style="width:auto">
+      <b>Administrador</b> — control completo
+    </label>
+  </div>
+
+  <div
+    id="nu_aviso"
+    style="font-size:12px;color:#a52314;font-weight:600;min-height:17px">
+  </div>
+
+  <button onclick="crearUsername()">
+    Create user
+  </button>
+
+  <div class="table-wrapper" style="margin-top:18px">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Perfiles</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tabla_usuarios"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<div id="modal_usuario" class="modal-overlay hidden">
+  <div class="modal-panel">
+    <h2>Edit user</h2>
+    <p class="required-legend">
+      <span class="required-marker">*</span>
+      Campo obligatorio
+    </p>
+
+
+    <input id="eu_id" type="hidden">
+
+    <div class="grid">
+      <div>
+        <label>Username</label>
+        <input id="eu_username" disabled>
+      </div>
+
+      <div>
+        <label>Full name<span class="required-marker">*</span></label>
+        <input id="eu_nombre" maxlength="150">
+      </div>
+
+      <div>
+        <label>Email <span class="optional-marker">(optional)</span></label>
+        <input
+          id="eu_mail"
+          type="email"
+          maxlength="150">
+      </div>
+
+      <div>
+        <label class="selection-option">
+          <input id="eu_enabled" type="checkbox">
+          Active account
+        </label>
+      </div>
+    </div>
+
+    <label>Assigned profiles</label>
+
+    <div class="selection-options">
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="eu_rol"
+          value="RECURSOS_HUMANOS">
+        Human Resources
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="eu_rol"
+          value="IT_ENGINEER">
+        IT Engineer
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="eu_rol"
+          value="AUDITOR">
+        Auditor
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="eu_rol"
+          value="ADMIN">
+        Administrador
+      </label>
+    </div>
+
+    <hr>
+
+    <h3>Reset password</h3>
+
+    <p style="font-size:12px;color:#66788c">
+      Deja estos campos vacíos si no deseas cambiarla.
+    </p>
+
+    <div class="password-grid">
+      <div>
+        <label>New password</label>
+        <input
+          id="eu_password"
+          type="password"
+          autocomplete="new-password">
+      </div>
+
+      <div>
+        <label>Confirm password</label>
+        <input
+          id="eu_password_confirm"
+          type="password"
+          autocomplete="new-password">
+      </div>
+    </div>
+
+    <div id="eu_aviso" class="notice"></div>
+
+    <div class="modal-actions">
+      <button
+        type="button"
+        class="logout"
+        onclick="cerrarEditUsername()">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        onclick="guardarEditUsername()">
+        Save changes
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div id="seccion_casos" class="card hidden">
+  <h2 id="titulo_casos">Cases y tareas</h2>
+  <div id="casos">Loading...</div>
+</div>
+
+<div id="seccion_auditoria" class="card hidden">
+
+  <div class="collapsible-card-header">
+
+    <button
+      id="btn_audit_toggle"
+      type="button"
+      class="audit-toggle"
+      aria-expanded="false"
+      title="Expandir bitácora"
+      onclick="toggleAuditoria()">
+
+      <span class="audit-arrow">▶</span>
+    </button>
+
+    <h2>Audit log</h2>
+
+    <span id="audit_count" class="case-count">
+      0 eventos
+    </span>
+  </div>
+
+  <div id="audit_body" class="audit-body hidden">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Semana</th>
+            <th>Fecha</th>
+            <th>Actor</th>
+            <th>Acción</th>
+            <th>Entity</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+
+        <tbody id="audit"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="seccion_log" class="card hidden">
+  <h2>Session activity</h2>
+  <div id="log"></div>
+</div>
+
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let rolesActuales = new Set();
+let usuarioActual = '';
+
+
+function obtenerSemanaISO(valor) {
+  const fecha = valor
+    ? new Date(valor)
+    : new Date();
+
+  const fechaUTC = new Date(
+    Date.UTC(
+      fecha.getFullYear(),
+      fecha.getMonth(),
+      fecha.getDate()
+    )
+  );
+
+  const dia = fechaUTC.getUTCDay() || 7;
+
+  fechaUTC.setUTCDate(
+    fechaUTC.getUTCDate() + 4 - dia
+  );
+
+  const inicioAnio = new Date(
+    Date.UTC(
+      fechaUTC.getUTCFullYear(),
+      0,
+      1
+    )
+  );
+
+  const semana = Math.ceil(
+    (
+      (
+        fechaUTC -
+        inicioAnio
+      ) / 86400000 + 1
+    ) / 7
+  );
+
+  return {
+    week: semana,
+    year: fechaUTC.getUTCFullYear()
+  };
+}
+
+function textoSemanaISO(valor) {
+  const resultado = obtenerSemanaISO(valor);
+
+  return 'S' +
+    String(resultado.week).padStart(2, '0') +
+    ' · ' +
+    resultado.year;
+}
+
+function actualizarIndicadorSemana() {
+  const resultado = obtenerSemanaISO();
+
+  const indicador = $('week_indicator');
+
+  if (!indicador) {
+    return;
+  }
+
+  indicador.textContent =
+    'Week ' +
+    resultado.week +
+    ' · ' +
+    resultado.year;
+}
+
+function toggleAuditoria() {
+  const seccion = $('seccion_auditoria');
+  const cuerpo = $('audit_body');
+  const boton = $('btn_audit_toggle');
+
+  if (!seccion || !cuerpo || !boton) {
+    return;
+  }
+
+  const expandir = cuerpo.classList.contains('hidden');
+
+  cuerpo.classList.toggle(
+    'hidden',
+    !expandir
+  );
+
+  seccion.classList.toggle(
+    'expanded',
+    expandir
+  );
+
+  boton.setAttribute(
+    'aria-expanded',
+    expandir ? 'true' : 'false'
+  );
+
+  boton.setAttribute(
+    'title',
+    expandir
+      ? 'Contraer bitácora'
+      : 'Expandir bitácora'
+  );
+}
+
+
+function tieneRol(rol) {
+  return rolesActuales.has(rol);
+}
+
+function mostrar(id, visible) {
+  const elemento = $(id);
+
+  if (!elemento) {
+    return;
+  }
+
+  elemento.classList.toggle('hidden', !visible);
+}
+
+function esc(valor) {
+  return (valor == null ? '' : String(valor))
+    .replace(/[<>&]/g, caracter => ({
+      '<': '&lt;',
+      '>': '&gt;',
+      '&': '&amp;'
+    }[caracter]));
+}
+
+function log(mensaje, clase) {
+  const contenedor = $('log');
+
+  if (!contenedor) {
+    return;
+  }
+
+  const linea = document.createElement('div');
+
+  if (clase) {
+    linea.className = clase;
+  }
+
+  linea.textContent =
+    new Date().toLocaleTimeString() + '  ' + mensaje;
+
+  contenedor.prepend(linea);
+}
+
+async function api(path, method, body) {
+  const respuesta = await fetch(path, {
+    method: method || 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+
+  if (respuesta.status === 401) {
+    window.location.replace('/login.html?expired');
+
+    return {
+      status: 401,
+      data: null
+    };
+  }
+
+  let data = null;
+
+  try {
+    data = await respuesta.json();
+  }
+  catch (error) {
+    data = null;
+  }
+
+  return {
+    status: respuesta.status,
+    data: data
+  };
+}
+
+
+function claveRegistrosRH() {
+  const usuario = usuarioActual || 'desconocido';
+
+  return 'offboarding.rh.session.' + usuario.toLowerCase();
+}
+
+function obtenerRegistrosRH() {
+  try {
+    const contenido = sessionStorage.getItem(
+      claveRegistrosRH()
+    );
+
+    if (!contenido) {
+      return [];
+    }
+
+    const registros = JSON.parse(contenido);
+
+    return Array.isArray(registros)
+      ? registros
+      : [];
+  }
+  catch (error) {
+    console.error(
+      'No fue posible leer el registro de RH',
+      error
+    );
+
+    return [];
+  }
+}
+
+function guardarRegistrosRH(registros) {
+  try {
+    sessionStorage.setItem(
+      claveRegistrosRH(),
+      JSON.stringify(registros)
+    );
+  }
+  catch (error) {
+    console.error(
+      'No fue posible guardar el registro de RH',
+      error
+    );
+  }
+}
+
+function agregarRegistroRH(caso, solicitud) {
+  if (!tieneRol('RECURSOS_HUMANOS')) {
+    return;
+  }
+
+  const registros = obtenerRegistrosRH();
+
+  registros.unshift({
+    registeredAt: new Date().toISOString(),
+    caseNumber: caso.caseNumber || '-',
+    employeeName: solicitud.employeeName || '-',
+    employeeIdentifier:
+      solicitud.employeeIdentifier || '-',
+    department: solicitud.department || '-',
+    building: solicitud.building || '-',
+    workArea: solicitud.workArea || '-',
+    terminationType:
+      solicitud.terminationType || '-',
+    effectiveAt:
+      solicitud.effectiveAt || null,
+    status: caso.status || 'REGISTRADA'
+  });
+
+  /*
+   * Mantener como máximo los últimos 100 registros
+   * de la sesión actual del navegador.
+   */
+  guardarRegistrosRH(
+    registros.slice(0, 100)
+  );
+
+  renderizarRegistrosRH();
+}
+
+function renderizarRegistrosRH() {
+  const tabla = $('tabla_registros_rh');
+
+  if (!tabla) {
+    return;
+  }
+
+  const registros = obtenerRegistrosRH();
+
+  if (!registros.length) {
+    tabla.innerHTML = `
+      <tr>
+        <td colspan="10" class="empty-row">
+          Todavía no has registrado bajas en esta sesión.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  tabla.innerHTML = registros.map(registro => `
+    <tr>
+      <td>
+        ${new Date(registro.registeredAt).toLocaleTimeString()}
+      </td>
+
+      <td>
+        <b>${esc(registro.caseNumber)}</b>
+      </td>
+
+      <td>${esc(registro.employeeName)}</td>
+      <td>${esc(registro.employeeIdentifier)}</td>
+      <td>${esc(registro.department)}</td>
+      <td>${esc(registro.building || '-')}</td>
+      <td>${esc(registro.workArea || '-')}</td>
+      <td>${esc(registro.terminationType)}</td>
+
+      <td>
+        ${registro.effectiveAt
+          ? new Date(registro.effectiveAt).toLocaleString()
+          : '-'}
+      </td>
+
+      <td>
+        <span class="pill ${esc(registro.status)}">
+          ${esc(registro.status)}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+}
+
+
+function nombrePerfil() {
+  if (tieneRol('ADMIN')) {
+    return 'Administrador';
+  }
+
+  if (tieneRol('RECURSOS_HUMANOS')) {
+    return 'Human Resources — solamente captura';
+  }
+
+  if (tieneRol('IT_ENGINEER')) {
+    return 'IT Engineer — procesamiento de bajas';
+  }
+
+  if (tieneRol('AUDITOR')) {
+    return 'Auditor — solo lectura';
+  }
+
+  return 'No profile autorizado';
+}
+
+function aplicarPermisos() {
+  const esAdmin = tieneRol('ADMIN');
+  const esRH = tieneRol('RECURSOS_HUMANOS');
+  const esEngineer = tieneRol('IT_ENGINEER');
+  const esAuditor = tieneRol('AUDITOR');
+
+  const tienePerfil =
+    esAdmin ||
+    esRH ||
+    esEngineer ||
+    esAuditor;
+
+  mostrar('perfil_actual', true);
+  $('perfil_actual').textContent = nombrePerfil();
+
+  mostrar('sin_permisos', !tienePerfil);
+  mostrar('seccion_captura', esAdmin || esRH);
+
+  /*
+   * El resumen de registros es exclusivo del perfil
+   * Human Resources.
+   */
+  mostrar(
+    'seccion_registros_rh',
+    esRH && !esAdmin
+  );
+
+  mostrar('seccion_usuarios', esAdmin);
+  mostrar('seccion_casos', esAdmin || esEngineer || esAuditor);
+  mostrar('seccion_auditoria', esAdmin || esAuditor);
+  mostrar('seccion_log', esAdmin || esEngineer);
+
+  mostrar(
+    'btn_recargar',
+    esAdmin || esEngineer || esAuditor
+  );
+
+  if (esAuditor && !esAdmin) {
+    $('titulo_casos').textContent =
+      'Consulta de casos y tareas — solo lectura';
+  }
+  else if (esEngineer && !esAdmin) {
+    $('titulo_casos').textContent =
+      'Procesamiento de bajas — IT Engineer';
+  }
+  else {
+    $('titulo_casos').textContent =
+      'Cases y tareas';
+  }
+}
+
+async function cargarSesion() {
+  const respuesta = await api('/api/auth/me');
+
+  if (respuesta.status !== 200 || !respuesta.data) {
+    return false;
+  }
+
+  usuarioActual =
+    respuesta.data.username || 'Username';
+
+  $('usuario_actual').textContent =
+    usuarioActual;
+
+  const roles = Array.isArray(respuesta.data.roles)
+    ? respuesta.data.roles
+    : [];
+
+  rolesActuales = new Set(roles);
+
+  $('roles_actuales').textContent = roles.length
+    ? 'Perfiles: ' + roles.join(', ')
+    : 'No profilees asignados';
+
+  aplicarPermisos();
+  renderizarRegistrosRH();
+
+  return true;
+}
+
+function accionesTask(tarea) {
+  const puedeComplete =
+    tieneRol('ADMIN') ||
+    tieneRol('IT_ENGINEER');
+
+  const puedeValidar =
+    tieneRol('ADMIN');
+
+  const botones = [];
+
+  if (puedeComplete && tarea.status === 'PENDIENTE') {
+    botones.push(
+      `<button class="mini ok" onclick="completar(${tarea.id})">Complete</button>`
+    );
+  }
+
+  if (
+    puedeValidar &&
+    tarea.critical &&
+    tarea.status === 'COMPLETADA'
+  ) {
+    botones.push(
+      `<button class="mini val" onclick="validarActive(${tarea.id})">Validate receipt</button>`
+    );
+  }
+
+  if (
+    tieneRol('ADMIN') &&
+    (
+      tarea.status === 'COMPLETADA' ||
+      tarea.status === 'VALIDADA' ||
+      tarea.status === 'NO_APLICA'
+    )
+  ) {
+    botones.push(
+      `<button class="mini reopen" onclick="reabrir(${tarea.id})">Reopen</button>`
+    );
+  }
+
+  return botones.length
+    ? botones.join('')
+    : '<span style="color:#78899b">Solo lectura</span>';
+}
+
+function toggleCase(id) {
+  const caso = document.getElementById(
+    'caso-' + id
+  );
+
+  if (!caso) {
+    return;
+  }
+
+  const expandido =
+    caso.classList.toggle('expanded');
+
+  const boton = caso.querySelector('.case-toggle');
+
+  if (boton) {
+    boton.setAttribute(
+      'aria-expanded',
+      expandido ? 'true' : 'false'
+    );
+
+    boton.setAttribute(
+      'title',
+      expandido
+        ? 'Contraer caso'
+        : 'Expandir caso'
+    );
+  }
+}
+
+async function cargarCases() {
+  /*
+   * Conservar abiertos los casos que el usuario
+   * ya había desplegado antes de la actualización.
+   */
+  const casosAbiertos = new Set(
+    Array.from(
+      document.querySelectorAll('.caso.expanded')
+    ).map(elemento => elemento.dataset.caseId)
+  );
+
+  const respuesta = await api('/api/offboardings');
+
+  if (respuesta.status !== 200) {
+    $('casos').innerHTML =
+      'No fue posible consultar los casos. HTTP ' +
+      respuesta.status;
+
+    log(
+      'GET /api/offboardings -> ' + respuesta.status,
+      'err'
+    );
+
+    return;
+  }
+
+  if (!respuesta.data.length) {
+    $('casos').innerHTML =
+      'No hay casos registrados.';
+
+    return;
+  }
+
+  $('casos').innerHTML = respuesta.data.map(caso => {
+    const tareas = (caso.tasks || [])
+      .sort((a, b) => a.id - b.id);
+
+    const tareasPendientes = tareas.filter(
+      tarea => tarea.status === 'PENDIENTE'
+    ).length;
+
+    const estaAbierto = casosAbiertos.has(
+      String(caso.id)
+    );
+
+    return `
+      <div
+        id="caso-${caso.id}"
+        data-case-id="${caso.id}"
+        class="caso ${estaAbierto ? 'expanded' : ''}">
+
+        <div class="caso-h">
+          <div class="case-header">
+
+            <button
+              type="button"
+              class="case-toggle"
+              aria-expanded="${estaAbierto ? 'true' : 'false'}"
+              title="${estaAbierto ? 'Contraer caso' : 'Expandir caso'}"
+              onclick="toggleCase(${caso.id})">
+
+              <span class="case-arrow">▶</span>
+            </button>
+
+            <div class="case-summary">
+              <div class="case-summary-main">
+
+                <b>${esc(caso.caseNumber)}</b>
+
+                <span>${esc(caso.employeeName)}</span>
+
+                <span class="pill ${esc(caso.riskLevel)}">
+                  ${esc(caso.riskLevel)}
+                </span>
+
+                <span class="pill ${esc(caso.status)}">
+                  ${esc(caso.status)}
+                </span>
+
+                ${caso.confidential
+                  ? '<span class="pill CRITICO">CONFIDENCIAL</span>'
+                  : ''}
+              </div>
+
+              <div class="case-summary-secondary">
+                ${esc(caso.department || '-')}
+                &middot;
+                Building ${esc(caso.building || '-')}
+                &middot;
+                Área ${esc(caso.workArea || '-')}
+                &middot;
+                ${esc(caso.terminationType)}
+                &middot;
+                efectiva
+                ${new Date(caso.effectiveAt).toLocaleString()}
+              </div>
+            </div>
+
+            <div class="case-count">
+              ${tareas.length} tareas
+              &middot;
+              ${tareasPendientes} pendientes
+            </div>
+
+          </div>
+        </div>
+
+        <div class="caso-body">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>System</th>
+                  <th>Task</th>
+                  <th>Vence</th>
+                  <th>Status</th>
+                  <th>Evidence</th>
+                  <th>Ejecutó</th>
+                  <th>Validó</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${tareas.map(tarea => `
+                  <tr>
+                    <td>
+                      ${esc(tarea.systemName)}
+
+                      ${tarea.critical
+                        ? '<span class="crit">*</span>'
+                        : ''}
+                    </td>
+
+                    <td>${esc(tarea.taskName)}</td>
+
+                    <td>
+                      ${new Date(tarea.dueAt).toLocaleString()}
+                    </td>
+
+                    <td>
+                      <span class="pill ${esc(tarea.status)}">
+                        ${esc(tarea.status)}
+                      </span>
+                    </td>
+
+                    <td>
+                      ${esc(tarea.evidenceReference || '-')}
+                    </td>
+
+                    <td>
+                      ${esc(tarea.completedBy || '-')}
+                    </td>
+
+                    <td>
+                      ${esc(tarea.validatedBy || '-')}
+                    </td>
+
+                    <td>
+                      ${accionesTask(tarea)}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function cargarAudit() {
+  const respuesta = await api('/api/audit');
+
+  if (respuesta.status !== 200) {
+    $('audit').innerHTML = `
+      <tr>
+        <td colspan="7">
+          No fue posible consultar la bitácora.
+          HTTP ${respuesta.status}
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  const eventos = Array.isArray(respuesta.data)
+    ? respuesta.data
+    : [];
+
+  const contador = $('audit_count');
+
+  if (contador) {
+    contador.textContent =
+      eventos.length +
+      (eventos.length === 1
+        ? ' evento'
+        : ' eventos');
+  }
+
+  if (!eventos.length) {
+    $('audit').innerHTML = `
+      <tr>
+        <td colspan="7" class="empty-row">
+          No existen eventos de auditoría.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  $('audit').innerHTML = eventos.map(evento => `
+    <tr>
+      <td>${evento.id}</td>
+
+      <td>
+        <span class="pill NORMAL">
+          ${textoSemanaISO(evento.occurredAt)}
+        </span>
+      </td>
+
+      <td>
+        ${new Date(evento.occurredAt).toLocaleString()}
+      </td>
+
+      <td>
+        <b>${esc(evento.actor)}</b>
+      </td>
+
+      <td>${esc(evento.action)}</td>
+
+      <td>
+        ${esc(evento.entityType)}
+        #${evento.entityId == null ? '-' : evento.entityId}
+      </td>
+
+      <td>${esc(evento.details)}</td>
+    </tr>
+  `).join('');
+}
+
+async function completar(id) {
+  if (
+    !tieneRol('ADMIN') &&
+    !tieneRol('IT_ENGINEER')
+  ) {
+    return;
+  }
+
+  const evidencia = prompt(
+    'Referencia de evidencia (ticket, folio o captura):',
+    'TICKET-INC-'
+  );
+
+  if (!evidencia) {
+    return;
+  }
+
+  const comentarios = prompt(
+    'Comments opcionales:',
+    ''
+  ) || null;
+
+  const respuesta = await api(
+    '/api/tasks/' + id + '/complete',
+    'PATCH',
+    {
+      evidenceReference: evidencia,
+      comments: comentarios
+    }
+  );
+
+  log(
+    `PATCH /api/tasks/${id}/complete -> ${respuesta.status}`,
+    respuesta.status === 200 ? null : 'err'
+  );
+
+  await recargar();
+}
+
+
+async function reabrir(id) {
+  if (!tieneRol('ADMIN')) {
+    return;
+  }
+
+  const motivo = prompt(
+    'Escribe el motivo para reabrir la tarea:',
+    ''
+  );
+
+  if (motivo === null) {
+    return;
+  }
+
+  const motivoLimpio = motivo.trim();
+
+  if (motivoLimpio.length < 5) {
+    alert(
+      'El motivo debe tener al menos 5 caracteres.'
+    );
+
+    return;
+  }
+
+  const confirmar = confirm(
+    'La tarea regresará a estado PENDIENTE.\n\n' +
+    'Será necesario procesarla nuevamente.\n\n' +
+    '¿Deseas continuar?'
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  const respuesta = await api(
+    '/api/tasks/' + id + '/reopen',
+    'PATCH',
+    {
+      reason: motivoLimpio
+    }
+  );
+
+  if (respuesta.status === 200) {
+    log(
+      'Task ' + id +
+      ' reabierta correctamente por ADMIN.'
+    );
+  }
+  else {
+    const detalle =
+      respuesta.data &&
+      (
+        respuesta.data.detail ||
+        respuesta.data.message
+      );
+
+    log(
+      detalle ||
+      (
+        'No fue posible reabrir la tarea ' +
+        id +
+        '. HTTP ' +
+        respuesta.status
+      ),
+      'err'
+    );
+  }
+
+  await recargar();
+}
+
+async function validar(id) {
+  if (!tieneRol('ADMIN')) {
+    return;
+  }
+
+  const respuesta = await api(
+    '/api/tasks/' + id + '/validate',
+    'PATCH'
+  );
+
+  if (respuesta.status === 200) {
+    log(
+      `Task ${id} validada por ${respuesta.data.validatedBy}`
+    );
+  }
+  else if (respuesta.status === 403) {
+    log(
+      'La validación debe realizarla una persona diferente a quien completó la tarea.',
+      'warn'
+    );
+  }
+  else {
+    log(
+      `Error validando tarea ${id}: HTTP ${respuesta.status}`,
+      'err'
+    );
+  }
+
+  await recargar();
+}
+
+function limpiarCaptura() {
+  $('n').value = '';
+  $('idf').value = '';
+  $('mail').value = '';
+  $('dep').value = '';
+  $('building').value = '';
+  $('work_area').value = '';
+  $('jefe').value = '';
+  $('obs').value = '';
+  $('eq_computer').checked = false;
+  $('eq_phone').checked = false;
+  $('computer_details').value = '';
+  $('phone_details').value = '';
+  $('access_other').checked = false;
+  $('other_accesses').value = '';
+
+  document
+    .querySelectorAll('.offboarding-access')
+    .forEach(control => {
+      control.checked = false;
+    });
+
+  actualizarCamposAsignacion();
+
+
+  $('tipo').value = '';
+  $('conf').value = '';
+  $('riesgo').value = '';
+  $('fecha').value = '';
+
+  const resultado = $('resultado_captura');
+
+  if (resultado) {
+    resultado.className = 'notice';
+    resultado.textContent = '';
+  }
+
+  $('n').focus();
+}
+
+
+function actualizarCamposAsignacion() {
+  const computerSelected =
+    $('eq_computer').checked;
+
+  const phoneSelected =
+    $('eq_phone').checked;
+
+  const otherSelected =
+    $('access_other').checked;
+
+  mostrar(
+    'computer_details_container',
+    computerSelected
+  );
+
+  mostrar(
+    'phone_details_container',
+    phoneSelected
+  );
+
+  mostrar(
+    'other_access_container',
+    otherSelected
+  );
+
+  if (!computerSelected) {
+    $('computer_details').value = '';
+  }
+
+  if (!phoneSelected) {
+    $('phone_details').value = '';
+  }
+
+  if (!otherSelected) {
+    $('other_accesses').value = '';
+  }
+}
+
+
+function obtenerAccesosSeleccionados() {
+  return Array
+    .from(
+      document.querySelectorAll(
+        '.offboarding-access:checked'
+      )
+    )
+    .map(control => control.value);
+}
+
+
+async function crearCase() {
+  const resultado = $('resultado_captura');
+
+  resultado.className = 'notice';
+  resultado.textContent = '';
+
+  const requiredFields = [
+    {
+      id: 'n',
+      label: 'Employee name'
+    },
+    {
+      id: 'idf',
+      label: 'Employee number or identifier'
+    },
+    {
+      id: 'dep',
+      label: 'Department'
+    },
+    {
+      id: 'work_area',
+      label: 'Work area'
+    },
+    {
+      id: 'jefe',
+      label: 'Direct manager'
+    },
+    {
+      id: 'riesgo',
+      label: 'Risk level'
+    }
+  ];
+
+  const missingFields =
+    requiredFields.filter(field => {
+      const control = $(field.id);
+
+      return !String(
+        control.value || ''
+      ).trim();
+    });
+
+  if (missingFields.length) {
+    resultado.className = 'notice error';
+    resultado.textContent =
+      'Complete the required fields: '
+      + missingFields
+          .map(field => field.label)
+          .join(', ')
+      + '.';
+
+    const firstControl =
+      $(missingFields[0].id);
+
+    firstControl.focus();
+    firstControl.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    return;
+  }
+
+  const corporateEmail =
+    $('mail').value.trim();
+
+  const fecha =
+    $('fecha').value;
+
+  const accesosSeleccionados =
+    obtenerAccesosSeleccionados();
+
+  const solicitud = {
+    employeeName:
+      $('n').value.trim(),
+
+    employeeIdentifier:
+      $('idf').value.trim(),
+
+    corporateEmail:
+      corporateEmail || null,
+
+    department:
+      $('dep').value.trim(),
+
+    building:
+      $('building').value.trim() || null,
+
+    workArea:
+      $('work_area').value.trim(),
+
+    managerName:
+      $('jefe').value.trim(),
+
+    terminationType:
+      $('tipo').value || 'NO_ESPECIFICADO',
+
+    effectiveAt:
+      fecha
+        ? new Date(fecha).toISOString()
+        : new Date().toISOString(),
+
+    riskLevel:
+      $('riesgo').value,
+
+    confidential:
+      $('conf').value === 'true',
+
+    computerAssigned:
+      $('eq_computer').checked,
+
+    computerDetails:
+      $('computer_details').value.trim()
+        || null,
+
+    phoneAssigned:
+      $('eq_phone').checked,
+
+    phoneDetails:
+      $('phone_details').value.trim()
+        || null,
+
+    accesses:
+      accesosSeleccionados,
+
+    otherAccesses:
+      $('other_accesses').value.trim()
+        || null,
+
+    observations:
+      $('obs').value.trim()
+        || null
+  };
+
+  const respuesta = await api(
+    '/api/offboardings',
+    'POST',
+    solicitud
+  );
+
+  if (respuesta.status === 201) {
+    agregarRegistroRH(
+      respuesta.data,
+      solicitud
+    );
+
+    resultado.className = 'notice ok';
+    resultado.textContent =
+      'Baja registrada correctamente. Case: '
+      + respuesta.data.caseNumber;
+
+    limpiarCaptura();
+
+    if (tieneRol('ADMIN')) {
+      await cargarCases();
+    }
+  }
+  else {
+    resultado.className = 'notice error';
+    resultado.textContent =
+      respuesta.data && respuesta.data.detail
+        ? respuesta.data.detail
+        : 'Error registering the offboarding. HTTP '
+          + respuesta.status;
+  }
+}
+
+
+function generarPass() {
+  const mayusculas = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const minusculas = 'abcdefghijkmnopqrstuvwxyz';
+  const numeros = '23456789';
+  const simbolos = '#$%&*+-';
+  const todos =
+    mayusculas +
+    minusculas +
+    numeros +
+    simbolos;
+
+  let password = '';
+
+  password += mayusculas[
+    Math.floor(Math.random() * mayusculas.length)
+  ];
+
+  password += minusculas[
+    Math.floor(Math.random() * minusculas.length)
+  ];
+
+  password += numeros[
+    Math.floor(Math.random() * numeros.length)
+  ];
+
+  password += simbolos[
+    Math.floor(Math.random() * simbolos.length)
+  ];
+
+  for (let i = 0; i < 12; i++) {
+    password += todos[
+      Math.floor(Math.random() * todos.length)
+    ];
+  }
+
+  $('nu_pass').type = 'text';
+  $('nu_pass').value = password;
+}
+
+async function crearUsername() {
+  if (!tieneRol('ADMIN')) {
+    return;
+  }
+
+  const roles = Array
+    .from(
+      document.querySelectorAll('.rol:checked')
+    )
+    .map(control => control.value);
+
+  const aviso = $('nu_aviso');
+
+  aviso.textContent = '';
+
+  const username =
+    $('nu_user').value.trim();
+
+  const fullName =
+    $('nu_nombre').value.trim();
+
+  const email =
+    $('nu_mail').value.trim();
+
+  const password =
+    $('nu_pass').value;
+
+  const missingFields = [];
+
+  if (!username) {
+    missingFields.push('Username');
+  }
+
+  if (!fullName) {
+    missingFields.push('Full name');
+  }
+
+  if (!password) {
+    missingFields.push('Temporary password');
+  }
+
+  if (!roles.length) {
+    missingFields.push('Perfiles');
+  }
+
+  if (missingFields.length) {
+    aviso.textContent =
+      'Complete the required fields: '
+      + missingFields.join(', ')
+      + '.';
+
+    return;
+  }
+
+  if (
+    typeof passwordSegura === 'function'
+    && !passwordSegura(password)
+  ) {
+    aviso.textContent =
+      'Password must contain 12 to 100 characters, including an uppercase letter, lowercase letter, number, and symbol.';
+
+    return;
+  }
+
+  const respuesta = await api(
+    '/api/users',
+    'POST',
+    {
+      username: username,
+      fullName: fullName,
+      email: email || null,
+      password: password,
+      roles: roles
+    }
+  );
+
+  if (respuesta.status === 201) {
+    alert(
+      'Username creado correctamente.\n\n'
+      + 'Username: ' + username + '\n'
+      + 'Contraseña: ' + password + '\n\n'
+      + 'Esta contraseña no volverá a mostrarse.'
+    );
+
+    $('nu_user').value = '';
+    $('nu_nombre').value = '';
+    $('nu_mail').value = '';
+    $('nu_pass').value = '';
+    $('nu_pass').type = 'password';
+
+    document
+      .querySelectorAll('.rol:checked')
+      .forEach(control => {
+        control.checked = false;
+      });
+
+    await cargarUsernames();
+    await cargarAudit();
+  }
+  else {
+    aviso.textContent =
+      respuesta.data && respuesta.data.detail
+        ? respuesta.data.detail
+        : 'No fue posible crear el usuario. HTTP '
+          + respuesta.status;
+  }
+}
+
+
+let usuariosAdministrados = [];
+
+
+async function cargarUsernames() {
+  const respuesta = await api('/api/users');
+  const tabla = $('tabla_usuarios');
+
+  if (respuesta.status !== 200) {
+    tabla.innerHTML = `
+      <tr>
+        <td colspan="7">
+          No fue posible consultar usuarios.
+          HTTP ${respuesta.status}
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  const usuarios = Array.isArray(respuesta.data)
+    ? respuesta.data
+    : respuesta.data.content || [];
+
+  usuariosAdministrados = usuarios;
+
+  tabla.innerHTML = usuarios.map(usuario => `
+    <tr>
+      <td>${usuario.id}</td>
+      <td><b>${esc(usuario.username)}</b></td>
+      <td>${esc(usuario.fullName)}</td>
+      <td>
+        ${usuario.email
+          ? esc(usuario.email)
+          : '<span class="no-email">Sin correo</span>'}
+      </td>
+      <td>
+        ${(usuario.roles || []).map(rol => `
+          <span class="pill NORMAL">${esc(rol)}</span>
+        `).join(' ')}
+      </td>
+      <td>
+        ${usuario.enabled === false
+          ? '<span class="pill CRITICO">INACTIVO</span>'
+          : '<span class="pill VALIDADA">ACTIVO</span>'}
+      </td>
+      <td class="user-actions">
+        <button
+          type="button"
+          class="mini"
+          onclick="abrirEditUsername(${usuario.id})">
+          Edit
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+
+
+function passwordSegura(password) {
+  return (
+    password.length >= 12 &&
+    password.length <= 100 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /\d/.test(password) &&
+    /[^A-Za-z0-9]/.test(password) &&
+    !/\s/.test(password)
+  );
+}
+
+
+function abrirEditUsername(id) {
+  const usuario = usuariosAdministrados.find(
+    item => Number(item.id) === Number(id)
+  );
+
+  if (!usuario) {
+    alert('The user could not be found.');
+    return;
+  }
+
+  $('eu_id').value = usuario.id;
+  $('eu_username').value = usuario.username;
+  $('eu_nombre').value = usuario.fullName || '';
+  $('eu_mail').value = usuario.email || '';
+  $('eu_enabled').checked =
+    usuario.enabled !== false;
+  $('eu_password').value = '';
+  $('eu_password_confirm').value = '';
+
+  const roles = new Set(usuario.roles || []);
+
+  document
+    .querySelectorAll('.eu_rol')
+    .forEach(control => {
+      control.checked = roles.has(control.value);
+    });
+
+  $('eu_aviso').className = 'notice';
+  $('eu_aviso').textContent = '';
+
+  mostrar('modal_usuario', true);
+}
+
+
+function cerrarEditUsername() {
+  mostrar('modal_usuario', false);
+}
+
+
+async function guardarEditUsername() {
+  const aviso = $('eu_aviso');
+
+  aviso.className = 'notice';
+  aviso.textContent = '';
+
+  const id = $('eu_id').value;
+  const fullName = $('eu_nombre').value.trim();
+  const email = $('eu_mail').value.trim();
+
+  const roles = Array
+    .from(
+      document.querySelectorAll('.eu_rol:checked')
+    )
+    .map(control => control.value);
+
+  const password = $('eu_password').value;
+  const passwordConfirm =
+    $('eu_password_confirm').value;
+
+  if (!fullName) {
+    aviso.className = 'notice error';
+    aviso.textContent =
+      'Completa el campo obligatorio: Full name.';
+    return;
+  }
+
+  if (!roles.length) {
+    aviso.className = 'notice error';
+    aviso.textContent =
+      'Asigna al menos un perfil.';
+    return;
+  }
+
+  if (password || passwordConfirm) {
+    if (password !== passwordConfirm) {
+      aviso.className = 'notice error';
+      aviso.textContent =
+        'La confirmación no coincide.';
+      return;
+    }
+
+    if (!passwordSegura(password)) {
+      aviso.className = 'notice error';
+      aviso.textContent =
+        'La contraseña debe incluir mayúscula, minúscula, número y símbolo.';
+      return;
+    }
+  }
+
+  const actualizacion = await api(
+    '/api/users/' + encodeURIComponent(id),
+    'PUT',
+    {
+      fullName: fullName,
+      email: email || null,
+      enabled: $('eu_enabled').checked,
+      roles: roles
+    }
+  );
+
+  if (actualizacion.status !== 200) {
+    aviso.className = 'notice error';
+    aviso.textContent =
+      actualizacion.data && actualizacion.data.detail
+        ? actualizacion.data.detail
+        : 'No fue posible actualizar el usuario. HTTP '
+          + actualizacion.status;
+    return;
+  }
+
+  if (password) {
+    const cambioPassword = await api(
+      '/api/users/'
+        + encodeURIComponent(id)
+        + '/password',
+      'PUT',
+      {
+        password: password
+      }
+    );
+
+    if (cambioPassword.status !== 204) {
+      aviso.className = 'notice error';
+      aviso.textContent =
+        cambioPassword.data &&
+        cambioPassword.data.detail
+          ? cambioPassword.data.detail
+          : 'Los datos se actualizaron, pero la contraseña no pudo cambiarse. HTTP '
+            + cambioPassword.status;
+
+      await cargarUsernames();
+      await cargarAudit();
+      return;
+    }
+  }
+
+  cerrarEditUsername();
+
+  await cargarUsernames();
+  await cargarAudit();
+
+  alert(
+    password
+      ? 'Username y contraseña actualizados correctamente.'
+      : 'Username actualizado correctamente.'
+  );
+}
+
+
+async function validarActive(taskId) {
+  if (!tieneRol('ADMIN')) {
+    alert(
+      'Solamente un administrador puede validar la recepción.'
+    );
+
+    return;
+  }
+
+  const activoRecibido = confirm(
+    '¿Confirmas que el equipo o teléfono fue recibido físicamente?'
+  );
+
+  if (!activoRecibido) {
+    return;
+  }
+
+  const inventarioActualizado = confirm(
+    '¿Confirmas que el inventario de activos ya fue actualizado?'
+  );
+
+  if (!inventarioActualizado) {
+    return;
+  }
+
+  const referencia = prompt(
+    'Escribe el número de activo, folio o referencia de inventario:'
+  );
+
+  if (referencia === null) {
+    return;
+  }
+
+  if (!referencia.trim()) {
+    alert(
+      'La referencia de inventario es obligatoria.'
+    );
+
+    return;
+  }
+
+  const comentarios = prompt(
+    'Comments adicionales de validación (optional):'
+  );
+
+  if (comentarios === null) {
+    return;
+  }
+
+  const respuesta = await api(
+    '/api/tasks/'
+      + encodeURIComponent(taskId)
+      + '/validate',
+    'PATCH',
+    {
+      assetReceived: true,
+      inventoryUpdated: true,
+      inventoryReference: referencia.trim(),
+      validationComments:
+        comentarios.trim() || null
+    }
+  );
+
+  if (respuesta.status === 200) {
+    alert(
+      'Recepción del activo e inventario validados correctamente.'
+    );
+
+    await cargarCases();
+    await cargarAudit();
+  }
+  else {
+    alert(
+      respuesta.data && respuesta.data.detail
+        ? respuesta.data.detail
+        : 'No fue posible validar el activo. HTTP '
+          + respuesta.status
+    );
+  }
+}
+
+
+async function recargar() {
+  const tareas = [];
+
+  if (
+    tieneRol('ADMIN') ||
+    tieneRol('IT_ENGINEER') ||
+    tieneRol('AUDITOR')
+  ) {
+    tareas.push(cargarCases());
+  }
+
+  if (
+    tieneRol('ADMIN') ||
+    tieneRol('AUDITOR')
+  ) {
+    tareas.push(cargarAudit());
+  }
+
+  if (tieneRol('ADMIN')) {
+    tareas.push(cargarUsernames());
+  }
+
+  await Promise.all(tareas);
+}
+
+async function iniciar() {
+  actualizarIndicadorSemana();
+  limpiarCaptura();
+
+  const sesionValida = await cargarSesion();
+
+  if (!sesionValida) {
+    return;
+  }
+
+  await recargar();
+}
+
+iniciar();
+
+setInterval(() => {
+  recargar();
+}, 15000);
+</script>
+
+
+<!-- FEATURE_ENGLISH_VISIBLE_VALUES -->
+<script>
+(function () {
+  const exactTranslations = {
+    'RENUNCIA': 'Resignation',
+    'DESPIDO': 'Termination',
+    'FIN_DE_CONTRATO': 'End of contract',
+    'JUBILACION': 'Retirement',
+    'MUTUO_ACUERDO': 'Mutual agreement',
+    'FALLECIMIENTO': 'Deceased',
+    'NO_ESPECIFICADO': 'Not specified',
+
+    'BAJO': 'Low',
+    'NORMAL': 'Normal',
+    'ALTO': 'High',
+    'CRITICO': 'Critical',
+
+    'PROGRAMADA': 'Scheduled',
+    'EN_PROCESO': 'In progress',
+    'COMPLETADA': 'Completed',
+    'VALIDADA': 'Validated',
+    'REABIERTA': 'Reopened',
+    'NO_APLICA': 'Not applicable',
+    'PENDIENTE': 'Pending',
+
+    'ACTIVO': 'Active',
+    'INACTIVO': 'Inactive',
+
+    'RECURSOS HUMANOS': 'Human Resources',
+    'TECNOLOGÍA DE LA INFORMACIÓN': 'Information Technology',
+    'ADMINISTRADOR': 'Administrator',
+
+    'CREADO': 'Created',
+    'ACTUALIZADO': 'Updated',
+    'COMPLETADO': 'Completed',
+    'REABIERTO': 'Reopened'
+  };
+
+  const phraseTranslations = [
+    [
+      'Baja registrada correctamente.',
+      'Offboarding registered successfully.'
+    ],
+    [
+      'Completa los campos obligatorios:',
+      'Complete the required fields:'
+    ],
+    [
+      'Error registrando la baja.',
+      'Error registering the offboarding.'
+    ],
+    [
+      'No fue posible cargar',
+      'Unable to load'
+    ],
+    [
+      'No fue posible localizar',
+      'Unable to locate'
+    ],
+    [
+      'Usuario creado correctamente.',
+      'User created successfully.'
+    ],
+    [
+      'Usuario actualizado correctamente.',
+      'User updated successfully.'
+    ],
+    [
+      'Contraseña actualizada correctamente.',
+      'Password updated successfully.'
+    ]
+  ];
+
+  function translateVisibleText(value) {
+    if (!value) {
+      return value;
+    }
+
+    const trimmed = value.trim();
+
+    if (exactTranslations[trimmed]) {
+      return value.replace(
+        trimmed,
+        exactTranslations[trimmed]
+      );
+    }
+
+    let translated = value;
+
+    for (const translation of phraseTranslations) {
+      translated = translated.replace(
+        translation[0],
+        translation[1]
+      );
+    }
+
+    return translated;
+  }
+
+  function translateNode(node) {
+    if (!node) {
+      return;
+    }
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      const parent = node.parentElement;
+
+      if (
+        !parent
+        || parent.matches(
+          'script, style, input, textarea, option'
+        )
+      ) {
+        return;
+      }
+
+      const translated =
+        translateVisibleText(node.nodeValue);
+
+      if (translated !== node.nodeValue) {
+        node.nodeValue = translated;
+      }
+
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return;
+    }
+
+    if (node.matches('script, style')) {
+      return;
+    }
+
+    for (
+      const child
+      of node.childNodes
+    ) {
+      translateNode(child);
+    }
+  }
+
+  translateNode(document.body);
+
+  const observer = new MutationObserver(
+    mutations => {
+      for (const mutation of mutations) {
+        if (
+          mutation.type === 'characterData'
+        ) {
+          translateNode(mutation.target);
+          continue;
+        }
+
+        for (
+          const addedNode
+          of mutation.addedNodes
+        ) {
+          translateNode(addedNode);
+        }
+      }
+    }
+  );
+
+  observer.observe(
+    document.body,
+    {
+      childList: true,
+      subtree: true,
+      characterData: true
+    }
+  );
+})();
+</script>
+
+</body>
+</html>

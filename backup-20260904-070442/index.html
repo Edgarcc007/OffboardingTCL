@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control de Bajas de Personal</title>
+<style>
+ *{box-sizing:border-box}
+ body{font-family:system-ui,Segoe UI,sans-serif;margin:0;background:#eef1f5;color:#1c2530}
+ header{background:#12263f;color:#fff;padding:18px 26px}
+ header h1{margin:0;font-size:19px;letter-spacing:.3px}
+ header p{margin:4px 0 0;font-size:13px;opacity:.75}
+ main{max-width:1180px;margin:22px auto;padding:0 16px}
+ .card{background:#fff;border-radius:8px;padding:18px 20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+ .card h2{margin:0 0 14px;font-size:15px;text-transform:uppercase;letter-spacing:.6px;color:#3f5875;border-bottom:2px solid #e3e8ee;padding-bottom:8px}
+ label{display:block;font-size:12px;font-weight:600;color:#5a6b7f;margin:8px 0 3px}
+ input,select,textarea{width:100%;padding:8px 10px;border:1px solid #c8d2de;border-radius:5px;font-size:13px;font-family:inherit}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0 14px}
+ button{background:#12263f;color:#fff;border:0;padding:9px 16px;border-radius:5px;cursor:pointer;font-size:13px;font-weight:600;margin-top:12px}
+ button:hover{background:#1d3a5f}
+ button.mini{padding:5px 10px;font-size:11px;margin:2px 3px 2px 0}
+ button.ok{background:#1c7a4a}button.ok:hover{background:#239159}
+ button.val{background:#8a5a00}button.val:hover{background:#a86e00}
+ table{width:100%;border-collapse:collapse;font-size:13px}
+ th{background:#f4f7fa;text-align:left;padding:8px;font-size:11px;text-transform:uppercase;color:#5a6b7f;border-bottom:2px solid #e3e8ee}
+ td{padding:8px;border-bottom:1px solid #eef1f5;vertical-align:top}
+ .pill{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:700}
+ .PENDIENTE{background:#fdf0d5;color:#8a5a00}
+ .COMPLETADA{background:#d7e9fb;color:#14548c}
+ .VALIDADA{background:#d5f0e0;color:#146c42}
+ .CRITICO,.ALTO{background:#fbdcd8;color:#a52314}
+ .NORMAL,.BAJO{background:#e2e7ee;color:#42556c}
+ .crit{color:#a52314;font-weight:700}
+ .caso{border:1px solid #dde4ec;border-radius:7px;margin-bottom:14px;overflow:hidden}
+ .caso-h{background:#f7f9fc;padding:11px 14px;border-bottom:1px solid #dde4ec}
+ .caso-h b{font-size:14px}
+ .meta{font-size:12px;color:#5a6b7f;margin-top:3px}
+ #log{background:#0f1b2b;color:#b8f0c8;font-family:Consolas,monospace;font-size:12px;padding:12px;border-radius:6px;height:150px;overflow-y:auto;white-space:pre-wrap}
+ .err{color:#ff8f7d}.warn{color:#ffd479}
+</style>
+</head>
+<body>
+<header>
+  <h1>Control de Bajas de Personal</h1>
+  <p>Revocacion de accesos con evidencia, doble validacion y bitacora inmutable</p>
+</header>
+<main>
+
+<div class="card">
+  <h2>Sesion</h2>
+  <div class="grid">
+    <div><label>Usuario</label><input id="u" value="admin"></div>
+    <div><label>Contrasena</label><input id="p" type="password" value="TCLAdmin2026#"></div>
+  </div>
+  <button onclick="recargar()">Entrar y recargar</button>
+  <span style="font-size:12px;color:#5a6b7f;margin-left:10px">
+    Cambia de usuario aqui para probar la separacion de deberes.
+  </span>
+</div>
+
+<div class="card">
+  <h2>Registrar una baja</h2>
+  <div class="grid">
+    <div><label>Nombre del empleado</label><input id="n" value="Maria Fernanda Ortiz"></div>
+    <div><label>Identificador</label><input id="idf" value="EMP-5120"></div>
+    <div><label>Correo corporativo</label><input id="mail" value="mf.ortiz@empresa.com"></div>
+    <div><label>Departamento</label><input id="dep" value="Finanzas"></div>
+    <div><label>Jefe directo</label><input id="jefe" value="Carlos Iban"></div>
+    <div><label>Tipo de baja</label><select id="tipo">
+      <option>RENUNCIA</option><option>DESPIDO</option><option>FIN_DE_CONTRATO</option>
+      <option>JUBILACION</option><option>MUTUO_ACUERDO</option><option>FALLECIMIENTO</option>
+    </select></div>
+    <div><label>Fecha efectiva</label><input id="fecha" type="datetime-local"></div>
+    <div><label>Nivel de riesgo</label><select id="riesgo">
+      <option>BAJO</option><option selected>NORMAL</option><option>ALTO</option><option>CRITICO</option>
+    </select></div>
+    <div><label>Confidencial</label><select id="conf"><option value="false">No</option><option value="true">Si</option></select></div>
+  </div>
+  <label>Observaciones</label><textarea id="obs" rows="2"></textarea>
+  <button onclick="crearCaso()">Registrar baja</button>
+</div>
+
+<div class="card">
+  <h2>Usuarios del sistema</h2>
+  <div class="grid">
+    <div><label>Usuario (para iniciar sesion)</label><input id="nu_user" placeholder="nombre.apellido"></div>
+    <div><label>Nombre completo</label><input id="nu_nombre" placeholder="Nombre Apellido"></div>
+    <div><label>Correo</label><input id="nu_mail" placeholder="usuario@empresa.com"></div>
+    <div><label>Contrasena inicial</label>
+      <input id="nu_pass" placeholder="minimo 12 caracteres">
+      <button class="mini" type="button" onclick="generarPass()">Generar</button>
+    </div>
+  </div>
+  <label>Roles asignados</label>
+  <div style="font-size:13px;line-height:1.9;padding:6px 0">
+    <label style="display:inline-block;margin-right:20px;font-weight:400;text-transform:none">
+      <input type="checkbox" class="rol" value="RECURSOS_HUMANOS" style="width:auto"> <b>RECURSOS_HUMANOS</b> — registra las bajas</label>
+    <label style="display:inline-block;margin-right:20px;font-weight:400;text-transform:none">
+      <input type="checkbox" class="rol" value="EJECUTOR" style="width:auto"> <b>EJECUTOR</b> — ejecuta revocaciones</label>
+    <label style="display:inline-block;margin-right:20px;font-weight:400;text-transform:none">
+      <input type="checkbox" class="rol" value="SEGURIDAD" style="width:auto"> <b>SEGURIDAD</b> — valida el trabajo de otros</label>
+    <label style="display:inline-block;margin-right:20px;font-weight:400;text-transform:none">
+      <input type="checkbox" class="rol" value="AUDITOR" style="width:auto"> <b>AUDITOR</b> — solo lectura</label>
+    <label style="display:inline-block;margin-right:20px;font-weight:400;text-transform:none">
+      <input type="checkbox" class="rol" value="ADMIN" style="width:auto"> <b>ADMIN</b> — control total</label>
+  </div>
+  <div id="nu_aviso" style="font-size:12px;color:#a52314;font-weight:600;min-height:17px"></div>
+  <button onclick="crearUsuario()">Crear usuario</button>
+  <div style="margin-top:18px">
+    <table><thead><tr><th>#</th><th>Usuario</th><th>Nombre</th><th>Correo</th><th>Roles</th><th>Estado</th></tr></thead>
+    <tbody id="tabla_usuarios"></tbody></table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Casos y tareas</h2>
+  <div id="casos">Cargando...</div>
+</div>
+
+<div class="card">
+  <h2>Bitacora de auditoria</h2>
+  <table><thead><tr><th>#</th><th>Fecha</th><th>Actor</th><th>Accion</th><th>Entidad</th><th>Detalle</th></tr></thead>
+  <tbody id="audit"></tbody></table>
+</div>
+
+<div class="card">
+  <h2>Respuestas del servidor</h2>
+  <div id="log"></div>
+</div>
+
+</main>
+<script>
+const $ = id => document.getElementById(id);
+function auth(){ return 'Basic ' + btoa($('u').value + ':' + $('p').value); }
+function log(msg, cls){
+  const d = document.createElement('div');
+  if(cls) d.className = cls;
+  d.textContent = new Date().toLocaleTimeString() + '  ' + msg;
+  $('log').prepend(d);
+}
+async function api(path, method, body){
+  const r = await fetch(path, {
+    method: method || 'GET',
+    headers: {'Authorization': auth(), 'Content-Type': 'application/json'},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  let data = null;
+  try { data = await r.json(); } catch(e) {}
+  return {status: r.status, data: data};
+}
+function esc(s){ return (s==null?'':String(s)).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
+
+async function cargarCasos(){
+  const r = await api('/api/offboardings');
+  if(r.status !== 200){ $('casos').innerHTML = 'Error ' + r.status; log('GET /api/offboardings -> ' + r.status, 'err'); return; }
+  if(!r.data.length){ $('casos').innerHTML = 'No hay casos registrados.'; return; }
+  $('casos').innerHTML = r.data.map(c => `
+    <div class="caso">
+      <div class="caso-h">
+        <b>${esc(c.caseNumber)}</b> &nbsp; ${esc(c.employeeName)}
+        <span class="pill ${esc(c.riskLevel)}">${esc(c.riskLevel)}</span>
+        <span class="pill ${esc(c.status)}">${esc(c.status)}</span>
+        ${c.confidential ? '<span class="pill CRITICO">CONFIDENCIAL</span>' : ''}
+        <div class="meta">${esc(c.department||'-')} &middot; ${esc(c.terminationType)} &middot;
+        efectiva ${new Date(c.effectiveAt).toLocaleString()} &middot; solicito ${esc(c.requestedBy)}</div>
+      </div>
+      <table><thead><tr><th>Sistema</th><th>Tarea</th><th>Vence</th><th>Estado</th><th>Evidencia</th><th>Ejecuto</th><th>Valido</th><th>Acciones</th></tr></thead><tbody>
+      ${(c.tasks||[]).sort((a,b)=>a.id-b.id).map(t => `
+        <tr>
+          <td>${esc(t.systemName)} ${t.critical?'<span class="crit">*</span>':''}</td>
+          <td>${esc(t.taskName)}</td>
+          <td>${new Date(t.dueAt).toLocaleString()}</td>
+          <td><span class="pill ${esc(t.status)}">${esc(t.status)}</span></td>
+          <td>${esc(t.evidenceReference||'-')}</td>
+          <td>${esc(t.completedBy||'-')}</td>
+          <td>${esc(t.validatedBy||'-')}</td>
+          <td>
+            ${t.status==='PENDIENTE'?`<button class="mini ok" onclick="completar(${t.id})">Completar</button>`:''}
+            ${t.status==='COMPLETADA'?`<button class="mini val" onclick="validar(${t.id})">Validar</button>`:''}
+          </td>
+        </tr>`).join('')}
+      </tbody></table>
+    </div>`).join('');
+}
+
+async function cargarAudit(){
+  const r = await api('/api/audit');
+  if(r.status !== 200){ $('audit').innerHTML = `<tr><td colspan="6">Error ${r.status}</td></tr>`; return; }
+  $('audit').innerHTML = r.data.map(e => `<tr>
+    <td>${e.id}</td><td>${new Date(e.occurredAt).toLocaleString()}</td>
+    <td><b>${esc(e.actor)}</b></td><td>${esc(e.action)}</td>
+    <td>${esc(e.entityType)} #${e.entityId==null?'-':e.entityId}</td>
+    <td>${esc(e.details)}</td></tr>`).join('');
+}
+
+async function completar(id){
+  const ev = prompt('Referencia de evidencia (ticket, folio, captura):', 'TICKET-INC-');
+  if(!ev) return;
+  const co = prompt('Comentarios (opcional):', '') || null;
+  const r = await api('/api/tasks/'+id+'/complete', 'PATCH', {evidenceReference: ev, comments: co});
+  log(`PATCH /api/tasks/${id}/complete -> ${r.status}` + (r.status===200?' COMPLETADA':' '+JSON.stringify(r.data)),
+      r.status===200?null:'err');
+  recargar();
+}
+
+async function validar(id){
+  const r = await api('/api/tasks/'+id+'/validate', 'PATCH');
+  if(r.status===200) log(`PATCH /api/tasks/${id}/validate -> 200 VALIDADA por ${r.data.validatedBy}`);
+  else if(r.status===403) log(`PATCH /api/tasks/${id}/validate -> 403 RECHAZADO: nadie valida su propio trabajo`, 'warn');
+  else log(`PATCH /api/tasks/${id}/validate -> ${r.status} ${JSON.stringify(r.data)}`, 'err');
+  recargar();
+}
+
+async function crearCaso(){
+  const f = $('fecha').value;
+  if(!f){ alert('Indica la fecha efectiva'); return; }
+  const r = await api('/api/offboardings', 'POST', {
+    employeeName: $('n').value, employeeIdentifier: $('idf').value,
+    corporateEmail: $('mail').value, department: $('dep').value,
+    managerName: $('jefe').value, terminationType: $('tipo').value,
+    effectiveAt: new Date(f).toISOString(), riskLevel: $('riesgo').value,
+    confidential: $('conf').value === 'true', observations: $('obs').value || null
+  });
+  log(`POST /api/offboardings -> ${r.status}` + (r.status===201?` caso ${r.data.caseNumber} con ${r.data.tasks.length} tareas`:' '+JSON.stringify(r.data)),
+      r.status===201?null:'err');
+  recargar();
+}
+
+function generarPass(){
+  const may='ABCDEFGHJKLMNPQRSTUVWXYZ', min='abcdefghijkmnopqrstuvwxyz', num='23456789', sim='#$%&*+-';
+  const todo=may+min+num+sim; let p='';
+  p+=may[Math.floor(Math.random()*may.length)];
+  p+=num[Math.floor(Math.random()*num.length)];
+  p+=sim[Math.floor(Math.random()*sim.length)];
+  for(let i=0;i<11;i++) p+=todo[Math.floor(Math.random()*todo.length)];
+  $('nu_pass').value = p.split('').sort(()=>Math.random()-0.5).join('');
+}
+
+async function crearUsuario(){
+  const roles = Array.from(document.querySelectorAll('.rol:checked')).map(c=>c.value);
+  const av = $('nu_aviso'); av.textContent='';
+  if(!$('nu_user').value || !$('nu_nombre').value || !$('nu_mail').value){
+    av.textContent='Faltan datos obligatorios.'; return; }
+  if(($('nu_pass').value||'').length < 12){
+    av.textContent='La contrasena debe tener al menos 12 caracteres.'; return; }
+  if(!roles.length){ av.textContent='Asigna al menos un rol.'; return; }
+  if(roles.includes('EJECUTOR') && roles.includes('SEGURIDAD')){
+    if(!confirm('ATENCION: esta cuenta podria ejecutar y validar.\nEso rompe la separacion de deberes.\n\nCrear de todos modos?')) return;
+  }
+  const r = await api('/api/users','POST',{
+    username: $('nu_user').value.trim(), fullName: $('nu_nombre').value.trim(),
+    email: $('nu_mail').value.trim(), password: $('nu_pass').value, roles: roles
+  });
+  if(r.status===201){
+    log(`POST /api/users -> 201 usuario ${$('nu_user').value} creado con roles ${roles.join(', ')}`);
+    alert('Usuario creado.\n\nEntregale estos datos:\n\nUsuario: '+$('nu_user').value+'\nContrasena: '+$('nu_pass').value+'\n\nEsta contrasena no se vuelve a mostrar.');
+    $('nu_user').value=''; $('nu_nombre').value=''; $('nu_mail').value=''; $('nu_pass').value='';
+    document.querySelectorAll('.rol:checked').forEach(c=>c.checked=false);
+  } else {
+    av.textContent = (r.data && r.data.detail) ? r.data.detail : 'Error '+r.status;
+    log(`POST /api/users -> ${r.status} ${JSON.stringify(r.data)}`,'err');
+  }
+  recargar();
+}
+
+async function cargarUsuarios(){
+  const r = await api('/api/users');
+  const t = $('tabla_usuarios');
+  if(r.status!==200){
+    t.innerHTML = `<tr><td colspan="6" style="color:#5a6b7f">No hay endpoint de listado de usuarios (HTTP ${r.status}). Los usuarios creados si quedan registrados en la bitacora de abajo.</td></tr>`;
+    return;
+  }
+  const lista = Array.isArray(r.data) ? r.data : (r.data.content || []);
+  t.innerHTML = lista.map(u => `<tr>
+    <td>${u.id}</td><td><b>${esc(u.username)}</b></td><td>${esc(u.fullName)}</td>
+    <td>${esc(u.email)}</td>
+    <td>${(u.roles||[]).map(x=>`<span class="pill NORMAL">${esc(x)}</span>`).join(' ')}</td>
+    <td>${u.enabled===false?'<span class="pill CRITICO">INACTIVO</span>':'<span class="pill VALIDADA">ACTIVO</span>'}</td>
+  </tr>`).join('');
+}
+
+function recargar(){ cargarCasos(); cargarAudit(); cargarUsuarios(); }
+const d = new Date(Date.now()+86400000);
+d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+$('fecha').value = d.toISOString().slice(0,16);
+recargar();
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Sign in | Employee Offboarding Control</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #eef1f5;
+            color: #1c2530;
+            font-family: system-ui, "Segoe UI", sans-serif;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(18, 38, 63, .16);
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: #12263f;
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        h1 {
+            margin: 0;
+            color: #12263f;
+            text-align: center;
+            font-size: 23px;
+        }
+
+        .subtitle {
+            margin: 8px 0 25px;
+            color: #66788c;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        label {
+            display: block;
+            margin: 14px 0 5px;
+            color: #45586e;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #c8d2de;
+            border-radius: 6px;
+            outline: none;
+            font: inherit;
+        }
+
+        input:focus {
+            border-color: #2462a0;
+            box-shadow: 0 0 0 3px rgba(36, 98, 160, .12);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 11px;
+            border: 0;
+            border-radius: 6px;
+            background: #12263f;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        button:hover {
+            background: #1d3a5f;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 17px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .error {
+            background: #fbdcd8;
+            color: #a52314;
+        }
+
+        .success {
+            background: #d5f0e0;
+            color: #146c42;
+        }
+
+        .warning {
+            background: #fdf0d5;
+            color: #8a5a00;
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-card">
+    <div class="logo">OB</div>
+
+    <h1>Employee Offboarding Control</h1>
+
+    <p class="subtitle">
+        Sign in with your authorized account
+    </p>
+
+    <div id="errorMessage" class="message error">
+        Incorrect username or password.
+    </div>
+
+    <div id="logoutMessage" class="message success">
+        You have signed out successfully.
+    </div>
+
+    <div id="expiredMessage" class="message warning">
+        Your session has expired. Please sign in again.
+    </div>
+
+    <form method="post" action="/login">
+        <label for="username">Username</label>
+
+        <input
+            id="username"
+            name="username"
+            type="text"
+            autocomplete="username"
+            required
+            autofocus
+        >
+
+        <label for="password">Password</label>
+
+        <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit">
+            Sign in
+        </button>
+    </form>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("error")) {
+        document.getElementById("errorMessage").style.display = "block";
+    }
+
+    if (params.has("logout")) {
+        document.getElementById("logoutMessage").style.display = "block";
+    }
+
+    if (params.has("expired")) {
+        document.getElementById("expiredMessage").style.display = "block";
+    }
+</script>
+</body>
+</html>

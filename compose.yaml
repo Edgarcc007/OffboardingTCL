@@ -1,0 +1,51 @@
+{
+  "services": {
+    "database": {
+      "image": "postgres:16-alpine",
+      "container_name": "offboarding-database",
+      "restart": "unless-stopped",
+      "environment": {
+        "POSTGRES_DB": "${POSTGRES_DB}",
+        "POSTGRES_USER": "${POSTGRES_USER}",
+        "POSTGRES_PASSWORD": "${POSTGRES_PASSWORD}"
+      },
+      "volumes": [
+        "database-data:/var/lib/postgresql/data"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"
+        ],
+        "interval": "5s",
+        "timeout": "5s",
+        "retries": 12
+      }
+    },
+    "application": {
+      "build": ".",
+      "container_name": "offboarding-application",
+      "restart": "unless-stopped",
+      "depends_on": {
+        "database": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "SPRING_DATASOURCE_URL": "jdbc:postgresql://database:5432/${POSTGRES_DB}",
+        "SPRING_DATASOURCE_USERNAME": "${POSTGRES_USER}",
+        "SPRING_DATASOURCE_PASSWORD": "${POSTGRES_PASSWORD}",
+        "APP_SECURITY_ADMIN_USERNAME": "${ADMIN_USERNAME}",
+        "APP_SECURITY_ADMIN_PASSWORD": "${ADMIN_PASSWORD}",
+        "APP_SECURITY_ADMIN_FULLNAME": "${ADMIN_FULLNAME}",
+        "APP_SECURITY_ADMIN_EMAIL": "${ADMIN_EMAIL}"
+      },
+      "ports": [
+        "0.0.0.0:8080:8080"
+      ]
+    }
+  },
+  "volumes": {
+    "database-data": null
+  }
+}

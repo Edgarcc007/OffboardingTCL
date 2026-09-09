@@ -17,10 +17,14 @@ import com.empresa.offboarding.repository.OffboardingTaskRepository;
 import com.empresa.offboarding.repository.TaskTemplateRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +40,14 @@ public class OffboardingService {
     private final CaseNumberGenerator caseNumberGenerator;
     private final AuditService auditService;
 
+    /* â”€â”€ Sistemas que Control de Accesos puede gestionar â”€â”€ */
+    private static final Set<String> ACCESS_CONTROL_SYSTEMS = Set.of(
+            "Accesos fisicos",
+            "Accesos fÃ­sicos",
+            "Control de accesos",
+            "BiomÃ©tricos"
+    );
+
     @Transactional
     public OffboardingResponse create(
             CreateOffboardingRequest request,
@@ -47,7 +59,7 @@ public class OffboardingService {
                         ? EnumSet.noneOf(AccessType.class)
                         : EnumSet.copyOf(request.accesses());
 
-Set<String> selectionCodes = new HashSet<>();
+        Set<String> selectionCodes = new HashSet<>();
 
         if (request.computerAssigned()) {
             selectionCodes.add("COMPUTER");
@@ -243,6 +255,23 @@ Set<String> selectionCodes = new HashSet<>();
             );
         }
 
+        /* â”€â”€ Tareas automÃ¡ticas de biomÃ©trico cuando aplica â”€â”€ */
+        if (request.fingerprintRegistered() || request.faceidRegistered()) {
+            offboardingCase.addTask(
+                    new OffboardingTask(
+                            "Control de accesos",
+                            buildBiometricTaskName(
+                                    request.fingerprintRegistered(),
+                                    request.faceidRegistered()
+                            ),
+                            true,
+                            false,
+                            4,
+                            effectiveAt
+                    )
+            );
+        }
+
         OffboardingCase saved =
                 caseRepository.save(offboardingCase);
 
@@ -260,6 +289,10 @@ Set<String> selectionCodes = new HashSet<>();
                         + saved.isComputerAssigned()
                         + "; telefono="
                         + saved.isPhoneAssigned()
+                        + "; huella="
+                        + saved.isFingerprintRegistered()
+                        + "; faceid="
+                        + saved.isFaceidRegistered()
                         + "; accesos="
                         + saved.getAccesses()
                         + "; otrosAccesos="
@@ -303,6 +336,8 @@ Set<String> selectionCodes = new HashSet<>();
             );
         }
 
+        enforceAccessControlScope(task);
+
         task.setStatus(TaskStatus.COMPLETADA);
         task.setEvidenceReference(
                 request.evidenceReference());
@@ -320,8 +355,9 @@ Set<String> selectionCodes = new HashSet<>();
                 "sistema=" + task.getSystemName()
                         + "; critica="
                         + task.isCritical()
-                        + "; referencia="
-                        + request.evidenceReference()
+                        + (request.evidenceReference() != null
+                                ? "; referencia=" + request.evidenceReference()
+                                : "")
         );
 
         updateCaseStatus(
@@ -338,17 +374,21 @@ Set<String> selectionCodes = new HashSet<>();
     ) {
         OffboardingTask task = requireTask(taskId);
 
-        if (!isAssetTask(task)) {
+        /*
+         * ValidaciÃ³n ampliada: activos fÃ­sicos (computadora/telÃ©fono)
+         * y tareas de control de accesos (biomÃ©tricos).
+         */
+        if (!isAssetTask(task) && !isAccessControlTask(task)) {
             throw new IllegalStateException(
                     "Administrative validation only applies "
-                            + "to computers and phones"
+                            + "to assets and access control tasks"
             );
         }
 
         if (task.getStatus()
                 != TaskStatus.COMPLETADA) {
             throw new IllegalStateException(
-                    "Solo se puede validar un activo "
+                    "Solo se puede validar una tarea "
                             + "en estado COMPLETADA"
             );
         }
@@ -360,20 +400,22 @@ Set<String> selectionCodes = new HashSet<>();
                 && validatedBy.equalsIgnoreCase(
                     completedBy)) {
             throw new IllegalStateException(
-                    "La validación debe hacerla una persona "
-                            + "distinta a quien recibió o procesó el activo"
+                    "La validaciÃ³n debe hacerla una persona "
+                            + "distinta a quien procesÃ³ la tarea"
             );
         }
 
+        enforceAccessControlScope(task);
+
         if (!request.assetReceived()) {
             throw new IllegalArgumentException(
-                    "Debes confirmar la recepción física del activo"
+                    "Debes confirmar la recepciÃ³n o ejecuciÃ³n de la tarea"
             );
         }
 
         if (!request.inventoryUpdated()) {
             throw new IllegalArgumentException(
-                    "Debes confirmar la actualización del inventario"
+                    "Debes confirmar la actualizaciÃ³n del registro"
             );
         }
 
@@ -399,7 +441,7 @@ Set<String> selectionCodes = new HashSet<>();
 
         auditService.record(
                 validatedBy,
-                "ASSET_RECEIPT_VALIDATED",
+                "TASK_VALIDATED",
                 "OffboardingTask",
                 task.getId(),
                 "sistema=" + task.getSystemName()
@@ -511,6 +553,56 @@ Set<String> selectionCodes = new HashSet<>();
         return toTaskResponse(task);
     }
 
+    /* â”€â”€ Helpers â”€â”€ */
+
+    private String buildBiometricTaskName(
+            boolean fingerprint,
+            boolean faceid
+    ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Dar de baja ");
+
+        if (fingerprint && faceid) {
+            sb.append("huella y foto en equipos FaceID y relojes checadores");
+        } else if (fingerprint) {
+            sb.append("huella en relojes checadores");
+        } else {
+            sb.append("foto en equipos FaceID");
+        }
+
+        sb.append(", revocar accesos biomÃ©tricos");
+        return sb.toString();
+    }
+
+    /**
+     * Si el usuario autenticado SOLO tiene el rol CONTROL_ACCESOS
+     * (sin ADMIN ni IT_ENGINEER), restringe la operaciÃ³n
+     * exclusivamente a tareas de control de accesos.
+     */
+    private void enforceAccessControlScope(OffboardingTask task) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return;
+        }
+
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+        boolean isAdmin = authorities.stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+        boolean isEngineer = authorities.stream()
+                .anyMatch(a -> "ROLE_IT_ENGINEER".equals(a.getAuthority()));
+        boolean isAccessControl = authorities.stream()
+                .anyMatch(a -> "ROLE_CONTROL_ACCESOS".equals(a.getAuthority()));
+
+        if (isAccessControl && !isAdmin && !isEngineer) {
+            if (!isAccessControlTask(task)) {
+                throw new IllegalStateException(
+                        "El perfil Control de Accesos solo puede procesar "
+                                + "tareas de biomÃ©tricos y accesos fÃ­sicos"
+                );
+            }
+        }
+    }
+
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
     }
@@ -535,7 +627,7 @@ Set<String> selectionCodes = new HashSet<>();
         }
 
         String value =
-                taskName + " — " + cleanReference;
+                taskName + " \u2014 " + cleanReference;
 
         return value.length() <= 200
                 ? value
@@ -581,20 +673,23 @@ Set<String> selectionCodes = new HashSet<>();
         }
     }
 
+    private boolean isAccessControlTask(
+            OffboardingTask task
+    ) {
+        String systemName = task.getSystemName();
+        return ACCESS_CONTROL_SYSTEMS.contains(systemName);
+    }
+
     private boolean isAssetTask(
             OffboardingTask task
     ) {
         String systemName =
                 task.getSystemName();
 
-        return "Equipo de cómputo".equals(
-                    systemName)
-                || "Telefonía".equals(
-                    systemName)
-                || "Activos asignados".equals(
-                    systemName)
-                || "Telefonia".equals(
-                    systemName);
+        return "Equipo de cÃ³mputo".equals(systemName)
+                || "TelefonÃ­a".equals(systemName)
+                || "Activos asignados".equals(systemName)
+                || "Telefonia".equals(systemName);
     }
 
     private boolean isTaskClosed(
@@ -605,7 +700,7 @@ Set<String> selectionCodes = new HashSet<>();
             return true;
         }
 
-        if (isAssetTask(task)) {
+        if (isAssetTask(task) || isAccessControlTask(task)) {
             return task.getStatus()
                     == TaskStatus.VALIDADA;
         }

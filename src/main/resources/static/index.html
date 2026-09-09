@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -523,7 +523,6 @@ td{
 }
 
 
-/* FEATURE_V7_EQUIPOS_ACCESOS */
 .selection-panel{
   margin:18px 0;
   padding:16px;
@@ -575,7 +574,6 @@ td{
 }
 
 
-/* FEATURE_ADMINISTRACION_USUARIOS_V3 */
 .password-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -616,7 +614,6 @@ td{
 }
 
 
-/* FEATURE_CORREO_OPCIONAL_USUARIOS */
 .required-marker{
   color:#c62828;
   font-weight:800;
@@ -714,7 +711,6 @@ td{
 
 <div id="seccion_captura" class="card hidden">
   <h2>Register employee offboarding</h2>
-  <!-- FEATURE_CAMPOS_CAPTURA_BAJA_FINAL -->
   <p class="required-legend">
     <span class="required-marker">*</span>
     Required field. All other fields are optional.
@@ -763,7 +759,7 @@ td{
       <input
         id="work_area"
         autocomplete="off"
-        placeholder="Example: Second floor – Finance" required aria-required="true">
+        placeholder="Example: Second floor - Finance" required aria-required="true">
     </div>
 
     <div>
@@ -905,7 +901,7 @@ td{
     <div class="assignment-detail">
       <label>Employee category <span class="optional-marker">(optional)</span></label>
       <select id="employee_category">
-        <option value="">— Select —</option>
+        <option value="">-- Select --</option>
         <option value="DIRECTO">Directo</option>
         <option value="INDIRECTO">Indirecto</option>
         <option value="STAFF">Staff</option>
@@ -1015,7 +1011,7 @@ td{
           <th>Identifier</th>
           <th>Department</th>
           <th>Building</th>
-          <th>Área</th>
+          <th>Area</th>
           <th>Offboarding type</th>
           <th>Effective date</th>
           <th>Status</th>
@@ -1025,7 +1021,7 @@ td{
       <tbody id="tabla_registros_rh">
         <tr>
           <td colspan="10" class="empty-row">
-            Todavía no has registrado bajas en esta sesión.
+            No offboardings registered in this session yet.
           </td>
         </tr>
       </tbody>
@@ -1033,18 +1029,19 @@ td{
   </div>
 </div>
 
+
 <div id="seccion_usuarios" class="card hidden">
   <h2>User administration</h2>
   <p class="required-legend">
     <span class="required-marker">*</span>
-    Campo obligatorio
+    Required field
   </p>
 
 
   <div class="grid">
     <div>
       <label>Username<span class="required-marker">*</span></label>
-      <input id="nu_user" autocomplete="off" placeholder="nombre.apellido">
+      <input id="nu_user" autocomplete="off" placeholder="first.last">
     </div>
 
     <div>
@@ -1066,7 +1063,7 @@ td{
         class="mini"
         type="button"
         onclick="generarPass()">
-        Generar
+        Generate
       </button>
     </div>
   </div>
@@ -1081,7 +1078,7 @@ td{
         class="rol"
         value="RECURSOS_HUMANOS"
         style="width:auto">
-      <b>Human Resources</b> — solamente captura
+      <b>Human Resources</b> -- capture only
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1090,7 +1087,16 @@ td{
         class="rol"
         value="IT_ENGINEER"
         style="width:auto">
-      <b>IT Engineer</b> — procesa tareas
+      <b>IT Engineer</b> -- processes tasks
+    </label>
+
+    <label style="display:inline-block;margin-right:20px;font-weight:400">
+      <input
+        type="checkbox"
+        class="rol"
+        value="CONTROL_ACCESOS"
+        style="width:auto">
+      <b>Access Control</b> -- biometrics and physical access
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1099,7 +1105,7 @@ td{
         class="rol"
         value="AUDITOR"
         style="width:auto">
-      <b>Auditor</b> — consulta de solo lectura
+      <b>Auditor</b> -- read-only
     </label>
 
     <label style="display:inline-block;margin-right:20px;font-weight:400">
@@ -1108,7 +1114,7 @@ td{
         class="rol"
         value="ADMIN"
         style="width:auto">
-      <b>Administrador</b> — control completo
+      <b>Administrator</b> -- full control
     </label>
   </div>
 
@@ -1127,9 +1133,9 @@ td{
         <tr>
           <th>#</th>
           <th>Username</th>
-          <th>Nombre</th>
+          <th>Name</th>
           <th>Email</th>
-          <th>Perfiles</th>
+          <th>Profiles</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -1145,7 +1151,7 @@ td{
     <h2>Edit user</h2>
     <p class="required-legend">
       <span class="required-marker">*</span>
-      Campo obligatorio
+      Required field
     </p>
 
 
@@ -1201,6 +1207,14 @@ td{
         <input
           type="checkbox"
           class="eu_rol"
+          value="CONTROL_ACCESOS">
+        Access Control
+      </label>
+
+      <label class="selection-option">
+        <input
+          type="checkbox"
+          class="eu_rol"
           value="AUDITOR">
         Auditor
       </label>
@@ -1210,7 +1224,7 @@ td{
           type="checkbox"
           class="eu_rol"
           value="ADMIN">
-        Administrador
+        Administrator
       </label>
     </div>
 
@@ -1219,7 +1233,7 @@ td{
     <h3>Reset password</h3>
 
     <p style="font-size:12px;color:#66788c">
-      Deja estos campos vacíos si no deseas cambiarla.
+      Leave these fields empty if you do not want to change the password.
     </p>
 
     <div class="password-grid">
@@ -1261,7 +1275,7 @@ td{
 
 
 <div id="seccion_casos" class="card hidden">
-  <h2 id="titulo_casos">Cases y tareas</h2>
+  <h2 id="titulo_casos">Tasks</h2>
   <div id="casos">Loading...</div>
 </div>
 
@@ -1274,7 +1288,7 @@ td{
       type="button"
       class="audit-toggle"
       aria-expanded="false"
-      title="Expandir bitácora"
+      title="Expand audit log"
       onclick="toggleAuditoria()">
 
       <span class="audit-arrow">&#9654;</span>
@@ -1283,7 +1297,7 @@ td{
     <h2>Audit log</h2>
 
     <span id="audit_count" class="case-count">
-      0 eventos
+      0 events
     </span>
   </div>
 
@@ -1293,12 +1307,12 @@ td{
         <thead>
           <tr>
             <th>#</th>
-            <th>Semana</th>
-            <th>Fecha</th>
+            <th>Week</th>
+            <th>Date</th>
             <th>Actor</th>
-            <th>Acción</th>
+            <th>Action</th>
             <th>Entity</th>
-            <th>Detalle</th>
+            <th>Details</th>
           </tr>
         </thead>
 
@@ -1314,7 +1328,6 @@ td{
 </div>
 
 </main>
-
 <script>
 const $ = id => document.getElementById(id);
 
@@ -1369,7 +1382,7 @@ function textoSemanaISO(valor) {
 
   return 'S' +
     String(resultado.week).padStart(2, '0') +
-    ' · ' +
+    ' \u00b7 ' +
     resultado.year;
 }
 
@@ -1385,7 +1398,7 @@ function actualizarIndicadorSemana() {
   indicador.textContent =
     'Week ' +
     resultado.week +
-    ' · ' +
+    ' \u00b7 ' +
     resultado.year;
 }
 
@@ -1418,8 +1431,8 @@ function toggleAuditoria() {
   boton.setAttribute(
     'title',
     expandir
-      ? 'Contraer bitácora'
-      : 'Expandir bitácora'
+      ? 'Collapse audit log'
+      : 'Expand audit log'
   );
 }
 
@@ -1524,7 +1537,7 @@ function obtenerRegistrosRH() {
   }
   catch (error) {
     console.error(
-      'No fue posible leer el registro de RH',
+      'Unable to read RH records',
       error
     );
 
@@ -1541,7 +1554,7 @@ function guardarRegistrosRH(registros) {
   }
   catch (error) {
     console.error(
-      'No fue posible guardar el registro de RH',
+      'Unable to save RH records',
       error
     );
   }
@@ -1570,10 +1583,6 @@ function agregarRegistroRH(caso, solicitud) {
     status: caso.status || 'REGISTRADA'
   });
 
-  /*
-   * Mantener como máximo los últimos 100 registros
-   * de la sesión actual del navegador.
-   */
   guardarRegistrosRH(
     registros.slice(0, 100)
   );
@@ -1591,68 +1600,48 @@ function renderizarRegistrosRH() {
   const registros = obtenerRegistrosRH();
 
   if (!registros.length) {
-    tabla.innerHTML = `
-      <tr>
-        <td colspan="10" class="empty-row">
-          Todavía no has registrado bajas en esta sesión.
-        </td>
-      </tr>
-    `;
-
+    tabla.innerHTML = '<tr><td colspan="10" class="empty-row">No offboardings registered in this session yet.</td></tr>';
     return;
   }
 
-  tabla.innerHTML = registros.map(registro => `
-    <tr>
-      <td>
-        ${new Date(registro.registeredAt).toLocaleTimeString()}
-      </td>
-
-      <td>
-        <b>${esc(registro.caseNumber)}</b>
-      </td>
-
-      <td>${esc(registro.employeeName)}</td>
-      <td>${esc(registro.employeeIdentifier)}</td>
-      <td>${esc(registro.department)}</td>
-      <td>${esc(registro.building || '-')}</td>
-      <td>${esc(registro.workArea || '-')}</td>
-      <td>${esc(registro.terminationType)}</td>
-
-      <td>
-        ${registro.effectiveAt
-          ? new Date(registro.effectiveAt).toLocaleString()
-          : '-'}
-      </td>
-
-      <td>
-        <span class="pill ${esc(registro.status)}">
-          ${esc(registro.status)}
-        </span>
-      </td>
-    </tr>
-  `).join('');
+  tabla.innerHTML = registros.map(registro => '<tr>' +
+    '<td>' + new Date(registro.registeredAt).toLocaleTimeString() + '</td>' +
+    '<td><b>' + esc(registro.caseNumber) + '</b></td>' +
+    '<td>' + esc(registro.employeeName) + '</td>' +
+    '<td>' + esc(registro.employeeIdentifier) + '</td>' +
+    '<td>' + esc(registro.department) + '</td>' +
+    '<td>' + esc(registro.building || '-') + '</td>' +
+    '<td>' + esc(registro.workArea || '-') + '</td>' +
+    '<td>' + esc(registro.terminationType) + '</td>' +
+    '<td>' + (registro.effectiveAt ? new Date(registro.effectiveAt).toLocaleString() : '-') + '</td>' +
+    '<td><span class="pill ' + esc(registro.status) + '">' + esc(registro.status) + '</span></td>' +
+    '</tr>'
+  ).join('');
 }
 
 
 function nombrePerfil() {
   if (tieneRol('ADMIN')) {
-    return 'Administrador';
+    return 'Administrator';
   }
 
   if (tieneRol('RECURSOS_HUMANOS')) {
-    return 'Human Resources — solamente captura';
+    return 'Human Resources \u2014 capture only';
   }
 
   if (tieneRol('IT_ENGINEER')) {
-    return 'IT Engineer — procesamiento de bajas';
+    return 'IT Engineer \u2014 task processing';
+  }
+
+  if (tieneRol('CONTROL_ACCESOS')) {
+    return 'Access Control \u2014 biometrics and physical access';
   }
 
   if (tieneRol('AUDITOR')) {
-    return 'Auditor — solo lectura';
+    return 'Auditor \u2014 read-only';
   }
 
-  return 'No profile autorizado';
+  return 'No authorized profile';
 }
 
 function aplicarPermisos() {
@@ -1660,12 +1649,14 @@ function aplicarPermisos() {
   const esRH = tieneRol('RECURSOS_HUMANOS');
   const esEngineer = tieneRol('IT_ENGINEER');
   const esAuditor = tieneRol('AUDITOR');
+  const esControlAccesos = tieneRol('CONTROL_ACCESOS');
 
   const tienePerfil =
     esAdmin ||
     esRH ||
     esEngineer ||
-    esAuditor;
+    esAuditor ||
+    esControlAccesos;
 
   mostrar('perfil_actual', true);
   $('perfil_actual').textContent = nombrePerfil();
@@ -1673,36 +1664,36 @@ function aplicarPermisos() {
   mostrar('sin_permisos', !tienePerfil);
   mostrar('seccion_captura', esAdmin || esRH);
 
-  /*
-   * El resumen de registros es exclusivo del perfil
-   * Human Resources.
-   */
   mostrar(
     'seccion_registros_rh',
     esRH && !esAdmin
   );
 
   mostrar('seccion_usuarios', esAdmin);
-  mostrar('seccion_casos', esAdmin || esEngineer || esAuditor);
+  mostrar('seccion_casos', esAdmin || esEngineer || esAuditor || esControlAccesos);
   mostrar('seccion_auditoria', esAdmin || esAuditor);
-  mostrar('seccion_log', esAdmin || esEngineer);
+  mostrar('seccion_log', esAdmin || esEngineer || esControlAccesos);
 
   mostrar(
     'btn_recargar',
-    esAdmin || esEngineer || esAuditor
+    esAdmin || esEngineer || esAuditor || esControlAccesos
   );
 
-  if (esAuditor && !esAdmin) {
+  if (esControlAccesos && !esAdmin && !esEngineer) {
     $('titulo_casos').textContent =
-      'Consulta de casos y tareas — solo lectura';
+      'Tasks \u2014 Access Control';
+  }
+  else if (esAuditor && !esAdmin) {
+    $('titulo_casos').textContent =
+      'Tasks \u2014 read-only';
   }
   else if (esEngineer && !esAdmin) {
     $('titulo_casos').textContent =
-      'Procesamiento de bajas — IT Engineer';
+      'Tasks \u2014 IT Engineer';
   }
   else {
     $('titulo_casos').textContent =
-      'Cases y tareas';
+      'Tasks';
   }
 }
 
@@ -1726,8 +1717,8 @@ async function cargarSesion() {
   rolesActuales = new Set(roles);
 
   $('roles_actuales').textContent = roles.length
-    ? 'Perfiles: ' + roles.join(', ')
-    : 'No profilees asignados';
+    ? 'Profiles: ' + roles.join(', ')
+    : 'No assigned profiles';
 
   aplicarPermisos();
   renderizarRegistrosRH();
@@ -1735,19 +1726,38 @@ async function cargarSesion() {
   return true;
 }
 
-function accionesTask(tarea) {
-  const puedeComplete =
-    tieneRol('ADMIN') ||
-    tieneRol('IT_ENGINEER');
 
-  const puedeValidar =
-    tieneRol('ADMIN');
+/* ---- Sistemas que Control de Accesos puede gestionar ---- */
+const ACCESS_CONTROL_SYSTEMS = new Set([
+  'Accesos fisicos',
+  'Accesos f\u00edsicos',
+  'Control de accesos',
+  'Biom\u00e9tricos'
+]);
+
+function esTaskDeControlAccesos(tarea) {
+  return ACCESS_CONTROL_SYSTEMS.has(tarea.systemName);
+}
+
+
+function accionesTask(tarea) {
+  const esAdmin = tieneRol('ADMIN');
+  const esEngineer = tieneRol('IT_ENGINEER');
+  const esControlAccesos = tieneRol('CONTROL_ACCESOS');
+
+  const puedeCompletarGeneral = esAdmin || esEngineer;
+  const puedeCompletarAccesos = esControlAccesos && esTaskDeControlAccesos(tarea);
+  const puedeComplete = puedeCompletarGeneral || puedeCompletarAccesos;
+
+  const puedeValidarGeneral = esAdmin;
+  const puedeValidarAccesos = esControlAccesos && esTaskDeControlAccesos(tarea);
+  const puedeValidar = puedeValidarGeneral || puedeValidarAccesos;
 
   const botones = [];
 
   if (puedeComplete && tarea.status === 'PENDIENTE') {
     botones.push(
-      `<button class="mini ok" onclick="completar(${tarea.id})">Complete</button>`
+      '<button class="mini ok" onclick="completar(' + tarea.id + ')">Complete</button>'
     );
   }
 
@@ -1757,12 +1767,12 @@ function accionesTask(tarea) {
     tarea.status === 'COMPLETADA'
   ) {
     botones.push(
-      `<button class="mini val" onclick="validarActive(${tarea.id})">Validate receipt</button>`
+      '<button class="mini val" onclick="validarActive(' + tarea.id + ')">Validate</button>'
     );
   }
 
   if (
-    tieneRol('ADMIN') &&
+    esAdmin &&
     (
       tarea.status === 'COMPLETADA' ||
       tarea.status === 'VALIDADA' ||
@@ -1770,13 +1780,13 @@ function accionesTask(tarea) {
     )
   ) {
     botones.push(
-      `<button class="mini reopen" onclick="reabrir(${tarea.id})">Reopen</button>`
+      '<button class="mini reopen" onclick="reabrir(' + tarea.id + ')">Reopen</button>'
     );
   }
 
   return botones.length
     ? botones.join('')
-    : '<span style="color:#78899b">Solo lectura</span>';
+    : '<span style="color:#78899b">Read-only</span>';
 }
 
 function toggleCase(id) {
@@ -1802,17 +1812,13 @@ function toggleCase(id) {
     boton.setAttribute(
       'title',
       expandido
-        ? 'Contraer caso'
-        : 'Expandir caso'
+        ? 'Collapse case'
+        : 'Expand case'
     );
   }
 }
 
 async function cargarCases() {
-  /*
-   * Conservar abiertos los casos que el usuario
-   * ya había desplegado antes de la actualización.
-   */
   const casosAbiertos = new Set(
     Array.from(
       document.querySelectorAll('.caso.expanded')
@@ -1823,7 +1829,7 @@ async function cargarCases() {
 
   if (respuesta.status !== 200) {
     $('casos').innerHTML =
-      'No fue posible consultar los casos. HTTP ' +
+      'Unable to load cases. HTTP ' +
       respuesta.status;
 
     log(
@@ -1836,186 +1842,85 @@ async function cargarCases() {
 
   if (!respuesta.data.length) {
     $('casos').innerHTML =
-      'No hay casos registrados.';
+      'No cases registered.';
 
     return;
   }
 
-  $('casos').innerHTML = respuesta.data.map(caso => {
-    const tareas = (caso.tasks || [])
-      .sort((a, b) => a.id - b.id);
+  $('casos').innerHTML = respuesta.data.map(function(caso) {
+    var tareas = (caso.tasks || [])
+      .sort(function(a, b) { return a.id - b.id; });
 
-    const tareasPendientes = tareas.filter(
-      tarea => tarea.status === 'PENDIENTE'
+    var tareasPendientes = tareas.filter(
+      function(tarea) { return tarea.status === 'PENDIENTE'; }
     ).length;
 
-    const estaAbierto = casosAbiertos.has(
+    var estaAbierto = casosAbiertos.has(
       String(caso.id)
     );
 
-    return `
-      <div
-        id="caso-${caso.id}"
-        data-case-id="${caso.id}"
-        class="caso ${estaAbierto ? 'expanded' : ''}">
-
-        <div class="caso-h">
-          <div class="case-header">
-
-            <button
-              type="button"
-              class="case-toggle"
-              aria-expanded="${estaAbierto ? 'true' : 'false'}"
-              title="${estaAbierto ? 'Contraer caso' : 'Expandir caso'}"
-              onclick="toggleCase(${caso.id})">
-
-              <span class="case-arrow">&#9654;</span>
-            </button>
-
-            <div class="case-summary">
-              <div class="case-summary-main">
-
-                <b>${esc(caso.caseNumber)}</b>
-
-                <span>${esc(caso.employeeName)}</span>
-
-                <span class="pill ${esc(caso.riskLevel)}">
-                  ${esc(caso.riskLevel)}
-                </span>
-
-                <span class="pill ${esc(caso.status)}">
-                  ${esc(caso.status)}
-                </span>
-
-                ${caso.confidential
-                  ? '<span class="pill CRITICO">CONFIDENCIAL</span>'
-                  : ''}
-              </div>
-
-              <div class="case-summary-secondary">
-                ${esc(caso.department || '-')}
-                &middot;
-                Building ${esc(caso.building || '-')}
-                &middot;
-                Área ${esc(caso.workArea || '-')}
-                &middot;
-                ${esc(caso.terminationType)}
-                &middot;
-                efectiva
-                ${new Date(caso.effectiveAt).toLocaleString()}
-              </div>
-            </div>
-
-            <div class="case-count">
-              ${tareas.length} tareas
-              &middot;
-              ${tareasPendientes} pendientes
-            </div>
-
-          </div>
-        </div>
-
-        <div class="caso-body">
-          <div class="table-wrapper">
-          <div class="case-details-grid">
-            <div class="detail-group">
-              <span class="detail-label">Manager</span>
-              <span class="detail-value">${esc(caso.managerName || '-')}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Category</span>
-              <span class="detail-value">${esc(caso.employeeCategory || '-')}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Computer</span>
-              <span class="detail-value">${caso.computerAssigned ? '? ' + esc(caso.computerDetails || '') : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Phone</span>
-              <span class="detail-value">${caso.phoneAssigned ? '? ' + esc(caso.phoneDetails || '') : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Fingerprint</span>
-              <span class="detail-value">${caso.fingerprintRegistered ? '?' : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Face ID</span>
-              <span class="detail-value">${caso.faceidRegistered ? '?' : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">EPP</span>
-              <span class="detail-value">${caso.eppAssigned ? '?' : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Parking</span>
-              <span class="detail-value">${caso.parkingAccess ? '?' : '—'}</span>
-            </div>
-            <div class="detail-group">
-              <span class="detail-label">Observations</span>
-              <span class="detail-value">${esc(caso.observations || '-')}</span>
-            </div>
-          </div>
-
-            <table>
-              <thead>
-                <tr>
-                  <th>System</th>
-                  <th>Task</th>
-                  <th>Vence</th>
-                  <th>Status</th>
-                  <th>Evidence</th>
-                  <th>Ejecutó</th>
-                  <th>Validó</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                ${tareas.map(tarea => `
-                  <tr>
-                    <td>
-                      ${esc(tarea.systemName)}
-
-                      ${tarea.critical
-                        ? '<span class="crit">*</span>'
-                        : ''}
-                    </td>
-
-                    <td>${esc(tarea.taskName)}</td>
-
-                    <td>
-                      ${new Date(tarea.dueAt).toLocaleString()}
-                    </td>
-
-                    <td>
-                      <span class="pill ${esc(tarea.status)}">
-                        ${esc(tarea.status)}
-                      </span>
-                    </td>
-
-                    <td>
-                      ${esc(tarea.evidenceReference || '-')}
-                    </td>
-
-                    <td>
-                      ${esc(tarea.completedBy || '-')}
-                    </td>
-
-                    <td>
-                      ${esc(tarea.validatedBy || '-')}
-                    </td>
-
-                    <td>
-                      ${accionesTask(tarea)}
-                    </td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    `;
+    return '<div id="caso-' + caso.id + '" data-case-id="' + caso.id + '" class="caso ' + (estaAbierto ? 'expanded' : '') + '">' +
+      '<div class="caso-h">' +
+        '<div class="case-header">' +
+          '<button type="button" class="case-toggle" aria-expanded="' + (estaAbierto ? 'true' : 'false') + '" title="' + (estaAbierto ? 'Collapse case' : 'Expand case') + '" onclick="toggleCase(' + caso.id + ')">' +
+            '<span class="case-arrow">&#9654;</span>' +
+          '</button>' +
+          '<div class="case-summary">' +
+            '<div class="case-summary-main">' +
+              '<b>' + esc(caso.caseNumber) + '</b>' +
+              '<span>' + esc(caso.employeeName) + '</span>' +
+              '<span class="pill ' + esc(caso.riskLevel) + '">' + esc(caso.riskLevel) + '</span>' +
+              '<span class="pill ' + esc(caso.status) + '">' + esc(caso.status) + '</span>' +
+              (caso.confidential ? '<span class="pill CRITICO">CONFIDENTIAL</span>' : '') +
+            '</div>' +
+            '<div class="case-summary-secondary">' +
+              esc(caso.department || '-') +
+              ' &middot; Building ' + esc(caso.building || '-') +
+              ' &middot; Area ' + esc(caso.workArea || '-') +
+              ' &middot; ' + esc(caso.terminationType) +
+              ' &middot; effective ' + new Date(caso.effectiveAt).toLocaleString() +
+            '</div>' +
+          '</div>' +
+          '<div class="case-count">' +
+            tareas.length + ' tasks &middot; ' + tareasPendientes + ' pending' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="caso-body">' +
+        '<div class="table-wrapper">' +
+        '<div class="case-details-grid">' +
+          '<div class="detail-group"><span class="detail-label">Manager</span><span class="detail-value">' + esc(caso.managerName || '-') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Category</span><span class="detail-value">' + esc(caso.employeeCategory || '-') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Computer</span><span class="detail-value">' + (caso.computerAssigned ? '\u2705 ' + esc(caso.computerDetails || '') : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Phone</span><span class="detail-value">' + (caso.phoneAssigned ? '\u2705 ' + esc(caso.phoneDetails || '') : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Fingerprint</span><span class="detail-value">' + (caso.fingerprintRegistered ? '\u2705' : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Face ID</span><span class="detail-value">' + (caso.faceidRegistered ? '\u2705' : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">EPP</span><span class="detail-value">' + (caso.eppAssigned ? '\u2705' : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Parking</span><span class="detail-value">' + (caso.parkingAccess ? '\u2705' : '\u2014') + '</span></div>' +
+          '<div class="detail-group"><span class="detail-label">Observations</span><span class="detail-value">' + esc(caso.observations || '-') + '</span></div>' +
+        '</div>' +
+          '<table>' +
+            '<thead><tr>' +
+              '<th>System</th><th>Task</th><th>Due</th><th>Status</th><th>Evidence</th><th>Completed by</th><th>Validated by</th><th>Actions</th>' +
+            '</tr></thead>' +
+            '<tbody>' +
+              tareas.map(function(tarea) {
+                return '<tr>' +
+                  '<td>' + esc(tarea.systemName) + (tarea.critical ? ' <span class="crit">*</span>' : '') + '</td>' +
+                  '<td>' + esc(tarea.taskName) + '</td>' +
+                  '<td>' + new Date(tarea.dueAt).toLocaleString() + '</td>' +
+                  '<td><span class="pill ' + esc(tarea.status) + '">' + esc(tarea.status) + '</span></td>' +
+                  '<td>' + esc(tarea.evidenceReference || '-') + '</td>' +
+                  '<td>' + esc(tarea.completedBy || '-') + '</td>' +
+                  '<td>' + esc(tarea.validatedBy || '-') + '</td>' +
+                  '<td>' + accionesTask(tarea) + '</td>' +
+                '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -2023,15 +1928,8 @@ async function cargarAudit() {
   const respuesta = await api('/api/audit');
 
   if (respuesta.status !== 200) {
-    $('audit').innerHTML = `
-      <tr>
-        <td colspan="7">
-          No fue posible consultar la bitácora.
-          HTTP ${respuesta.status}
-        </td>
-      </tr>
-    `;
-
+    $('audit').innerHTML =
+      '<tr><td colspan="7">Unable to load audit log. HTTP ' + respuesta.status + '</td></tr>';
     return;
   }
 
@@ -2045,87 +1943,64 @@ async function cargarAudit() {
     contador.textContent =
       eventos.length +
       (eventos.length === 1
-        ? ' evento'
-        : ' eventos');
+        ? ' event'
+        : ' events');
   }
 
   if (!eventos.length) {
-    $('audit').innerHTML = `
-      <tr>
-        <td colspan="7" class="empty-row">
-          No existen eventos de auditoría.
-        </td>
-      </tr>
-    `;
-
+    $('audit').innerHTML =
+      '<tr><td colspan="7" class="empty-row">No audit events.</td></tr>';
     return;
   }
 
-  $('audit').innerHTML = eventos.map(evento => `
-    <tr>
-      <td>${evento.id}</td>
-
-      <td>
-        <span class="pill NORMAL">
-          ${textoSemanaISO(evento.occurredAt)}
-        </span>
-      </td>
-
-      <td>
-        ${new Date(evento.occurredAt).toLocaleString()}
-      </td>
-
-      <td>
-        <b>${esc(evento.actor)}</b>
-      </td>
-
-      <td>${esc(evento.action)}</td>
-
-      <td>
-        ${esc(evento.entityType)}
-        #${evento.entityId == null ? '-' : evento.entityId}
-      </td>
-
-      <td>${esc(evento.details)}</td>
-    </tr>
-  `).join('');
+  $('audit').innerHTML = eventos.map(function(evento) {
+    return '<tr>' +
+      '<td>' + evento.id + '</td>' +
+      '<td><span class="pill NORMAL">' + textoSemanaISO(evento.occurredAt) + '</span></td>' +
+      '<td>' + new Date(evento.occurredAt).toLocaleString() + '</td>' +
+      '<td><b>' + esc(evento.actor) + '</b></td>' +
+      '<td>' + esc(evento.action) + '</td>' +
+      '<td>' + esc(evento.entityType) + ' #' + (evento.entityId == null ? '-' : evento.entityId) + '</td>' +
+      '<td>' + esc(evento.details) + '</td>' +
+    '</tr>';
+  }).join('');
 }
 
 async function completar(id) {
   if (
     !tieneRol('ADMIN') &&
-    !tieneRol('IT_ENGINEER')
+    !tieneRol('IT_ENGINEER') &&
+    !tieneRol('CONTROL_ACCESOS')
   ) {
     return;
   }
 
-  const evidencia = prompt(
-    'Referencia de evidencia (ticket, folio o captura):',
-    'TICKET-INC-'
-  );
-
-  if (!evidencia) {
-    return;
-  }
-
   const comentarios = prompt(
-    'Comments opcionales:',
-    ''
-  ) || null;
+      'Comments (e.g. Done, OK, Complete):',
+      'Done'
+    );
+
+    if (!comentarios) {
+      return;
+    }
 
   const respuesta = await api(
     '/api/tasks/' + id + '/complete',
     'PATCH',
     {
-      evidenceReference: evidencia,
-      comments: comentarios
+      evidenceReference: comentarios,
+        comments: null
     }
   );
 
   log(
-    `PATCH /api/tasks/${id}/complete -> ${respuesta.status}`,
+    'PATCH /api/tasks/' + id + '/complete -> ' + respuesta.status,
     respuesta.status === 200 ? null : 'err'
   );
+
+  if (respuesta.status !== 200 && respuesta.data && respuesta.data.detail) {
+    alert(respuesta.data.detail);
+  }
 
   await recargar();
 }
@@ -2137,7 +2012,7 @@ async function reabrir(id) {
   }
 
   const motivo = prompt(
-    'Escribe el motivo para reabrir la tarea:',
+    'Enter the reason to reopen this task:',
     ''
   );
 
@@ -2149,16 +2024,16 @@ async function reabrir(id) {
 
   if (motivoLimpio.length < 5) {
     alert(
-      'El motivo debe tener al menos 5 caracteres.'
+      'The reason must be at least 5 characters.'
     );
 
     return;
   }
 
   const confirmar = confirm(
-    'La tarea regresará a estado PENDIENTE.\n\n' +
-    'Será necesario procesarla nuevamente.\n\n' +
-    '¿Deseas continuar?'
+    'The task will return to PENDING status.\n\n' +
+    'It will need to be processed again.\n\n' +
+    'Do you want to continue?'
   );
 
   if (!confirmar) {
@@ -2176,7 +2051,7 @@ async function reabrir(id) {
   if (respuesta.status === 200) {
     log(
       'Task ' + id +
-      ' reabierta correctamente por ADMIN.'
+      ' reopened successfully by ADMIN.'
     );
   }
   else {
@@ -2190,7 +2065,7 @@ async function reabrir(id) {
     log(
       detalle ||
       (
-        'No fue posible reabrir la tarea ' +
+        'Unable to reopen task ' +
         id +
         '. HTTP ' +
         respuesta.status
@@ -2203,7 +2078,7 @@ async function reabrir(id) {
 }
 
 async function validar(id) {
-  if (!tieneRol('ADMIN')) {
+  if (!tieneRol('ADMIN') && !tieneRol('CONTROL_ACCESOS')) {
     return;
   }
 
@@ -2214,18 +2089,18 @@ async function validar(id) {
 
   if (respuesta.status === 200) {
     log(
-      `Task ${id} validada por ${respuesta.data.validatedBy}`
+      'Task ' + id + ' validated by ' + respuesta.data.validatedBy
     );
   }
   else if (respuesta.status === 403) {
     log(
-      'La validación debe realizarla una persona diferente a quien completó la tarea.',
+      'Validation must be performed by a different person than the one who completed the task.',
       'warn'
     );
   }
   else {
     log(
-      `Error validando tarea ${id}: HTTP ${respuesta.status}`,
+      'Error validating task ' + id + ': HTTP ' + respuesta.status,
       'err'
     );
   }
@@ -2234,7 +2109,6 @@ async function validar(id) {
 }
 
 function limpiarCaptura() {
-  /* fecha default se setea al final */
   $('n').value = '';
   $('idf').value = '';
   $('mail').value = '';
@@ -2257,12 +2131,11 @@ function limpiarCaptura() {
 
   document
     .querySelectorAll('.offboarding-access')
-    .forEach(control => {
+    .forEach(function(control) {
       control.checked = false;
     });
 
   actualizarCamposAsignacion();
-
 
   $('tipo').value = '';
   $('conf').value = '';
@@ -2276,8 +2149,7 @@ function limpiarCaptura() {
     resultado.textContent = '';
   }
 
-  // Reset autocomplete styles
-  ['n', 'dep', 'work_area', 'jefe'].forEach(id => {
+  ['n', 'dep', 'work_area', 'jefe'].forEach(function(id) {
     $(id).style.backgroundColor = '';
     $(id).readOnly = false;
   });
@@ -2334,7 +2206,7 @@ function obtenerAccesosSeleccionados() {
         '.offboarding-access:checked'
       )
     )
-    .map(control => control.value);
+    .map(function(control) { return control.value; });
 }
 
 
@@ -2345,39 +2217,18 @@ async function crearCase() {
   resultado.textContent = '';
 
   const requiredFields = [
-    {
-      id: 'n',
-      label: 'Employee name'
-    },
-    {
-      id: 'idf',
-      label: 'Employee number or identifier'
-    },
-    {
-      id: 'dep',
-      label: 'Department'
-    },
-    {
-      id: 'work_area',
-      label: 'Work area'
-    },
-    {
-      id: 'jefe',
-      label: 'Direct manager'
-    },
-    {
-      id: 'riesgo',
-      label: 'Risk level'
-    }
+    { id: 'n', label: 'Employee name' },
+    { id: 'idf', label: 'Employee number or identifier' },
+    { id: 'dep', label: 'Department' },
+    { id: 'work_area', label: 'Work area' },
+    { id: 'jefe', label: 'Direct manager' },
+    { id: 'riesgo', label: 'Risk level' }
   ];
 
   const missingFields =
-    requiredFields.filter(field => {
-      const control = $(field.id);
-
-      return !String(
-        control.value || ''
-      ).trim();
+    requiredFields.filter(function(field) {
+      var control = $(field.id);
+      return !String(control.value || '').trim();
     });
 
   if (missingFields.length) {
@@ -2385,13 +2236,11 @@ async function crearCase() {
     resultado.textContent =
       'Complete the required fields: '
       + missingFields
-          .map(field => field.label)
+          .map(function(field) { return field.label; })
           .join(', ')
       + '.';
 
-    const firstControl =
-      $(missingFields[0].id);
-
+    var firstControl = $(missingFields[0].id);
     firstControl.focus();
     firstControl.scrollIntoView({
       behavior: 'smooth',
@@ -2401,91 +2250,36 @@ async function crearCase() {
     return;
   }
 
-  const corporateEmail =
-    $('mail').value.trim();
-
-  const fecha =
-    $('fecha').value;
-
-  const accesosSeleccionados =
-    obtenerAccesosSeleccionados();
+  const corporateEmail = $('mail').value.trim();
+  const fecha = $('fecha').value;
+  const accesosSeleccionados = obtenerAccesosSeleccionados();
 
   const solicitud = {
-    employeeName:
-      $('n').value.trim(),
-
-    employeeIdentifier:
-      $('idf').value.trim(),
-
-    corporateEmail:
-      corporateEmail || null,
-
-    department:
-      $('dep').value.trim(),
-
-    building:
-      $('building').value.trim() || null,
-
-    workArea:
-      $('work_area').value.trim(),
-
-    managerName:
-      $('jefe').value.trim(),
-
-    terminationType:
-      $('tipo').value || 'NO_ESPECIFICADO',
-
-    effectiveAt:
-      fecha
-        ? new Date(fecha).toISOString()
-        : new Date().toISOString(),
-
-    riskLevel:
-      $('riesgo').value,
-
-    confidential:
-      $('conf').value === 'true',
-
-    computerAssigned:
-      $('eq_computer').checked,
-
-    computerDetails:
-      $('computer_details').value.trim()
-        || null,
-
-    phoneAssigned:
-      $('eq_phone').checked,
-
-    phoneDetails:
-      $('phone_details').value.trim()
-        || null,
-
-
-    fingerprintRegistered:
-      $('eq_fingerprint').checked,
-
-    faceidRegistered:
-      $('eq_faceid').checked,
-
-    eppAssigned:
-      $('eq_epp').checked,
-
-    parkingAccess:
-      $('eq_parking').checked,
-
-    employeeCategory:
-      $('employee_category').value.trim()
-        || null,
-    accesses:
-      accesosSeleccionados,
-
-    otherAccesses:
-      $('other_accesses').value.trim()
-        || null,
-
-    observations:
-      $('obs').value.trim()
-        || null
+    employeeName: $('n').value.trim(),
+    employeeIdentifier: $('idf').value.trim(),
+    corporateEmail: corporateEmail || null,
+    department: $('dep').value.trim(),
+    building: $('building').value.trim() || null,
+    workArea: $('work_area').value.trim(),
+    managerName: $('jefe').value.trim(),
+    terminationType: $('tipo').value || 'NO_ESPECIFICADO',
+    effectiveAt: fecha
+      ? new Date(fecha).toISOString()
+      : new Date().toISOString(),
+    riskLevel: $('riesgo').value,
+    confidential: $('conf').value === 'true',
+    computerAssigned: $('eq_computer').checked,
+    computerDetails: $('computer_details').value.trim() || null,
+    phoneAssigned: $('eq_phone').checked,
+    phoneDetails: $('phone_details').value.trim() || null,
+    fingerprintRegistered: $('eq_fingerprint').checked,
+    faceidRegistered: $('eq_faceid').checked,
+    eppAssigned: $('eq_epp').checked,
+    parkingAccess: $('eq_parking').checked,
+    employeeCategory: $('employee_category').value.trim() || null,
+    accesses: accesosSeleccionados,
+    otherAccesses: $('other_accesses').value.trim() || null,
+    observations: $('obs').value.trim() || null
   };
 
   const respuesta = await api(
@@ -2502,7 +2296,7 @@ async function crearCase() {
 
     resultado.className = 'notice ok';
     resultado.textContent =
-      'Baja registrada correctamente. Case: '
+      'Offboarding registered successfully. Case: '
       + respuesta.data.caseNumber;
 
     limpiarCaptura();
@@ -2527,34 +2321,17 @@ function generarPass() {
   const minusculas = 'abcdefghijkmnopqrstuvwxyz';
   const numeros = '23456789';
   const simbolos = '#$%&*+-';
-  const todos =
-    mayusculas +
-    minusculas +
-    numeros +
-    simbolos;
+  const todos = mayusculas + minusculas + numeros + simbolos;
 
   let password = '';
 
-  password += mayusculas[
-    Math.floor(Math.random() * mayusculas.length)
-  ];
-
-  password += minusculas[
-    Math.floor(Math.random() * minusculas.length)
-  ];
-
-  password += numeros[
-    Math.floor(Math.random() * numeros.length)
-  ];
-
-  password += simbolos[
-    Math.floor(Math.random() * simbolos.length)
-  ];
+  password += mayusculas[Math.floor(Math.random() * mayusculas.length)];
+  password += minusculas[Math.floor(Math.random() * minusculas.length)];
+  password += numeros[Math.floor(Math.random() * numeros.length)];
+  password += simbolos[Math.floor(Math.random() * simbolos.length)];
 
   for (let i = 0; i < 12; i++) {
-    password += todos[
-      Math.floor(Math.random() * todos.length)
-    ];
+    password += todos[Math.floor(Math.random() * todos.length)];
   }
 
   $('nu_pass').type = 'text';
@@ -2567,51 +2344,29 @@ async function crearUsername() {
   }
 
   const roles = Array
-    .from(
-      document.querySelectorAll('.rol:checked')
-    )
-    .map(control => control.value);
+    .from(document.querySelectorAll('.rol:checked'))
+    .map(function(control) { return control.value; });
 
   const aviso = $('nu_aviso');
-
   aviso.textContent = '';
 
-  const username =
-    $('nu_user').value.trim();
-
-  const fullName =
-    $('nu_nombre').value.trim();
-
-  const email =
-    $('nu_mail').value.trim();
-
-  const password =
-    $('nu_pass').value;
+  const username = $('nu_user').value.trim();
+  const fullName = $('nu_nombre').value.trim();
+  const email = $('nu_mail').value.trim();
+  const password = $('nu_pass').value;
 
   const missingFields = [];
 
-  if (!username) {
-    missingFields.push('Username');
-  }
-
-  if (!fullName) {
-    missingFields.push('Full name');
-  }
-
-  if (!password) {
-    missingFields.push('Temporary password');
-  }
-
-  if (!roles.length) {
-    missingFields.push('Perfiles');
-  }
+  if (!username) { missingFields.push('Username'); }
+  if (!fullName) { missingFields.push('Full name'); }
+  if (!password) { missingFields.push('Temporary password'); }
+  if (!roles.length) { missingFields.push('Profiles'); }
 
   if (missingFields.length) {
     aviso.textContent =
       'Complete the required fields: '
       + missingFields.join(', ')
       + '.';
-
     return;
   }
 
@@ -2621,7 +2376,6 @@ async function crearUsername() {
   ) {
     aviso.textContent =
       'Password must contain 12 to 100 characters, including an uppercase letter, lowercase letter, number, and symbol.';
-
     return;
   }
 
@@ -2639,10 +2393,10 @@ async function crearUsername() {
 
   if (respuesta.status === 201) {
     alert(
-      'Username creado correctamente.\n\n'
+      'User created successfully.\n\n'
       + 'Username: ' + username + '\n'
-      + 'Contraseña: ' + password + '\n\n'
-      + 'Esta contraseña no volverá a mostrarse.'
+      + 'Password: ' + password + '\n\n'
+      + 'This password will not be shown again.'
     );
 
     $('nu_user').value = '';
@@ -2653,7 +2407,7 @@ async function crearUsername() {
 
     document
       .querySelectorAll('.rol:checked')
-      .forEach(control => {
+      .forEach(function(control) {
         control.checked = false;
       });
 
@@ -2664,7 +2418,7 @@ async function crearUsername() {
     aviso.textContent =
       respuesta.data && respuesta.data.detail
         ? respuesta.data.detail
-        : 'No fue posible crear el usuario. HTTP '
+        : 'Unable to create user. HTTP '
           + respuesta.status;
   }
 }
@@ -2678,15 +2432,8 @@ async function cargarUsernames() {
   const tabla = $('tabla_usuarios');
 
   if (respuesta.status !== 200) {
-    tabla.innerHTML = `
-      <tr>
-        <td colspan="7">
-          No fue posible consultar usuarios.
-          HTTP ${respuesta.status}
-        </td>
-      </tr>
-    `;
-
+    tabla.innerHTML =
+      '<tr><td colspan="7">Unable to load users. HTTP ' + respuesta.status + '</td></tr>';
     return;
   }
 
@@ -2696,38 +2443,18 @@ async function cargarUsernames() {
 
   usuariosAdministrados = usuarios;
 
-  tabla.innerHTML = usuarios.map(usuario => `
-    <tr>
-      <td>${usuario.id}</td>
-      <td><b>${esc(usuario.username)}</b></td>
-      <td>${esc(usuario.fullName)}</td>
-      <td>
-        ${usuario.email
-          ? esc(usuario.email)
-          : '<span class="no-email">Sin correo</span>'}
-      </td>
-      <td>
-        ${(usuario.roles || []).map(rol => `
-          <span class="pill NORMAL">${esc(rol)}</span>
-        `).join(' ')}
-      </td>
-      <td>
-        ${usuario.enabled === false
-          ? '<span class="pill CRITICO">INACTIVO</span>'
-          : '<span class="pill VALIDADA">ACTIVO</span>'}
-      </td>
-      <td class="user-actions">
-        <button
-          type="button"
-          class="mini"
-          onclick="abrirEditUsername(${usuario.id})">
-          Edit
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  tabla.innerHTML = usuarios.map(function(usuario) {
+    return '<tr>' +
+      '<td>' + usuario.id + '</td>' +
+      '<td><b>' + esc(usuario.username) + '</b></td>' +
+      '<td>' + esc(usuario.fullName) + '</td>' +
+      '<td>' + (usuario.email ? esc(usuario.email) : '<span class="no-email">No email</span>') + '</td>' +
+      '<td>' + (usuario.roles || []).map(function(rol) { return '<span class="pill NORMAL">' + esc(rol) + '</span>'; }).join(' ') + '</td>' +
+      '<td>' + (usuario.enabled === false ? '<span class="pill CRITICO">INACTIVE</span>' : '<span class="pill VALIDADA">ACTIVE</span>') + '</td>' +
+      '<td class="user-actions"><button type="button" class="mini" onclick="abrirEditUsername(' + usuario.id + ')">Edit</button></td>' +
+    '</tr>';
+  }).join('');
 }
-
 
 
 function passwordSegura(password) {
@@ -2745,11 +2472,11 @@ function passwordSegura(password) {
 
 function abrirEditUsername(id) {
   const usuario = usuariosAdministrados.find(
-    item => Number(item.id) === Number(id)
+    function(item) { return Number(item.id) === Number(id); }
   );
 
   if (!usuario) {
-    alert('The user could not be found.');
+    alert('User not found.');
     return;
   }
 
@@ -2766,7 +2493,7 @@ function abrirEditUsername(id) {
 
   document
     .querySelectorAll('.eu_rol')
-    .forEach(control => {
+    .forEach(function(control) {
       control.checked = roles.has(control.value);
     });
 
@@ -2793,41 +2520,34 @@ async function guardarEditUsername() {
   const email = $('eu_mail').value.trim();
 
   const roles = Array
-    .from(
-      document.querySelectorAll('.eu_rol:checked')
-    )
-    .map(control => control.value);
+    .from(document.querySelectorAll('.eu_rol:checked'))
+    .map(function(control) { return control.value; });
 
   const password = $('eu_password').value;
-  const passwordConfirm =
-    $('eu_password_confirm').value;
+  const passwordConfirm = $('eu_password_confirm').value;
 
   if (!fullName) {
     aviso.className = 'notice error';
-    aviso.textContent =
-      'Completa el campo obligatorio: Full name.';
+    aviso.textContent = 'Complete the required field: Full name.';
     return;
   }
 
   if (!roles.length) {
     aviso.className = 'notice error';
-    aviso.textContent =
-      'Asigna al menos un perfil.';
+    aviso.textContent = 'Assign at least one profile.';
     return;
   }
 
   if (password || passwordConfirm) {
     if (password !== passwordConfirm) {
       aviso.className = 'notice error';
-      aviso.textContent =
-        'La confirmación no coincide.';
+      aviso.textContent = 'Password confirmation does not match.';
       return;
     }
 
     if (!passwordSegura(password)) {
       aviso.className = 'notice error';
-      aviso.textContent =
-        'La contraseña debe incluir mayúscula, minúscula, número y símbolo.';
+      aviso.textContent = 'Password must include uppercase, lowercase, number, and symbol.';
       return;
     }
   }
@@ -2848,7 +2568,7 @@ async function guardarEditUsername() {
     aviso.textContent =
       actualizacion.data && actualizacion.data.detail
         ? actualizacion.data.detail
-        : 'No fue posible actualizar el usuario. HTTP '
+        : 'Unable to update user. HTTP '
           + actualizacion.status;
     return;
   }
@@ -2870,7 +2590,7 @@ async function guardarEditUsername() {
         cambioPassword.data &&
         cambioPassword.data.detail
           ? cambioPassword.data.detail
-          : 'Los datos se actualizaron, pero la contraseña no pudo cambiarse. HTTP '
+          : 'Data updated, but password could not be changed. HTTP '
             + cambioPassword.status;
 
       await cargarUsernames();
@@ -2886,80 +2606,74 @@ async function guardarEditUsername() {
 
   alert(
     password
-      ? 'Username y contraseña actualizados correctamente.'
-      : 'Username actualizado correctamente.'
+      ? 'User and password updated successfully.'
+      : 'User updated successfully.'
   );
 }
 
 
 async function validarActive(taskId) {
-  if (!tieneRol('ADMIN')) {
-    alert(
-      'Solamente un administrador puede validar la recepción.'
-    );
-
+  if (!tieneRol('ADMIN') && !tieneRol('CONTROL_ACCESOS')) {
+    alert('Only an administrator or Access Control can validate this task.');
     return;
   }
 
-  const activoRecibido = confirm(
-    '¿Confirmas que el equipo o teléfono fue recibido físicamente?'
-  );
-
-  if (!activoRecibido) {
-    return;
-  }
-
-  const inventarioActualizado = confirm(
-    '¿Confirmas que el inventario de activos ya fue actualizado?'
-  );
-
-  if (!inventarioActualizado) {
-    return;
-  }
-
-  const referencia = prompt(
-    'Escribe el número de activo, folio o referencia de inventario:'
-  );
-
-  if (referencia === null) {
-    return;
-  }
-
-  if (!referencia.trim()) {
-    alert(
-      'La referencia de inventario es obligatoria.'
-    );
-
-    return;
-  }
-
-  const comentarios = prompt(
-    'Comments adicionales de validación (optional):'
-  );
-
-  if (comentarios === null) {
-    return;
-  }
-
-  const respuesta = await api(
-    '/api/tasks/'
-      + encodeURIComponent(taskId)
-      + '/validate',
-    'PATCH',
-    {
-      assetReceived: true,
-      inventoryUpdated: true,
-      inventoryReference: referencia.trim(),
-      validationComments:
-        comentarios.trim() || null
+  // Detectar systemName de la tarea desde la tabla
+  var tareaSystem = null;
+  document.querySelectorAll('tr').forEach(function(fila) {
+    if (tareaSystem) return;
+    var btn = fila.querySelector('button[onclick*="validarActive(' + taskId + ')"]');
+    if (btn) {
+      var celdas = fila.querySelectorAll('td');
+      if (celdas.length > 0) {
+        tareaSystem = celdas[0].textContent.replace(/\s*\*\s*$/, '').trim();
+      }
     }
-  );
+  });
+
+  var ASSET_SYSTEMS = ['Equipo de c\u00f3mputo', 'Telefon\u00eda', 'Telefonia', 'Activos asignados'];
+  var esActivo = ASSET_SYSTEMS.indexOf(tareaSystem) !== -1;
+
+  var respuesta;
+
+  if (esActivo) {
+    var activoRecibido = confirm('Do you confirm that the asset was physically received?');
+    if (!activoRecibido) return;
+
+    var inventarioActualizado = confirm('Do you confirm that the inventory was updated?');
+    if (!inventarioActualizado) return;
+
+    var comentarios = prompt('Comments (optional):', 'Done');
+    if (comentarios === null) return;
+
+    respuesta = await api(
+      '/api/tasks/' + encodeURIComponent(taskId) + '/validate',
+      'PATCH',
+      {
+        assetReceived: true,
+        inventoryUpdated: true,
+        inventoryReference: comentarios.trim() || 'Validated',
+        validationComments: comentarios.trim() || null
+      }
+    );
+  } else {
+    var confirmado = confirm('Do you confirm this task has been validated?');
+    if (!confirmado) return;
+
+    respuesta = await api(
+      '/api/tasks/' + encodeURIComponent(taskId) + '/validate',
+      'PATCH',
+      {
+        assetReceived: true,
+        inventoryUpdated: true,
+        inventoryReference: 'Validated',
+        validationComments: null
+      }
+    );
+  }
 
   if (respuesta.status === 200) {
-    alert(
-      'Recepción del activo e inventario validados correctamente.'
-    );
-
+    alert('Task validated successfully.');
     await cargarCases();
     await cargarAudit();
   }
@@ -2967,8 +2681,7 @@ async function validarActive(taskId) {
     alert(
       respuesta.data && respuesta.data.detail
         ? respuesta.data.detail
-        : 'No fue posible validar el activo. HTTP '
-          + respuesta.status
+        : 'Unable to validate the task. HTTP ' + respuesta.status
     );
   }
 }
@@ -2980,7 +2693,8 @@ async function recargar() {
   if (
     tieneRol('ADMIN') ||
     tieneRol('IT_ENGINEER') ||
-    tieneRol('AUDITOR')
+    tieneRol('AUDITOR') ||
+    tieneRol('CONTROL_ACCESOS')
   ) {
     tareas.push(cargarCases());
   }
@@ -3000,8 +2714,6 @@ async function recargar() {
 }
 
 
-
-/* â”€â”€ AUTO-POPULATE desde premployee â”€â”€ */
 async function buscarEmpleado() {
   const campo = $('idf');
   const numero = (campo.value || '').trim();
@@ -3059,7 +2771,6 @@ async function buscarEmpleado() {
   }
 }
 
-/* â”€â”€ DEFAULT effective date = ahora â”€â”€ */
 function setDefaultFecha() {
   const campo = $('fecha');
   if (campo && !campo.value) {
@@ -3085,13 +2796,12 @@ async function iniciar() {
 
 iniciar();
 
-setInterval(() => {
+setInterval(function() {
   recargar();
 }, 15000);
 </script>
 
 
-<!-- FEATURE_ENGLISH_VISIBLE_VALUES -->
 <script>
 (function () {
   const exactTranslations = {
@@ -3120,8 +2830,7 @@ setInterval(() => {
     'INACTIVO': 'Inactive',
 
     'RECURSOS HUMANOS': 'Human Resources',
-    'TECNOLOGÁ DE LA INFORMACIÓN': 'Information Technology',
-    'ADMINISTRADOR': 'Administrator',
+    'CONTROL_ACCESOS': 'Access Control',
 
     'CREADO': 'Created',
     'ACTUALIZADO': 'Updated',
@@ -3130,38 +2839,14 @@ setInterval(() => {
   };
 
   const phraseTranslations = [
-    [
-      'Baja registrada correctamente.',
-      'Offboarding registered successfully.'
-    ],
-    [
-      'Completa los campos obligatorios:',
-      'Complete the required fields:'
-    ],
-    [
-      'Error registrando la baja.',
-      'Error registering the offboarding.'
-    ],
-    [
-      'No fue posible cargar',
-      'Unable to load'
-    ],
-    [
-      'No fue posible localizar',
-      'Unable to locate'
-    ],
-    [
-      'Usuario creado correctamente.',
-      'User created successfully.'
-    ],
-    [
-      'Usuario actualizado correctamente.',
-      'User updated successfully.'
-    ],
-    [
-      'Contraseña actualizada correctamente.',
-      'Password updated successfully.'
-    ]
+    ['Baja registrada correctamente.', 'Offboarding registered successfully.'],
+    ['Completa los campos obligatorios:', 'Complete the required fields:'],
+    ['Error registrando la baja.', 'Error registering the offboarding.'],
+    ['No fue posible cargar', 'Unable to load'],
+    ['No fue posible localizar', 'Unable to locate'],
+    ['Usuario creado correctamente.', 'User created successfully.'],
+    ['Usuario actualizado correctamente.', 'User updated successfully.'],
+    ['Contrase\u00f1a actualizada correctamente.', 'Password updated successfully.']
   ];
 
   function translateVisibleText(value) {
@@ -3236,7 +2921,7 @@ setInterval(() => {
   translateNode(document.body);
 
   const observer = new MutationObserver(
-    mutations => {
+    function(mutations) {
       for (const mutation of mutations) {
         if (
           mutation.type === 'characterData'
@@ -3268,4 +2953,3 @@ setInterval(() => {
 
 </body>
 </html>
-

@@ -4,5 +4,6 @@ public enum AppRole {
     ADMIN,
     RECURSOS_HUMANOS,
     IT_ENGINEER,
-    AUDITOR
+    AUDITOR,
+    CONTROL_ACCESOS
 }

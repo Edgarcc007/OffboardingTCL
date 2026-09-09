@@ -53,24 +53,24 @@ public class SecurityConfig {
                          * - Administrador
                          * - IT Engineer
                          * - Auditor de solo lectura
-                         *
-                         * Recursos Humanos no puede consultar los casos.
+                         * - Control de Accesos (biométricos y accesos físicos)
                          */
                         .requestMatchers(HttpMethod.GET, "/api/offboardings/**")
-                            .hasAnyRole("ADMIN", "IT_ENGINEER", "AUDITOR")
+                            .hasAnyRole("ADMIN", "IT_ENGINEER", "AUDITOR", "CONTROL_ACCESOS")
 
                         /*
                          * Procesamiento de tareas.
+                         * Control de Accesos puede completar tareas de biométrico.
                          */
                         .requestMatchers(HttpMethod.PATCH, "/api/tasks/*/complete")
-                            .hasAnyRole("ADMIN", "IT_ENGINEER")
+                            .hasAnyRole("ADMIN", "IT_ENGINEER", "CONTROL_ACCESOS")
 
                         /*
-                         * Validación administrativa.
+                         * Validación administrativa de activos.
+                         * Control de Accesos puede validar tareas de biométrico.
                          */
                         .requestMatchers(HttpMethod.PATCH, "/api/tasks/*/validate")
-                            .hasRole("ADMIN")
-
+                            .hasAnyRole("ADMIN", "CONTROL_ACCESOS")
 
                         /*
                          * Solamente un administrador puede reabrir

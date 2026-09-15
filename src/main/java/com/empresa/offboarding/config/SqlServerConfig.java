@@ -29,17 +29,19 @@ public class SqlServerConfig {
         config.setUsername(username);
         config.setPassword(password);
         config.setDriverClassName("net.sourceforge.jtds.jdbc.Driver");
-        config.setMaximumPoolSize(3);
-        config.setConnectionTimeout(10000);
-        config.setMinimumIdle(0);
-        config.setInitializationFailTimeout(-1);
 
-        // Fix: jTDS no implementa isValid(), usar connectionTestQuery
+        config.setMaximumPoolSize(3);
+        config.setMinimumIdle(0);
+        config.setConnectionTimeout(10000);
+        config.setIdleTimeout(60000);
+        config.setMaxLifetime(120000);
+        config.setKeepaliveTime(30000);
         config.setConnectionTestQuery("SELECT 1");
+        config.setInitializationFailTimeout(-1);
 
         config.addDataSourceProperty("ssl", "off");
 
-        log.info("SqlServer datasource configured with jTDS (no SSL)");
+        log.info("SqlServer datasource configured with jTDS (no SSL) - keepalive enabled");
         return new HikariDataSource(config);
     }
 

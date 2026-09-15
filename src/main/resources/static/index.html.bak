@@ -639,7 +639,76 @@ td{
 }
 
 
-/* -- Inventory lookup -- */
+/* ── Inventory lookup ── */
+.inv-lookup-result{margin-top:6px;min-height:0}
+.inv-lookup-result:empty{display:none}
+.inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;border-radius:6px;font-size:.82rem;line-height:1.4}
+.inv-tag.found{background:#e8f5e9;border:1px solid #66bb6a;color:#2e7d32}
+.inv-tag.not-found{background:#fff3e0;border:1px solid #ffa726;color:#e65100}
+.inv-tag .inv-icon{font-size:1rem}
+.inv-tag .inv-field{font-weight:600}
+.inv-tag .inv-sep{opacity:.4}
+.inv-tag-status{display:inline-block;padding:1px 7px;border-radius:3px;font-size:.75rem;font-weight:600}
+.inv-tag-status.on-use{background:#c8e6c9;color:#1b5e20}
+.inv-tag-status.inactive{background:#ffcdd2;color:#b71c1c}
+.inv-tag-status.available{background:#bbdefb;color:#0d47a1}
+.inv-tag-status.other{background:#e0e0e0;color:#424242}
+.other-equip-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.other-equip-row input{flex:1}
+.btn-add-equip{width:36px;height:36px;border:none;border-radius:6px;background:#1976d2;color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-add-equip:hover{background:#1565c0}
+.other-equip-item{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:6px;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;font-size:.85rem}
+.other-equip-item .equip-info{flex:1}
+.other-equip-item .btn-remove-equip{background:none;border:none;color:#e53935;font-size:1.1rem;cursor:pointer;padding:2px 6px}
+.other-equip-item .btn-remove-equip:hover{color:#b71c1c}
+
+/* ── Inventory lookup ── */
+.inv-lookup-result{margin-top:6px;min-height:0}
+.inv-lookup-result:empty{display:none}
+.inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;border-radius:6px;font-size:.82rem;line-height:1.4}
+.inv-tag.found{background:#e8f5e9;border:1px solid #66bb6a;color:#2e7d32}
+.inv-tag.not-found{background:#fff3e0;border:1px solid #ffa726;color:#e65100}
+.inv-tag .inv-icon{font-size:1rem}
+.inv-tag .inv-field{font-weight:600}
+.inv-tag .inv-sep{opacity:.4}
+.inv-tag-status{display:inline-block;padding:1px 7px;border-radius:3px;font-size:.75rem;font-weight:600}
+.inv-tag-status.on-use{background:#c8e6c9;color:#1b5e20}
+.inv-tag-status.inactive{background:#ffcdd2;color:#b71c1c}
+.inv-tag-status.available{background:#bbdefb;color:#0d47a1}
+.inv-tag-status.other{background:#e0e0e0;color:#424242}
+.other-equip-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.other-equip-row input{flex:1}
+.btn-add-equip{width:36px;height:36px;border:none;border-radius:6px;background:#1976d2;color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-add-equip:hover{background:#1565c0}
+.other-equip-item{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:6px;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;font-size:.85rem}
+.other-equip-item .equip-info{flex:1}
+.other-equip-item .btn-remove-equip{background:none;border:none;color:#e53935;font-size:1.1rem;cursor:pointer;padding:2px 6px}
+.other-equip-item .btn-remove-equip:hover{color:#b71c1c}
+
+/* ── Inventory lookup ── */
+.inv-lookup-result{margin-top:6px;min-height:0}
+.inv-lookup-result:empty{display:none}
+.inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;border-radius:6px;font-size:.82rem;line-height:1.4}
+.inv-tag.found{background:#e8f5e9;border:1px solid #66bb6a;color:#2e7d32}
+.inv-tag.not-found{background:#fff3e0;border:1px solid #ffa726;color:#e65100}
+.inv-tag .inv-icon{font-size:1rem}
+.inv-tag .inv-field{font-weight:600}
+.inv-tag .inv-sep{opacity:.4}
+.inv-tag-status{display:inline-block;padding:1px 7px;border-radius:3px;font-size:.75rem;font-weight:600}
+.inv-tag-status.on-use{background:#c8e6c9;color:#1b5e20}
+.inv-tag-status.inactive{background:#ffcdd2;color:#b71c1c}
+.inv-tag-status.available{background:#bbdefb;color:#0d47a1}
+.inv-tag-status.other{background:#e0e0e0;color:#424242}
+.other-equip-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.other-equip-row input{flex:1}
+.btn-add-equip{width:36px;height:36px;border:none;border-radius:6px;background:#1976d2;color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-add-equip:hover{background:#1565c0}
+.other-equip-item{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:6px;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;font-size:.85rem}
+.other-equip-item .equip-info{flex:1}
+.other-equip-item .btn-remove-equip{background:none;border:none;color:#e53935;font-size:1.1rem;cursor:pointer;padding:2px 6px}
+.other-equip-item .btn-remove-equip:hover{color:#b71c1c}
+
+/* ── Inventory lookup ── */
 .inv-lookup-result{margin-top:6px;min-height:0}
 .inv-lookup-result:empty{display:none}
 .inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;border-radius:6px;font-size:.82rem;line-height:1.4}
@@ -752,7 +821,7 @@ td{
     </div>
 
     <div>
-      <label>Employee name<span class="required-marker">*</span></label>
+      <label>Employee name <span class="optional-marker">(auto)</span></label>
       <input id="n" autocomplete="off" placeholder="Auto-filled from employee number" required aria-required="true">
     </div>
 
@@ -762,7 +831,7 @@ td{
     </div>
 
     <div>
-      <label>Department<span class="required-marker">*</span></label>
+      <label>Department <span class="optional-marker">(auto)</span></label>
       <input id="dep" autocomplete="off" placeholder="Department" required aria-required="true">
     </div>
 
@@ -776,8 +845,28 @@ td{
         placeholder="Ejemplo: Building A">
     </div>
 
+    
     <div>
-      <label>Work area<span class="required-marker">*</span></label>
+      <label>Position <span class="optional-marker">(auto)</span></label>
+      <input
+        id="position"
+        autocomplete="off"
+        placeholder="Auto-filled from employee number"
+        readonly>
+    </div>
+
+
+    <div>
+      <label>Shift <span class="optional-marker">(auto)</span></label>
+      <input
+        id="shift"
+        autocomplete="off"
+        placeholder="Auto-filled from employee number"
+        readonly>
+    </div>
+
+<div>
+      <label>Work area <span class="optional-marker">(auto)</span></label>
 
       <input
         id="work_area"
@@ -786,7 +875,7 @@ td{
     </div>
 
     <div>
-      <label>Direct manager<span class="required-marker">*</span></label>
+      <label>Direct manager <span class="optional-marker">(auto)</span></label>
       <input id="jefe" autocomplete="off" placeholder="Manager name" required aria-required="true">
     </div>
 
@@ -854,14 +943,6 @@ td{
           onchange="actualizarCamposAsignacion()">
         Phone
       </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_other_equip"
-          type="checkbox"
-          onchange="actualizarCamposAsignacion()">
-        Other equipment
-      </label>
     </div>
 
     <div
@@ -892,6 +973,66 @@ td{
         placeholder="Type to search inventory..."
         oninput="buscarInventario(this.value, 'phone_inv_result')">
       <div id="phone_inv_result" class="inv-lookup-result"></div>
+    </div>
+
+    <div
+      id="other_equip_container"
+      class="assignment-detail hidden">
+
+      <label>Other equipment <span class="optional-marker">(search inventory)</span></label>
+
+      <div id="other_equip_list"></div>
+
+      <div class="other-equip-row">
+        <input
+          id="other_equip_input"
+          maxlength="250"
+          autocomplete="off"
+          placeholder="Type to search inventory..."
+          oninput="buscarInventario(this.value, 'other_equip_inv_result')">
+        <button type="button" class="btn-add-equip" onclick="agregarOtroEquipo()">+</button>
+      </div>
+      <div id="other_equip_inv_result" class="inv-lookup-result"></div>
+    </div>
+
+    <div
+      id="other_equip_container"
+      class="assignment-detail hidden">
+
+      <label>Other equipment <span class="optional-marker">(search inventory)</span></label>
+
+      <div id="other_equip_list"></div>
+
+      <div class="other-equip-row">
+        <input
+          id="other_equip_input"
+          maxlength="250"
+          autocomplete="off"
+          placeholder="Type to search inventory..."
+          oninput="buscarInventario(this.value, 'other_equip_inv_result')">
+        <button type="button" class="btn-add-equip" onclick="agregarOtroEquipo()">+</button>
+      </div>
+      <div id="other_equip_inv_result" class="inv-lookup-result"></div>
+    </div>
+
+    <div
+      id="other_equip_container"
+      class="assignment-detail hidden">
+
+      <label>Other equipment <span class="optional-marker">(search inventory)</span></label>
+
+      <div id="other_equip_list"></div>
+
+      <div class="other-equip-row">
+        <input
+          id="other_equip_input"
+          maxlength="250"
+          autocomplete="off"
+          placeholder="Type to search inventory..."
+          oninput="buscarInventario(this.value, 'other_equip_inv_result')">
+        <button type="button" class="btn-add-equip" onclick="agregarOtroEquipo()">+</button>
+      </div>
+      <div id="other_equip_inv_result" class="inv-lookup-result"></div>
     </div>
 
     <div
@@ -1040,6 +1181,10 @@ td{
 
   <label>Comments <span class="optional-marker">(optional)</span></label>
   <textarea id="obs" autocomplete="off" rows="3"></textarea>
+
+  <button type="button" onclick="limpiarCaptura()" style="background:#5a6b7f">
+    Clear form
+  </button>
 
   <button onclick="crearCase()">
     Register offboarding
@@ -1328,44 +1473,6 @@ td{
   </div>
 </div>
 
-
-
-<div id="seccion_destinatarios" class="card hidden">
-  <h2>Notification recipients</h2>
-  <p style="font-size:12px;color:#66788c;margin-top:-5px">
-    When an offboarding is registered, an email notification will be sent to all active recipients below.
-  </p>
-
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-    <div>
-      <label>Email<span class="required-marker">*</span></label>
-      <input id="nr_email" type="email" autocomplete="off" placeholder="user@tcl.com">
-    </div>
-    <div>
-      <label>Description <span class="optional-marker">(optional)</span></label>
-      <input id="nr_desc" autocomplete="off" placeholder="e.g. IT Manager">
-    </div>
-  </div>
-
-  <div id="nr_aviso" style="font-size:12px;color:#a52314;font-weight:600;min-height:17px"></div>
-
-  <button onclick="crearDestinatario()">Add recipient</button>
-
-  <div class="table-wrapper" style="margin-top:18px">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Email</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tabla_destinatarios"></tbody>
-    </table>
-  </div>
-</div>
 
 <div id="seccion_casos" class="card hidden">
   <h2 id="titulo_casos">Tasks</h2>
@@ -1763,7 +1870,6 @@ function aplicarPermisos() {
   );
 
   mostrar('seccion_usuarios', esAdmin);
-  mostrar('seccion_destinatarios', esAdmin);
   mostrar('seccion_casos', esAdmin || esEngineer || esAuditor || esControlAccesos);
   mostrar('seccion_auditoria', esAdmin || esAuditor);
   mostrar('seccion_log', esAdmin || esEngineer || esControlAccesos);
@@ -1983,7 +2089,6 @@ async function cargarCases() {
       '<div class="caso-body">' +
         '<div class="table-wrapper">' +
         '<div class="case-details-grid">' +
-          '<div class="detail-group"><span class="detail-label">Employee #</span><span class="detail-value" style="font-weight:700;font-size:15px;color:#12263f">' + esc(caso.employeeIdentifier || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Manager</span><span class="detail-value">' + esc(caso.managerName || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Category</span><span class="detail-value">' + esc(caso.employeeCategory || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Computer</span><span class="detail-value">' + (caso.computerAssigned ? '\u2705 ' + esc(caso.computerDetails || '') : '\u2014') + '</span></div>' +
@@ -2203,6 +2308,137 @@ async function validar(id) {
   await recargar();
 }
 
+/* ── Inventory lookup ── */
+var _inventario = [];
+(function cargarInventario() {
+  var x = new XMLHttpRequest();
+  x.open('GET', 'inventory.json', true);
+  x.onload = function() {
+    if (x.status === 200) {
+      try { _inventario = JSON.parse(x.responseText); }
+      catch(e) { console.warn('inventory.json parse error', e); }
+    }
+  };
+  x.send();
+})();
+
+function buscarInventario(valor, targetId) {
+  var el = document.getElementById(targetId);
+  if (!el) return;
+  var q = valor.trim().toUpperCase();
+  if (q.length < 3) { el.innerHTML = ''; return; }
+
+  var found = null;
+  for (var i = 0; i < _inventario.length; i++) {
+    var item = _inventario[i];
+    if ((item.tag    && item.tag.toUpperCase()    === q) ||
+        (item.serial && item.serial.toUpperCase() === q) ||
+        (item.id     && item.id.toUpperCase()     === q)) {
+      found = item; break;
+    }
+  }
+  // Si no hay match exacto, buscar parcial en cualquier campo
+  if (!found) {
+    for (var i = 0; i < _inventario.length; i++) {
+      var item = _inventario[i];
+      var haystack = [item.tag, item.model, item.serial, item.user, item.id, item.dept]
+        .join(' ').toUpperCase();
+      if (haystack.indexOf(q) !== -1) { found = item; break; }
+    }
+  }
+
+  if (found) {
+    el.innerHTML = renderInvTag(found);
+  } else {
+    el.innerHTML =
+      '<span class="inv-tag not-found">' +
+        '<span class="inv-icon">&#9888;</span>' +
+        'No match for <b>' + esc(q) + '</b> in inventory' +
+      '</span>';
+  }
+}
+
+function renderInvTag(item) {
+  var st = (item.status || '').toLowerCase().replace(/\s+/g, '-');
+  var stClass = 'other';
+  if (st === 'on-use') stClass = 'on-use';
+  else if (st === 'inactive') stClass = 'inactive';
+  else if (st === 'available') stClass = 'available';
+
+  return '<span class="inv-tag found">' +
+    '<span class="inv-icon">&#9989;</span>' +
+    '<span class="inv-field">' + esc(item.tag || '?') + '</span>' +
+    '<span class="inv-sep">&middot;</span>' +
+    esc(item.type || '?') +
+    '<span class="inv-sep">&middot;</span>' +
+    esc(item.model || '?') +
+    '<span class="inv-sep">&middot;</span>' +
+    'S/N: ' + esc(item.serial || '?') +
+    '<span class="inv-sep">&middot;</span>' +
+    '<span class="inv-tag-status ' + stClass + '">' + esc(item.status || '?') + '</span>' +
+    '<span class="inv-sep">&middot;</span>' +
+    'User: ' + esc(item.user || 'N/A') +
+  '</span>';
+}
+
+var _otherEquipItems = [];
+
+function agregarOtroEquipo() {
+  var input = document.getElementById('other_equip_input');
+  var val = input.value.trim();
+  if (!val) return;
+
+  // Buscar en inventario para guardar info completa
+  var q = val.toUpperCase();
+  var found = null;
+  for (var i = 0; i < _inventario.length; i++) {
+    var item = _inventario[i];
+    if ((item.tag && item.tag.toUpperCase() === q) ||
+        (item.serial && item.serial.toUpperCase() === q) ||
+        (item.id && item.id.toUpperCase() === q)) {
+      found = item; break;
+    }
+  }
+  if (!found) {
+    for (var i = 0; i < _inventario.length; i++) {
+      var item = _inventario[i];
+      var haystack = [item.tag, item.model, item.serial, item.user, item.id]
+        .join(' ').toUpperCase();
+      if (haystack.indexOf(q) !== -1) { found = item; break; }
+    }
+  }
+
+  var entry = found
+    ? { text: found.tag + ' - ' + found.type + ' - ' + found.model, raw: val, inv: found }
+    : { text: val, raw: val, inv: null };
+
+  _otherEquipItems.push(entry);
+  input.value = '';
+  document.getElementById('other_equip_inv_result').innerHTML = '';
+  renderOtherEquipList();
+}
+
+function quitarOtroEquipo(idx) {
+  _otherEquipItems.splice(idx, 1);
+  renderOtherEquipList();
+}
+
+function renderOtherEquipList() {
+  var container = document.getElementById('other_equip_list');
+  var html = '';
+  for (var i = 0; i < _otherEquipItems.length; i++) {
+    var e = _otherEquipItems[i];
+    var info = e.inv
+      ? '<b>' + esc(e.inv.tag) + '</b> &middot; ' + esc(e.inv.type) + ' &middot; ' + esc(e.inv.model) + ' &middot; S/N: ' + esc(e.inv.serial)
+      : esc(e.text);
+    html += '<div class="other-equip-item">' +
+      '<span class="equip-info">' + info + '</span>' +
+      '<button type="button" class="btn-remove-equip" onclick="quitarOtroEquipo(' + i + ')">&times;</button>' +
+    '</div>';
+  }
+  container.innerHTML = html;
+}
+
 function limpiarCaptura() {
   $('n').value = '';
   $('idf').value = '';
@@ -2210,7 +2446,9 @@ function limpiarCaptura() {
   $('dep').value = '';
   $('building').value = '';
   $('work_area').value = '';
-  $('jefe').value      = '';
+  $('jefe').value = '';
+  $('position').value = '';
+  $('shift').value = '';
   $('obs').value = '';
   $('eq_computer').checked = false;
   $('eq_phone').checked = false;
@@ -2223,6 +2461,11 @@ function limpiarCaptura() {
   $('phone_details').value = '';
   $('access_other').checked = false;
   $('other_accesses').value = '';
+  $('eq_other_equip').checked = false;
+  _otherEquipItems = [];
+  if ($('other_equip_list')) $('other_equip_list').innerHTML = '';
+  if ($('other_equip_input')) $('other_equip_input').value = '';
+  if ($('other_equip_inv_result')) $('other_equip_inv_result').innerHTML = '';
 
   document
     .querySelectorAll('.offboarding-access')
@@ -2232,9 +2475,10 @@ function limpiarCaptura() {
 
   actualizarCamposAsignacion();
 
-  $('tipo').value = '';
-  $('conf').value = '';
-  $('riesgo').value = '';
+  $('tipo').selectedIndex = 0;
+  $('conf').selectedIndex = 0;
+  $('riesgo').selectedIndex = 0;
+  $('employee_category').selectedIndex = 0;
   $('fecha').value = '';
 
   const resultado = $('resultado_captura');
@@ -2378,27 +2622,23 @@ async function crearCase() {
     effectiveAt: fecha
       ? new Date(fecha).toISOString()
       : new Date().toISOString(),
-    riskLevel: $('riesgo').value || 'NORMAL',
+    riskLevel: $('riesgo').value,
     confidential: $('conf').value === 'true',
     computerAssigned: $('eq_computer').checked,
     computerDetails: $('computer_details').value.trim() || null,
     phoneAssigned: $('eq_phone').checked,
     phoneDetails: $('phone_details').value.trim() || null,
+    otherEquipAssigned: $('eq_other_equip').checked,
+    otherEquipDetails: _otherEquipItems.length > 0
+      ? _otherEquipItems.map(function(e){ return e.text; }).join(' | ')
+      : null,
     fingerprintRegistered: $('eq_fingerprint').checked,
     faceidRegistered: $('eq_faceid').checked,
     eppAssigned: $('eq_epp').checked,
     parkingAccess: $('eq_parking').checked,
     employeeCategory: $('employee_category').value.trim() || null,
     accesses: accesosSeleccionados,
-    otherAccesses: (function(){
-      var parts = [];
-      if (window._otherEquipItems && window._otherEquipItems.length) {
-        parts.push('[Equipment] ' + window._otherEquipItems.join(', '));
-      }
-      var oa = $('other_accesses').value.trim();
-      if (oa) parts.push('[Access] ' + oa);
-      return parts.length ? parts.join(' | ') : null;
-    })(),
+    otherAccesses: $('other_accesses').value.trim() || null,
     observations: $('obs').value.trim() || null
   };
 
@@ -2828,7 +3068,6 @@ async function recargar() {
 
   if (tieneRol('ADMIN')) {
     tareas.push(cargarUsernames());
-    tareas.push(cargarDestinatarios());
   }
 
   await Promise.all(tareas);
@@ -2839,7 +3078,7 @@ async function buscarEmpleado() {
   const campo = $('idf');
   const numero = (campo.value || '').trim();
   const status = $('idf_status');
-  const autoCampos = ['n', 'dep', 'work_area', 'jefe'];
+  const autoCampos = ['n', 'dep', 'work_area', 'jefe', 'position', 'shift'];
 
   if (!numero) {
     if (status) status.innerHTML = '';
@@ -2862,18 +3101,32 @@ async function buscarEmpleado() {
 
     if (resp.status === 200 && resp.data) {
       const emp = resp.data;
-      $('n').value        = emp.employeeName || '';
-      $('dep').value       = emp.deptName  || emp.deptCode      || '';
-      $('work_area').value = emp.areaName  || emp.areaCode    || '';
-      $('jefe').value      = emp.superName || emp.superCode || '';
+      $('n').value         = emp.employeeName || '';
+      $('dep').value       = emp.deptName
+                               ? (emp.deptCode + ' - ' + emp.deptName)
+                               : (emp.deptCode || '');
+      $('work_area').value = emp.areaName
+                               ? (emp.areaCode + ' - ' + emp.areaName)
+                               : (emp.areaCode || '');
+      $('jefe').value      = emp.superName
+                               ? emp.superName
+                               : (emp.superCode || '');
+      $('position').value  = emp.rollName || '';
+      $('shift').value     = emp.turnName || '';
 
       autoCampos.forEach(function(id) {
         $(id).style.backgroundColor = '#eef6ed';
         $(id).readOnly = true;
       });
 
-      if (status) status.innerHTML = '<span style="color:#146c42">&#10003; ' + esc(emp.employeeName) + '</span>';
-      log('Employee ' + numero + ' found: ' + (emp.employeeName || '-'));
+      var infoExtra = '';
+      if (status) status.innerHTML =
+        '<span style="color:#146c42">&#10003; ' +
+        esc(emp.employeeName) + infoExtra + '</span>';
+      log('Employee ' + numero + ' found: ' +
+        (emp.employeeName || '-') + ' | Dept: ' +
+        (emp.deptName || '-') + ' | Super: ' +
+        (emp.superName || '-'));
     } else {
       autoCampos.forEach(function(id) {
         $(id).style.backgroundColor = '';
@@ -2916,115 +3169,6 @@ async function iniciar() {
 }
 
 iniciar();
-
-
-
-/* ============================================================
-   NOTIFICATION RECIPIENTS (admin only)
-   ============================================================ */
-
-let destinatariosData = [];
-
-async function cargarDestinatarios() {
-  const resp = await api('/api/notification-recipients');
-  const tabla = $('tabla_destinatarios');
-
-  if (resp.status !== 200) {
-    tabla.innerHTML =
-      '<tr><td colspan="5">Unable to load recipients. HTTP ' + resp.status + '</td></tr>';
-    return;
-  }
-
-  destinatariosData = Array.isArray(resp.data) ? resp.data : [];
-
-  if (!destinatariosData.length) {
-    tabla.innerHTML =
-      '<tr><td colspan="5" class="empty-row">No recipients configured. Notifications will not be sent.</td></tr>';
-    return;
-  }
-
-  tabla.innerHTML = destinatariosData.map(function(r) {
-    return '<tr>' +
-      '<td>' + r.id + '</td>' +
-      '<td><b>' + esc(r.email) + '</b></td>' +
-      '<td>' + esc(r.description || '-') + '</td>' +
-      '<td>' + (r.active
-        ? '<span class="pill VALIDADA">ACTIVE</span>'
-        : '<span class="pill CRITICO">INACTIVE</span>') + '</td>' +
-      '<td class="user-actions">' +
-        '<button type="button" class="mini" onclick="toggleDestinatario(' + r.id + ',' + r.active + ')">' +
-          (r.active ? 'Disable' : 'Enable') +
-        '</button>' +
-        '<button type="button" class="mini logout" onclick="eliminarDestinatario(' + r.id + ')">Delete</button>' +
-      '</td>' +
-    '</tr>';
-  }).join('');
-}
-
-async function crearDestinatario() {
-  var aviso = $('nr_aviso');
-  aviso.textContent = '';
-
-  var email = $('nr_email').value.trim();
-  if (!email) {
-    aviso.textContent = 'Email is required.';
-    return;
-  }
-
-  var desc = $('nr_desc').value.trim();
-
-  var resp = await api('/api/notification-recipients', 'POST', {
-    email: email,
-    description: desc || null,
-    active: true
-  });
-
-  if (resp.status === 201) {
-    $('nr_email').value = '';
-    $('nr_desc').value = '';
-    await cargarDestinatarios();
-    await cargarAudit();
-  } else {
-    aviso.textContent = resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to add recipient. HTTP ' + resp.status;
-  }
-}
-
-async function toggleDestinatario(id, currentActive) {
-  var r = destinatariosData.find(function(x) { return x.id === id; });
-  if (!r) return;
-
-  var resp = await api('/api/notification-recipients/' + id, 'PUT', {
-    email: r.email,
-    description: r.description,
-    active: !currentActive
-  });
-
-  if (resp.status === 200) {
-    await cargarDestinatarios();
-    await cargarAudit();
-  } else {
-    alert(resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to update recipient.');
-  }
-}
-
-async function eliminarDestinatario(id) {
-  if (!confirm('Remove this recipient permanently?')) return;
-
-  var resp = await api('/api/notification-recipients/' + id, 'DELETE');
-
-  if (resp.status === 204) {
-    await cargarDestinatarios();
-    await cargarAudit();
-  } else {
-    alert(resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to delete recipient.');
-  }
-}
 
 setInterval(function() {
   recargar();
@@ -3183,207 +3327,3 @@ setInterval(function() {
 
 </body>
 </html>
-<script>
-/* ============================================================
-   INVENTORY LOOKUP  +  CLEAR FORM BUTTON
-   ============================================================ */
-(function () {
-
-  /* ---------- inventory data cache ---------- */
-  var _inventoryData = null;
-  var _inventoryLoading = false;
-  var _inventoryCallbacks = [];
-
-  function loadInventory(cb) {
-    if (_inventoryData) { cb(_inventoryData); return; }
-    _inventoryCallbacks.push(cb);
-    if (_inventoryLoading) return;
-    _inventoryLoading = true;
-
-    fetch('/inventory.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        _inventoryData = Array.isArray(data) ? data : [];
-        _inventoryCallbacks.forEach(function (fn) { fn(_inventoryData); });
-        _inventoryCallbacks = [];
-      })
-      .catch(function () {
-        _inventoryData = [];
-        _inventoryCallbacks.forEach(function (fn) { fn([]); });
-        _inventoryCallbacks = [];
-      });
-  }
-
-  /* ---------- search helper ---------- */
-  function searchInventory(query, items) {
-    var q = (query || '').trim().toLowerCase();
-    if (!q || q.length < 2) return [];
-
-    return items.filter(function (item) {
-      return (
-        (item.tag    && item.tag.toLowerCase().indexOf(q) !== -1) ||
-        (item.id     && item.id.toLowerCase().indexOf(q) !== -1) ||
-        (item.serial && item.serial.toLowerCase().indexOf(q) !== -1) ||
-        (item.model  && item.model.toLowerCase().indexOf(q) !== -1) ||
-        (item.user   && item.user.toLowerCase().indexOf(q) !== -1)
-      );
-    }).slice(0, 8);
-  }
-
-  /* ---------- render a result tag ---------- */
-  function statusClass(s) {
-    if (!s) return 'other';
-    var l = s.toLowerCase();
-    if (l === 'on use' || l.indexOf('activ') !== -1 || l.indexOf('asigna') !== -1) return 'on-use';
-    if (l.indexOf('inactiv') !== -1 || l.indexOf('baja') !== -1 || l.indexOf('decomm') !== -1) return 'inactive';
-    if (l.indexOf('available') !== -1 || l.indexOf('disponible') !== -1) return 'available';
-    return 'other';
-  }
-
-  function renderTag(item) {
-    return '<span class="inv-tag found">' +
-      '<span class="inv-icon">&#9989;</span>' +
-      '<span class="inv-field">' + esc(item.tag || item.id || '-') + '</span>' +
-      '<span class="inv-sep">|</span>' +
-      esc(item.model || '-') +
-      '<span class="inv-sep">|</span>' +
-      esc(item.serial || '-') +
-      '<span class="inv-sep">|</span>' +
-      esc(item.user || '-') +
-      '<span class="inv-sep">|</span>' +
-      '<span class="inv-tag-status ' + statusClass(item.status) + '">' + esc(item.status || '-') + '</span>' +
-    '</span>';
-  }
-
-  function renderNotFound(query) {
-    return '<span class="inv-tag not-found">' +
-      '<span class="inv-icon">&#9888;</span>' +
-      ' No match for "<b>' + esc(query) + '</b>"' +
-    '</span>';
-  }
-
-  /* ---------- global buscarInventario ---------- */
-  window.buscarInventario = function (value, resultContainerId) {
-    var container = document.getElementById(resultContainerId);
-    if (!container) return;
-
-    var q = (value || '').trim();
-    if (q.length < 2) { container.innerHTML = ''; return; }
-
-    loadInventory(function (items) {
-      var results = searchInventory(q, items);
-      if (results.length === 0) {
-        container.innerHTML = renderNotFound(q);
-      } else if (results.length === 1) {
-        container.innerHTML = renderTag(results[0]);
-      } else {
-        // Show clickable list
-        container.innerHTML = results.map(function (item, idx) {
-          return '<div class="inv-result-option" data-idx="' + idx + '" ' +
-            'style="cursor:pointer;padding:4px 8px;border-bottom:1px solid #eee;font-size:.82rem" ' +
-            'onmouseenter="this.style.background=\'#e3f2fd\'" ' +
-            'onmouseleave="this.style.background=\'\'">' +
-            '<b>' + esc(item.tag || item.id || '-') + '</b> &mdash; ' +
-            esc(item.model || '') + ' &mdash; ' +
-            esc(item.user || '') + ' &mdash; ' +
-            '<span class="inv-tag-status ' + statusClass(item.status) + '">' + esc(item.status || '-') + '</span>' +
-          '</div>';
-        }).join('');
-
-        // Click to select
-        container.querySelectorAll('.inv-result-option').forEach(function (el) {
-          el.addEventListener('click', function () {
-            var i = parseInt(el.getAttribute('data-idx'));
-            var selected = results[i];
-            if (!selected) return;
-
-            // Find the input that triggered this
-            var input = container.previousElementSibling;
-            while (input && input.tagName !== 'INPUT') {
-              input = input.previousElementSibling;
-            }
-            if (input) {
-              input.value = selected.tag || selected.id || '';
-            }
-            container.innerHTML = renderTag(selected);
-          });
-        });
-      }
-    });
-  };
-
-  /* ---------- Other equipment list ---------- */
-  window._otherEquipItems = window._otherEquipItems || [];
-
-  window.renderOtherEquipList = function () {
-    var list = document.getElementById('other_equip_list');
-    if (!list) return;
-
-    if (!window._otherEquipItems.length) {
-      list.innerHTML = '';
-      return;
-    }
-
-    list.innerHTML = window._otherEquipItems.map(function (text, idx) {
-      return '<div class="other-equip-item">' +
-        '<span class="equip-info">' + esc(text) + '</span>' +
-        '<button type="button" class="btn-remove-equip" onclick="removeOtherEquip(' + idx + ')">&times;</button>' +
-      '</div>';
-    }).join('');
-  };
-
-  window.agregarOtroEquipo = function () {
-    var input = document.getElementById('other_equip_input');
-    if (!input) return;
-    var val = input.value.trim();
-    if (!val) return;
-
-    window._otherEquipItems.push(val);
-    input.value = '';
-    var r = document.getElementById('other_equip_inv_result');
-    if (r) r.innerHTML = '';
-    window.renderOtherEquipList();
-  };
-
-  window.removeOtherEquip = function (idx) {
-    window._otherEquipItems.splice(idx, 1);
-    window.renderOtherEquipList();
-  };
-
-  /* ---------- CLEAR FORM BUTTON ---------- */
-  var captureSection = document.getElementById('seccion_captura');
-  if (captureSection) {
-    // Find the "Register offboarding" button
-    var registerBtn = captureSection.querySelector('button[onclick="crearCase()"]');
-    if (registerBtn) {
-      var clearBtn = document.createElement('button');
-      clearBtn.type = 'button';
-      clearBtn.textContent = 'Clear form';
-      clearBtn.style.cssText = 'background:#6b7280;margin-left:10px';
-      clearBtn.onmouseover = function () { clearBtn.style.background = '#4b5563'; };
-      clearBtn.onmouseout = function () { clearBtn.style.background = '#6b7280'; };
-      clearBtn.onclick = function () {
-        limpiarCaptura();
-        setDefaultFecha();
-        // Also clear inventory results
-        ['computer_inv_result', 'phone_inv_result', 'other_equip_inv_result'].forEach(function (id) {
-          var el = document.getElementById(id);
-          if (el) el.innerHTML = '';
-        });
-        window._otherEquipItems = [];
-        window.renderOtherEquipList();
-      };
-      registerBtn.parentNode.insertBefore(clearBtn, registerBtn.nextSibling);
-    }
-  }
-
-  /* ---------- helper (reuse from main script) ---------- */
-  function esc(v) {
-    return (v == null ? '' : String(v))
-      .replace(/[<>&]/g, function (c) {
-        return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c];
-      });
-  }
-
-})();
-</script>

@@ -37,7 +37,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         /*
-                         * Administración de usuarios locales.
+                         * Administracion de usuarios locales.
                          */
                         .requestMatchers("/api/users/**")
                             .hasRole("ADMIN")
@@ -49,44 +49,37 @@ public class SecurityConfig {
                             .hasAnyRole("ADMIN", "RECURSOS_HUMANOS")
 
                         /*
-                         * Consulta de casos:
-                         * - Administrador
-                         * - IT Engineer
-                         * - Auditor de solo lectura
-                         * - Control de Accesos (biométricos y accesos físicos)
+                         * Consulta de casos.
                          */
                         .requestMatchers(HttpMethod.GET, "/api/offboardings/**")
                             .hasAnyRole("ADMIN", "IT_ENGINEER", "AUDITOR", "CONTROL_ACCESOS")
 
                         /*
                          * Procesamiento de tareas.
-                         * Control de Accesos puede completar tareas de biométrico.
                          */
                         .requestMatchers(HttpMethod.PATCH, "/api/tasks/*/complete")
                             .hasAnyRole("ADMIN", "IT_ENGINEER", "CONTROL_ACCESOS")
 
                         /*
-                         * Validación administrativa de activos.
-                         * Control de Accesos puede validar tareas de biométrico.
+                         * Validacion administrativa de activos.
                          */
                         .requestMatchers(HttpMethod.PATCH, "/api/tasks/*/validate")
                             .hasAnyRole("ADMIN", "CONTROL_ACCESOS")
 
                         /*
-                         * Solamente un administrador puede reabrir
-                         * una tarea que ya fue procesada.
+                         * Reabrir tarea procesada.
                          */
                         .requestMatchers(HttpMethod.PATCH, "/api/tasks/*/reopen")
                             .hasRole("ADMIN")
 
                         /*
-                         * Bloquear cualquier otra operación sobre tareas.
+                         * Bloquear cualquier otra operacion sobre tareas.
                          */
                         .requestMatchers("/api/tasks/**")
                             .denyAll()
 
                         /*
-                         * Bitácora estrictamente de lectura.
+                         * Bitacora de lectura.
                          */
                         .requestMatchers(HttpMethod.GET, "/api/audit/**")
                             .hasAnyRole("ADMIN", "AUDITOR")
@@ -95,7 +88,16 @@ public class SecurityConfig {
                             .denyAll()
 
                         /*
-                         * Información del usuario autenticado.
+                         * Notificaciones por correo.
+                         */
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/test-smtp", "/api/notifications/test-flow")
+                            .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/notifications/send")
+                            .hasAnyRole("ADMIN", "IT_ENGINEER")
+
+                        /*
+                         * Informacion del usuario autenticado.
                          */
                         .requestMatchers("/api/auth/**")
                             .authenticated()

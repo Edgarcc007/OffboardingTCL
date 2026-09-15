@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario de Activos IT — TCL</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:#0f172a; color:#e2e8f0; }
+
+  /* TOP BAR */
+  .topbar { background:#1e293b; padding:16px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-bottom:1px solid #334155; }
+  .topbar h1 { font-size:1.25rem; color:#38bdf8; white-space:nowrap; }
+  .topbar .stats { display:flex; gap:12px; margin-left:auto; }
+  .stat-card { background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 16px; text-align:center; min-width:100px; }
+  .stat-card .num { font-size:1.4rem; font-weight:700; color:#38bdf8; }
+  .stat-card .lbl { font-size:.7rem; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; }
+
+  /* FILTERS */
+  .filters { background:#1e293b; padding:12px 24px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; border-bottom:1px solid #334155; }
+  .filters input, .filters select {
+    background:#0f172a; color:#e2e8f0; border:1px solid #475569; border-radius:6px;
+    padding:8px 12px; font-size:.85rem; outline:none; transition:border .2s;
+  }
+  .filters input:focus, .filters select:focus { border-color:#38bdf8; }
+  .filters input { flex:1; min-width:200px; }
+  .filters select { min-width:140px; }
+  .btn-clear { background:#ef4444; color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-size:.8rem; }
+  .btn-clear:hover { background:#dc2626; }
+
+  /* TABLE */
+  .table-wrap { overflow:auto; max-height:calc(100vh - 180px); margin:0; }
+  table { width:100%; border-collapse:collapse; font-size:.8rem; }
+  thead { position:sticky; top:0; z-index:2; }
+  th {
+    background:#334155; color:#38bdf8; padding:10px 8px; text-align:left;
+    white-space:nowrap; cursor:pointer; user-select:none; border-bottom:2px solid #475569;
+  }
+  th:hover { background:#475569; }
+  th .arrow { margin-left:4px; font-size:.65rem; }
+  td { padding:8px; border-bottom:1px solid #1e293b; white-space:nowrap; max-width:250px; overflow:hidden; text-overflow:ellipsis; }
+  tr:hover td { background:#1e293b; }
+
+  /* STATUS BADGES */
+  .badge { padding:2px 8px; border-radius:10px; font-size:.72rem; font-weight:600; display:inline-block; }
+  .badge-active { background:#064e3b; color:#34d399; }
+  .badge-inactive { background:#7f1d1d; color:#fca5a5; }
+  .badge-other { background:#1e3a5f; color:#7dd3fc; }
+
+  /* LOADING */
+  .loading { display:flex; justify-content:center; align-items:center; height:60vh; flex-direction:column; gap:12px; }
+  .spinner { width:40px; height:40px; border:4px solid #334155; border-top-color:#38bdf8; border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ROW COUNT */
+  .row-count { padding:8px 24px; font-size:.78rem; color:#64748b; background:#1e293b; border-top:1px solid #334155; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>📦 Inventario de Activos IT</h1>
+  <div class="stats">
+    <div class="stat-card"><div class="num" id="totalAssets">—</div><div class="lbl">Total</div></div>
+    <div class="stat-card"><div class="num" id="activeAssets">—</div><div class="lbl">Activos</div></div>
+    <div class="stat-card"><div class="num" id="typesCount">—</div><div class="lbl">Tipos</div></div>
+    <div class="stat-card"><div class="num" id="deptsCount">—</div><div class="lbl">Deptos</div></div>
+  </div>
+</div>
+
+<div class="filters">
+  <input type="text" id="searchBox" placeholder="🔍 Buscar por Asset ID, nombre, serial, usuario...">
+  <select id="filterStatus"><option value="">— Status —</option></select>
+  <select id="filterType"><option value="">— DevType —</option></select>
+  <select id="filterDept"><option value="">— Department —</option></select>
+  <select id="filterLocation"><option value="">— Location —</option></select>
+  <button class="btn-clear" onclick="clearFilters()">Limpiar</button>
+</div>
+
+<div id="loadingDiv" class="loading">
+  <div class="spinner"></div>
+  <span>Cargando inventario...</span>
+</div>
+
+<div class="table-wrap" id="tableWrap" style="display:none;">
+  <table>
+    <thead id="thead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+<div class="row-count" id="rowCount"></div>
+
+<script>
+const XLSX_PATH = '/data/Inventario actualizado 2026.xlsx';
+const KEY_COLS = [
+  'Asset ID','Name','Model','Serial Number / Parent Serial','DevType',
+  'Operating System','User','Department','Building/Floor','Location','Status'
+];
+const SEARCH_FIELDS = ['Asset ID','Name','Model','Serial Number / Parent Serial','Sub-Serial Number','Mac Address','User'];
+
+let allRows = [];
+let headers = [];
+let sortCol = -1, sortAsc = true;
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const resp = await fetch(XLSX_PATH);
+  const buf = await resp.arrayBuffer();
+  const wb = XLSX.read(buf, { type:'array' });
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const json = XLSX.utils.sheet_to_json(ws, { defval:'' });
+
+  if (!json.length) return;
+  headers = KEY_COLS;
+  allRows = json;
+
+  buildFilters(json);
+  updateStats(json);
+  buildThead();
+  renderTable(json);
+
+  document.getElementById('loadingDiv').style.display = 'none';
+  document.getElementById('tableWrap').style.display = '';
+
+  document.getElementById('searchBox').addEventListener('input', applyFilters);
+  ['filterStatus','filterType','filterDept','filterLocation'].forEach(id =>
+    document.getElementById(id).addEventListener('change', applyFilters));
+});
+
+function buildFilters(data) {
+  populateSelect('filterStatus', [...new Set(data.map(r => r['Status']))].filter(Boolean).sort());
+  populateSelect('filterType',   [...new Set(data.map(r => r['DevType']))].filter(Boolean).sort());
+  populateSelect('filterDept',   [...new Set(data.map(r => r['Department']))].filter(Boolean).sort());
+  populateSelect('filterLocation',[...new Set(data.map(r => r['Location']))].filter(Boolean).sort());
+}
+
+function populateSelect(id, values) {
+  const sel = document.getElementById(id);
+  const label = sel.options[0].text;
+  sel.innerHTML = `<option value="">${label}</option>`;
+  values.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+}
+
+function updateStats(data) {
+  document.getElementById('totalAssets').textContent = data.length;
+  const activeKw = ['active','activo','in use','en uso','asignado','assigned'];
+  document.getElementById('activeAssets').textContent = data.filter(r =>
+    activeKw.some(k => String(r['Status']).toLowerCase().includes(k))
+  ).length;
+  document.getElementById('typesCount').textContent = new Set(data.map(r => r['DevType']).filter(Boolean)).size;
+  document.getElementById('deptsCount').textContent = new Set(data.map(r => r['Department']).filter(Boolean)).size;
+}
+
+function buildThead() {
+  const tr = document.createElement('tr');
+  headers.forEach((h, i) => {
+    const th = document.createElement('th');
+    th.innerHTML = h + ' <span class="arrow"></span>';
+    th.onclick = () => sortBy(i);
+    tr.appendChild(th);
+  });
+  document.getElementById('thead').appendChild(tr);
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    headers.forEach(h => {
+      const td = document.createElement('td');
+      const val = String(row[h] ?? '');
+      if (h === 'Status') {
+        const low = val.toLowerCase();
+        const cls = (low.includes('activ') || low.includes('in use') || low.includes('asigna')) ? 'badge-active'
+                  : (low.includes('inactiv') || low.includes('baja') || low.includes('obsolet')) ? 'badge-inactive'
+                  : 'badge-other';
+        td.innerHTML = val ? `<span class="badge ${cls}">${val}</span>` : '';
+      } else {
+        td.textContent = val;
+        td.title = val;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  document.getElementById('rowCount').textContent = `Mostrando ${data.length} de ${allRows.length} registros`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  const st = document.getElementById('filterStatus').value;
+  const tp = document.getElementById('filterType').value;
+  const dp = document.getElementById('filterDept').value;
+  const lc = document.getElementById('filterLocation').value;
+
+  let filtered = allRows;
+  if (q) filtered = filtered.filter(r => SEARCH_FIELDS.some(f => String(r[f]).toLowerCase().includes(q)));
+  if (st) filtered = filtered.filter(r => r['Status'] === st);
+  if (tp) filtered = filtered.filter(r => r['DevType'] === tp);
+  if (dp) filtered = filtered.filter(r => r['Department'] === dp);
+  if (lc) filtered = filtered.filter(r => r['Location'] === lc);
+
+  updateStats(filtered);
+  renderTable(filtered);
+}
+
+function clearFilters() {
+  document.getElementById('searchBox').value = '';
+  ['filterStatus','filterType','filterDept','filterLocation'].forEach(id => document.getElementById(id).value = '');
+  updateStats(allRows);
+  renderTable(allRows);
+}
+
+function sortBy(colIdx) {
+  const key = headers[colIdx];
+  if (sortCol === colIdx) { sortAsc = !sortAsc; } else { sortCol = colIdx; sortAsc = true; }
+  const tbody = document.getElementById('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  // re-sort allRows visible
+  applyFilters();
+  // update arrows
+  document.querySelectorAll('#thead .arrow').forEach((a, i) => {
+    a.textContent = i === colIdx ? (sortAsc ? '▲' : '▼') : '';
+  });
+}
+</script>
+</body>
+</html>

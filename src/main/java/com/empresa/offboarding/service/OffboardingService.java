@@ -17,6 +17,7 @@ import com.empresa.offboarding.repository.OffboardingTaskRepository;
 import com.empresa.offboarding.repository.TaskTemplateRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +25,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OffboardingService {
 
     private final OffboardingCaseRepository caseRepository;
@@ -39,13 +44,15 @@ public class OffboardingService {
     private final TaskTemplateRepository templateRepository;
     private final CaseNumberGenerator caseNumberGenerator;
     private final AuditService auditService;
+    private final NotificationService notificationService;
+    private final NotificationRecipientService recipientService;
 
-    /* â”€â”€ Sistemas que Control de Accesos puede gestionar â”€â”€ */
+    /* -- Sistemas que Control de Accesos puede gestionar -- */
     private static final Set<String> ACCESS_CONTROL_SYSTEMS = Set.of(
             "Accesos fisicos",
-            "Accesos fÃ­sicos",
+            "Accesos f\u00edsicos",
             "Control de accesos",
-            "BiomÃ©tricos"
+            "Biom\u00e9tricos"
     );
 
     @Transactional
@@ -255,7 +262,7 @@ public class OffboardingService {
             );
         }
 
-        /* â”€â”€ Tareas automÃ¡ticas de biomÃ©trico cuando aplica â”€â”€ */
+        /* -- Tareas automaticas de biometrico cuando aplica -- */
         if (request.fingerprintRegistered() || request.faceidRegistered()) {
             offboardingCase.addTask(
                     new OffboardingTask(
@@ -301,6 +308,48 @@ public class OffboardingService {
                         + "; tareas="
                         + saved.getTasks().size()
         );
+
+        /* -- Notificacion automatica por correo -- */
+        try {
+            String recipients = recipientService.getActiveRecipientsAsString();
+
+            if (recipients != null) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("Caso", saved.getCaseNumber());
+                row.put("Empleado", saved.getEmployeeName());
+                row.put("NumEmpleado", saved.getEmployeeIdentifier());
+                row.put("Departamento", saved.getDepartment());
+                row.put("Area", saved.getWorkArea());
+                row.put("Edificio",
+                        saved.getBuilding() != null
+                                ? saved.getBuilding()
+                                : "-");
+                row.put("Tipo", saved.getTerminationType());
+                row.put("FechaEfectiva",
+                        saved.getEffectiveAt()
+                                .format(DateTimeFormatter
+                                        .ofPattern("dd/MM/yyyy HH:mm")));
+                row.put("Riesgo",
+                        saved.getRiskLevel().name());
+                row.put("Tareas",
+                        String.valueOf(saved.getTasks().size()));
+                row.put("Solicitado por", requestedBy);
+
+                String subject = "Offboarding "
+                        + saved.getCaseNumber()
+                        + " - "
+                        + saved.getEmployeeName();
+
+                notificationService.sendOffboardingNotification(
+                        List.of(row),
+                        subject,
+                        recipients
+                );
+            }
+        } catch (Exception e) {
+            log.warn("No se pudo enviar notificacion para caso {}: {}",
+                    saved.getCaseNumber(), e.getMessage());
+        }
 
         return toResponse(saved);
     }
@@ -374,10 +423,6 @@ public class OffboardingService {
     ) {
         OffboardingTask task = requireTask(taskId);
 
-        /*
-         * ValidaciÃ³n ampliada: activos fÃ­sicos (computadora/telÃ©fono)
-         * y tareas de control de accesos (biomÃ©tricos).
-         */
         if (!isAssetTask(task) && !isAccessControlTask(task)) {
             throw new IllegalStateException(
                     "Administrative validation only applies "
@@ -400,8 +445,8 @@ public class OffboardingService {
                 && validatedBy.equalsIgnoreCase(
                     completedBy)) {
             throw new IllegalStateException(
-                    "La validaciÃ³n debe hacerla una persona "
-                            + "distinta a quien procesÃ³ la tarea"
+                    "La validacion debe hacerla una persona "
+                            + "distinta a quien proceso la tarea"
             );
         }
 
@@ -409,13 +454,13 @@ public class OffboardingService {
 
         if (!request.assetReceived()) {
             throw new IllegalArgumentException(
-                    "Debes confirmar la recepciÃ³n o ejecuciÃ³n de la tarea"
+                    "Debes confirmar la recepcion o ejecucion de la tarea"
             );
         }
 
         if (!request.inventoryUpdated()) {
             throw new IllegalArgumentException(
-                    "Debes confirmar la actualizaciÃ³n del registro"
+                    "Debes confirmar la actualizacion del registro"
             );
         }
 
@@ -553,7 +598,7 @@ public class OffboardingService {
         return toTaskResponse(task);
     }
 
-    /* â”€â”€ Helpers â”€â”€ */
+    /* -- Helpers -- */
 
     private String buildBiometricTaskName(
             boolean fingerprint,
@@ -570,15 +615,10 @@ public class OffboardingService {
             sb.append("foto en equipos FaceID");
         }
 
-        sb.append(", revocar accesos biomÃ©tricos");
+        sb.append(", revocar accesos biometricos");
         return sb.toString();
     }
 
-    /**
-     * Si el usuario autenticado SOLO tiene el rol CONTROL_ACCESOS
-     * (sin ADMIN ni IT_ENGINEER), restringe la operaciÃ³n
-     * exclusivamente a tareas de control de accesos.
-     */
     private void enforceAccessControlScope(OffboardingTask task) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
@@ -597,7 +637,7 @@ public class OffboardingService {
             if (!isAccessControlTask(task)) {
                 throw new IllegalStateException(
                         "El perfil Control de Accesos solo puede procesar "
-                                + "tareas de biomÃ©tricos y accesos fÃ­sicos"
+                                + "tareas de biometricos y accesos fisicos"
                 );
             }
         }
@@ -686,8 +726,8 @@ public class OffboardingService {
         String systemName =
                 task.getSystemName();
 
-        return "Equipo de cÃ³mputo".equals(systemName)
-                || "TelefonÃ­a".equals(systemName)
+        return "Equipo de c\u00f3mputo".equals(systemName)
+                || "Telefon\u00eda".equals(systemName)
                 || "Activos asignados".equals(systemName)
                 || "Telefonia".equals(systemName);
     }

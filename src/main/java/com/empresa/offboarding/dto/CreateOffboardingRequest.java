@@ -47,7 +47,6 @@ public record CreateOffboardingRequest(
 
         OffsetDateTime effectiveAt,
 
-        @NotNull(message = "Risk level is required")
         RiskLevel riskLevel,
 
         boolean confidential,

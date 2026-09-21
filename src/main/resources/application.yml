@@ -55,3 +55,6 @@ app:
 logging:
   level:
     org.springframework.security: INFO
+inventory:
+  excel-path: "\\\\10.138.96.15\\Information Systems files\\01 TRANSICION TCL\\03 Equipment Delivery\\06 Inventario de Equipo\\ISO 27001\\Inventario actualizado\\Inventario actualizado 2026.xlsx"
+  cache-minutes: 10

@@ -12,6 +12,7 @@ import com.empresa.offboarding.entity.TaskTemplate;
 import com.empresa.offboarding.enums.AccessType;
 import com.empresa.offboarding.enums.CaseStatus;
 import com.empresa.offboarding.enums.TaskStatus;
+import com.empresa.offboarding.enums.RiskLevel;
 import com.empresa.offboarding.repository.OffboardingCaseRepository;
 import com.empresa.offboarding.repository.OffboardingTaskRepository;
 import com.empresa.offboarding.repository.TaskTemplateRepository;
@@ -153,7 +154,9 @@ public class OffboardingService {
         offboardingCase.setEffectiveAt(
                 effectiveAt);
         offboardingCase.setRiskLevel(
-                request.riskLevel());
+                request.riskLevel() != null
+                        ? request.riskLevel()
+                        : RiskLevel.NORMAL);
         offboardingCase.setConfidential(
                 request.confidential());
 

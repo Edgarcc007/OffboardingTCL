@@ -7,1696 +7,511 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Employee Offboarding Control</title>
-
 <style>
-*{box-sizing:border-box}
-
-body{
-  font-family:system-ui,Segoe UI,sans-serif;
-  margin:0;
-  background:#eef1f5;
-  color:#1c2530
-}
-
-header{
-  background:#12263f;
-  color:#fff;
-  padding:18px 26px
-}
-
-header h1{
-  margin:0;
-  font-size:19px;
-  letter-spacing:.3px
-}
-
-header p{
-  margin:4px 0 0;
-  font-size:13px;
-  opacity:.75
-}
-
-main{
-  max-width:1180px;
-  margin:22px auto;
-  padding:0 16px
-}
-
-.hidden{
-  display:none!important
-}
-
-.card{
-  background:#fff;
-  border-radius:8px;
-  padding:18px 20px;
-  margin-bottom:18px;
-  box-shadow:0 1px 3px rgba(0,0,0,.12)
-}
-
-.card h2{
-  margin:0 0 14px;
-  font-size:15px;
-  text-transform:uppercase;
-  letter-spacing:.6px;
-  color:#3f5875;
-  border-bottom:2px solid #e3e8ee;
-  padding-bottom:8px
-}
-
-.session-card{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  flex-wrap:wrap
-}
-
-.session-info{
-  font-size:13px;
-  color:#42556c
-}
-
-.session-info strong{
-  color:#12263f
-}
-
-.session-roles{
-  margin-top:5px;
-  font-size:11px;
-  color:#66788c
-}
-
-.profile-label{
-  display:inline-block;
-  margin-top:7px;
-  padding:3px 10px;
-  border-radius:12px;
-  background:#d7e9fb;
-  color:#14548c;
-  font-size:11px;
-  font-weight:700
-}
-
-.session-actions{
-  display:flex;
-  align-items:center;
-  gap:8px
-}
-
-.session-actions form{
-  margin:0
-}
-
-.session-actions button{
-  margin-top:0
-}
-
-button.logout{
-  background:#b3261e
-}
-
-button.logout:hover{
-  background:#8e1d17
-}
-
-label{
-  display:block;
-  font-size:12px;
-  font-weight:600;
-  color:#5a6b7f;
-  margin:8px 0 3px
-}
-
-input,select,textarea{
-  width:100%;
-  padding:8px 10px;
-  border:1px solid #c8d2de;
-  border-radius:5px;
-  font-size:13px;
-  font-family:inherit
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:0 14px
-}
-
-button{
-  background:#12263f;
-  color:#fff;
-  border:0;
-  padding:9px 16px;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:13px;
-  font-weight:600;
-  margin-top:12px
-}
-
-button:hover{
-  background:#1d3a5f
-}
-
-button.mini{
-  padding:5px 10px;
-  font-size:11px;
-  margin:2px 3px 2px 0
-}
-
-button.ok{
-  background:#1c7a4a
-}
-
-button.ok:hover{
-  background:#239159
-}
-
-button.val{
-  background:#8a5a00
-}
-
-button.val:hover{
-  background:#a86e00
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px
-}
-
-th{
-  background:#f4f7fa;
-  text-align:left;
-  padding:8px;
-  font-size:11px;
-  text-transform:uppercase;
-  color:#5a6b7f;
-  border-bottom:2px solid #e3e8ee
-}
-
-td{
-  padding:8px;
-  border-bottom:1px solid #eef1f5;
-  vertical-align:top
-}
-
-.table-wrapper{
-  width:100%;
-  overflow-x:auto
-}
-
-.pill{
-  display:inline-block;
-  padding:2px 9px;
-  border-radius:11px;
-  font-size:11px;
-  font-weight:700;
-  margin:1px
-}
-
-.PENDIENTE{
-  background:#fdf0d5;
-  color:#8a5a00
-}
-
-.COMPLETADA{
-  background:#d7e9fb;
-  color:#14548c
-}
-
-.VALIDADA{
-  background:#d5f0e0;
-  color:#146c42
-}
-
-.CRITICO,.ALTO{
-  background:#fbdcd8;
-  color:#a52314
-}
-
-.NORMAL,.BAJO{
-  background:#e2e7ee;
-  color:#42556c
-}
-
-.crit{
-  color:#a52314;
-  font-weight:700
-}
-
-
-.case-header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  width:100%
-}
-
-.case-toggle{
-  flex:0 0 auto;
-  width:31px;
-  height:31px;
-  margin:0;
-  padding:0;
-  border-radius:50%;
-  background:#e5ebf2;
-  color:#12263f;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer
-}
-
-.case-toggle:hover{
-  background:#d2dce8
-}
-
-.case-arrow{
-  display:inline-block;
-  font-size:13px;
-  transition:transform .18s ease
-}
-
-.caso.expanded .case-arrow{
-  transform:rotate(90deg)
-}
-
-.case-summary{
-  flex:1;
-  min-width:0
-}
-
-.case-summary-main{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  flex-wrap:wrap
-}
-
-.case-summary-secondary{
-  margin-top:3px;
-  color:#5a6b7f;
-  font-size:12px
-}
-
-
-.case-details-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:8px 16px;
-  padding:12px 16px;
-  margin-bottom:12px;
-  background:#f8fafc;
-  border-radius:6px;
-  border:1px solid #e2e8f0;
-  font-size:13px
-}
-
-.detail-group{
-  display:flex;
-  flex-direction:column;
-  gap:2px
-}
-
-.detail-label{
-  font-size:11px;
-  color:#5a6b7f;
-  text-transform:uppercase;
-  letter-spacing:.5px
-}
-
-.detail-value{
-  font-weight:500;
-  color:#1e293b
-}
-.caso-body{
-  display:none
-}
-
-.caso.expanded .caso-body{
-  display:block
-}
-
-.case-count{
-  color:#5a6b7f;
-  font-size:11px;
-  white-space:nowrap
-}
-
-.empty-row{
-  padding:14px;
-  text-align:center;
-  color:#66788c
-}
-
-.caso{
-  border:1px solid #dde4ec;
-  border-radius:7px;
-  margin-bottom:14px;
-  overflow:hidden
-}
-
-.caso-h{
-  background:#f7f9fc;
-  padding:11px 14px;
-  border-bottom:1px solid #dde4ec
-}
-
-.caso-h b{
-  font-size:14px
-}
-
-.meta{
-  font-size:12px;
-  color:#5a6b7f;
-  margin-top:3px
-}
-
-.notice{
-  border-radius:6px;
-  padding:10px 12px;
-  margin-top:12px;
-  font-size:13px;
-  display:none
-}
-
-.notice.ok{
-  display:block;
-  color:#146c42;
-  background:#d5f0e0;
-  border:1px solid #acd9bf
-}
-
-.notice.error{
-  display:block;
-  color:#a52314;
-  background:#fbdcd8;
-  border:1px solid #e9b1aa
-}
-
-#log{
-  background:#0f1b2b;
-  color:#b8f0c8;
-  font-family:Consolas,monospace;
-  font-size:12px;
-  padding:12px;
-  border-radius:6px;
-  height:150px;
-  overflow-y:auto;
-  white-space:pre-wrap
-}
-
-.err{color:#ff8f7d}
-.warn{color:#ffd479}
-
-.header-content{
-  max-width:1180px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  gap:17px
-}
-
-.brand-logo{
-  width:88px;
-  height:auto;
-  flex:0 0 auto;
-  display:block
-}
-
-.header-text{
-  min-width:0;
-  flex:1
-}
-
-.header-department{
-  margin-top:3px;
-  color:#ffffff;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:.4px
-}
-
-.week-indicator{
-  flex:0 0 auto;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.23);
-  border-radius:18px;
-  padding:7px 13px;
-  font-size:12px;
-  font-weight:700;
-  white-space:nowrap
-}
-
-.collapsible-card-header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border-bottom:2px solid #e3e8ee;
-  padding-bottom:8px;
-  margin-bottom:0
-}
-
-.collapsible-card-header h2{
-  flex:1;
-  margin:0;
-  padding:0;
-  border:0
-}
-
-.audit-toggle{
-  flex:0 0 auto;
-  width:31px;
-  height:31px;
-  margin:0;
-  padding:0;
-  border-radius:50%;
-  background:#e5ebf2;
-  color:#12263f;
-  display:flex;
-  align-items:center;
-  justify-content:center
-}
-
-.audit-toggle:hover{
-  background:#d2dce8
-}
-
-.audit-arrow{
-  display:inline-block;
-  transition:transform .18s ease
-}
-
-#seccion_auditoria.expanded .audit-arrow{
-  transform:rotate(90deg)
-}
-
-.audit-body{
-  margin-top:14px
-}
-
-.reopen{
-  background:#6d3fa0
-}
-
-.reopen:hover{
-  background:#8150b6
-}
-
-@media(max-width:700px){
-  .header-content{
-    align-items:flex-start;
-    flex-wrap:wrap
-  }
-
-  .brand-logo{
-    width:70px
-  }
-
-  .week-indicator{
-    width:100%;
-    text-align:center
-  }
-}
-
-
-.selection-panel{
-  margin:18px 0;
-  padding:16px;
-  border:1px solid #d8e0e8;
-  border-radius:8px;
-  background:#f8fafc
-}
-
-.selection-panel legend{
-  padding:0 8px;
-  font-weight:700;
-  color:#24364b
-}
-
-.selection-options{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px 24px;
-  margin:8px 0
-}
-
-.selection-option{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  margin:0;
-  font-weight:500;
-  cursor:pointer
-}
-
-.selection-option input{
-  width:auto;
-  margin:0
-}
-
-.assignment-detail{
-  margin-top:13px
-}
-
-.assignment-detail label{
-  display:block;
-  margin-bottom:5px
-}
-
-.selection-help{
-  margin:5px 0 12px;
-  color:#66788c;
-  font-size:12px
-}
-
-
-.password-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px
-}
-
-.modal-overlay{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.55)
-}
-
-.modal-panel{
-  width:min(720px,100%);
-  max-height:90vh;
-  overflow:auto;
-  padding:22px;
-  border-radius:10px;
-  background:#fff;
-  box-shadow:0 18px 50px rgba(0,0,0,.3)
-}
-
-.modal-actions{
-  display:flex;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:18px
-}
-
-.user-actions{
-  white-space:nowrap
-}
-
-
-.required-marker{
-  color:#c62828;
-  font-weight:800;
-  margin-left:3px
-}
-
-.optional-marker{
-  color:#66788c;
-  font-size:12px;
-  font-weight:400
-}
-
-.required-legend{
-  margin:4px 0 14px;
-  color:#66788c;
-  font-size:12px
-}
-
-.no-email{
-  color:#78899a;
-  font-size:12px;
-  font-style:italic
-}
-
-
-/* -- Inventory lookup -- */
-.inv-lookup-result{margin-top:6px;min-height:0}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg-dark:#1a1a2e;--bg-mid:#16213e;--bg-card:#ffffff;--text-primary:#1e293b;--text-secondary:#64748b;--text-muted:#94a3b8;--accent:#e52d27;--accent-hover:#c62222;--accent-blue:#3b82f6;--accent-blue-hover:#2563eb;--border:#e2e8f0;--border-light:#f1f5f9;--success:#16a34a;--success-bg:#dcfce7;--warning:#d97706;--warning-bg:#fef3c7;--danger:#dc2626;--danger-bg:#fee2e2;--info:#2563eb;--info-bg:#dbeafe;--radius:12px;--radius-sm:8px;--radius-pill:50px;--shadow-card:0 4px 24px rgba(0,0,0,.08);--shadow-hover:0 8px 32px rgba(0,0,0,.12);--font:system-ui,'Segoe UI',sans-serif}
+body{font-family:var(--font);background:var(--bg-dark);color:var(--text-primary);min-height:100vh;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 50% at 20% 80%,rgba(30,41,70,.7),transparent),radial-gradient(ellipse 60% 40% at 80% 20%,rgba(50,50,80,.5),transparent),linear-gradient(160deg,#1a1a2e 0%,#16213e 30%,#0f3460 60%,#1a1a2e 100%);pointer-events:none}
+body::after{content:'';position:fixed;inset:0;z-index:0;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,165.3C672,171,768,213,864,218.7C960,224,1056,192,1152,165.3C1248,139,1344,117,1392,106.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E") no-repeat bottom/100% auto;pointer-events:none}
+.hidden{display:none!important}
+header{position:relative;z-index:10;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;background:transparent}
+.header-content{width:100%;max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:20px}
+.brand-logo{width:120px;height:auto;flex:0 0 auto;filter:brightness(1.1)}
+.header-text{flex:1;min-width:0}
+header h1{font-size:22px;font-weight:800;letter-spacing:.3px;color:#fff}
+header p{margin:4px 0 0;font-size:13px;color:rgba(255,255,255,.6)}
+.header-department{margin-top:3px;color:rgba(255,255,255,.85);font-size:13px;font-weight:700;letter-spacing:.4px}
+.week-indicator{flex:0 0 auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);border-radius:var(--radius-pill);padding:8px 18px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
+main{position:relative;z-index:10;max-width:1280px;margin:10px auto 40px;padding:0 20px}
+.card{background:var(--bg-card);border-radius:var(--radius);padding:24px 28px;margin-bottom:20px;box-shadow:var(--shadow-card);border:1px solid var(--border-light);transition:box-shadow .2s ease}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h2{margin:0 0 16px;font-size:14px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-secondary);border-bottom:2px solid var(--border);padding-bottom:10px;font-weight:700}
+.session-card{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(255,255,255,.97);backdrop-filter:blur(10px)}
+.session-info{font-size:13px;color:var(--text-secondary)}
+.session-info strong{color:var(--text-primary)}
+.session-roles{margin-top:5px;font-size:11px;color:var(--text-muted)}
+.profile-label{display:inline-block;margin-top:7px;padding:4px 14px;border-radius:var(--radius-pill);background:var(--info-bg);color:var(--info);font-size:11px;font-weight:700}
+.session-actions{display:flex;align-items:center;gap:10px}
+.session-actions form{margin:0}
+.session-actions button{margin-top:0}
+button{background:var(--accent);color:#fff;border:0;padding:10px 22px;border-radius:var(--radius-pill);cursor:pointer;font-size:13px;font-weight:700;margin-top:12px;transition:all .2s ease;letter-spacing:.3px}
+button:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(229,45,39,.3)}
+button:active{transform:translateY(0)}
+button.logout{background:transparent;border:2px solid rgba(255,255,255,.3);color:#fff;padding:8px 20px}
+button.logout:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
+button.mini{padding:6px 14px;font-size:11px;margin:2px 3px 2px 0;border-radius:var(--radius-sm)}
+button.ok{background:var(--success)}
+button.ok:hover{background:#15803d;box-shadow:0 4px 12px rgba(22,163,74,.3)}
+button.val{background:var(--warning)}
+button.val:hover{background:#b45309;box-shadow:0 4px 12px rgba(217,119,6,.3)}
+button.reopen{background:#7c3aed}
+button.reopen:hover{background:#6d28d9;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+label{display:block;font-size:12px;font-weight:700;color:var(--text-secondary);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+input,select,textarea{width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;transition:border-color .2s ease,box-shadow .2s ease;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(229,45,39,.1)}
+  .auto-filled{background-color:#ecfdf5!important;border-color:#6ee7b7!important;transition:background-color .3s ease,border-color .3s ease}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px 16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--border-light);text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);border-bottom:2px solid var(--border);font-weight:700}
+td{padding:10px 12px;border-bottom:1px solid var(--border-light);vertical-align:top}
+tr:hover td{background:#f8fafc}
+.table-wrapper{width:100%;overflow-x:auto;border-radius:var(--radius-sm)}
+.pill{display:inline-block;padding:3px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700;margin:1px;letter-spacing:.3px}
+.PENDIENTE{background:var(--warning-bg);color:var(--warning)}
+.COMPLETADA{background:var(--info-bg);color:var(--info)}
+.VALIDADA{background:var(--success-bg);color:var(--success)}
+.CRITICO,.ALTO{background:var(--danger-bg);color:var(--danger)}
+.NORMAL,.BAJO{background:#f1f5f9;color:var(--text-secondary)}
+.crit{color:var(--danger);font-weight:700}
+.caso{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;transition:box-shadow .2s ease}
+.caso:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.caso-h{background:#fafbfc;padding:14px 18px;border-bottom:1px solid var(--border)}
+.caso-h b{font-size:14px}
+.case-header{display:flex;align-items:center;gap:12px;width:100%}
+.case-toggle{flex:0 0 auto;width:34px;height:34px;margin:0;padding:0;border-radius:50%;background:var(--border-light);color:var(--text-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--border);transition:all .2s ease}
+.case-toggle:hover{background:var(--border);border-color:var(--text-muted)}
+.case-arrow{display:inline-block;font-size:12px;transition:transform .2s ease}
+.caso.expanded .case-arrow{transform:rotate(90deg)}
+.case-summary{flex:1;min-width:0}
+.case-summary-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.case-summary-secondary{margin-top:4px;color:var(--text-muted);font-size:12px}
+.case-details-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px 18px;padding:16px 18px;margin-bottom:14px;background:#f8fafc;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13px}
+.detail-group{display:flex;flex-direction:column;gap:3px}
+.detail-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700}
+.detail-value{font-weight:600;color:var(--text-primary)}
+.caso-body{display:none}
+.caso.expanded .caso-body{display:block}
+.case-count{color:var(--text-muted);font-size:11px;white-space:nowrap;font-weight:600}
+.empty-row{padding:20px;text-align:center;color:var(--text-muted)}
+.meta{font-size:12px;color:var(--text-muted);margin-top:3px}
+.notice{border-radius:var(--radius-sm);padding:12px 16px;margin-top:12px;font-size:13px;display:none;font-weight:500}
+.notice.ok{display:block;color:var(--success);background:var(--success-bg);border:1px solid #bbf7d0}
+.notice.error{display:block;color:var(--danger);background:var(--danger-bg);border:1px solid #fecaca}
+#log{background:#0c1222;color:#6ee7b7;font-family:'Cascadia Code',Consolas,monospace;font-size:12px;padding:16px;border-radius:var(--radius-sm);height:160px;overflow-y:auto;white-space:pre-wrap;border:1px solid #1e293b}
+.err{color:#fca5a5}
+.warn{color:#fcd34d}
+.collapsible-card-header{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:0}
+.collapsible-card-header h2{flex:1;margin:0;padding:0;border:0}
+.audit-toggle{flex:0 0 auto;width:34px;height:34px;margin:0;padding:0;border-radius:50%;background:var(--border-light);color:var(--text-primary);display:flex;align-items:center;justify-content:center;border:2px solid var(--border);transition:all .2s ease}
+.audit-toggle:hover{background:var(--border)}
+.audit-arrow{display:inline-block;transition:transform .2s ease}
+#seccion_auditoria.expanded .audit-arrow{transform:rotate(90deg)}
+.audit-body{margin-top:16px}
+.selection-panel{margin:18px 0;padding:20px;border:2px solid var(--border);border-radius:var(--radius);background:#fafbfc}
+.selection-panel legend{padding:0 10px;font-weight:800;color:var(--text-primary);font-size:14px}
+.selection-options{display:flex;flex-wrap:wrap;gap:10px 28px;margin:10px 0}
+.selection-option{display:inline-flex;align-items:center;gap:8px;margin:0;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;font-size:13px;color:var(--text-primary)}
+.selection-option input{width:auto;margin:0}
+.assignment-detail{margin-top:14px}
+.assignment-detail label{display:block;margin-bottom:5px}
+.selection-help{margin:6px 0 14px;color:var(--text-muted);font-size:12px}
+.password-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.modal-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+.modal-panel{width:min(760px,100%);max-height:90vh;overflow:auto;padding:28px;border-radius:var(--radius);background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:20px}
+.modal-actions button.logout{background:transparent;border:2px solid var(--border);color:var(--text-secondary)}
+.modal-actions button.logout:hover{background:var(--border-light);border-color:var(--text-muted)}
+.user-actions{white-space:nowrap}
+.required-marker{color:var(--danger);font-weight:800;margin-left:3px}
+.optional-marker{color:var(--text-muted);font-size:12px;font-weight:400}
+.required-legend{margin:4px 0 14px;color:var(--text-muted);font-size:12px}
+.no-email{color:var(--text-muted);font-size:12px;font-style:italic}
+.inv-lookup-result{margin-top:8px;min-height:0}
 .inv-lookup-result:empty{display:none}
-.inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;border-radius:6px;font-size:.82rem;line-height:1.4}
-.inv-tag.found{background:#e8f5e9;border:1px solid #66bb6a;color:#2e7d32}
-.inv-tag.not-found{background:#fff3e0;border:1px solid #ffa726;color:#e65100}
+.inv-tag{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 14px;border-radius:var(--radius-sm);font-size:.82rem;line-height:1.4}
+.inv-tag.found{background:#ecfdf5;border:1px solid #6ee7b7;color:#065f46}
+.inv-tag.not-found{background:#fffbeb;border:1px solid #fbbf24;color:#92400e}
 .inv-tag .inv-icon{font-size:1rem}
-.inv-tag .inv-field{font-weight:600}
-.inv-tag .inv-sep{opacity:.4}
-.inv-tag-status{display:inline-block;padding:1px 7px;border-radius:3px;font-size:.75rem;font-weight:600}
-.inv-tag-status.on-use{background:#c8e6c9;color:#1b5e20}
-.inv-tag-status.inactive{background:#ffcdd2;color:#b71c1c}
-.inv-tag-status.available{background:#bbdefb;color:#0d47a1}
-.inv-tag-status.other{background:#e0e0e0;color:#424242}
-.other-equip-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.inv-tag .inv-field{font-weight:700}
+.inv-tag .inv-sep{opacity:.35}
+.inv-tag-status{display:inline-block;padding:2px 8px;border-radius:var(--radius-pill);font-size:.72rem;font-weight:700}
+.inv-tag-status.on-use{background:#d1fae5;color:#065f46}
+.inv-tag-status.inactive{background:#fee2e2;color:#991b1b}
+.inv-tag-status.available{background:#dbeafe;color:#1e40af}
+.inv-tag-status.other{background:#f1f5f9;color:#475569}
+.other-equip-row{display:flex;gap:8px;align-items:center;margin-top:8px}
 .other-equip-row input{flex:1}
-.btn-add-equip{width:36px;height:36px;border:none;border-radius:6px;background:#1976d2;color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.btn-add-equip:hover{background:#1565c0}
-.other-equip-item{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:6px;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;font-size:.85rem}
+.btn-add-equip{width:38px;height:38px;border:none;border-radius:var(--radius-sm);background:var(--accent);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-add-equip:hover{background:var(--accent-hover)}
+.other-equip-item{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-top:6px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:.85rem}
 .other-equip-item .equip-info{flex:1}
-.other-equip-item .btn-remove-equip{background:none;border:none;color:#e53935;font-size:1.1rem;cursor:pointer;padding:2px 6px}
-.other-equip-item .btn-remove-equip:hover{color:#b71c1c}
+.other-equip-item .btn-remove-equip{background:none;border:none;color:var(--danger);font-size:1.1rem;cursor:pointer;padding:2px 6px}
+.other-equip-item .btn-remove-equip:hover{color:#991b1b}
+@media(max-width:700px){header{padding:16px 18px}.header-content{flex-wrap:wrap}.brand-logo{width:90px}.week-indicator{width:100%;text-align:center}.card{padding:18px 16px}main{padding:0 12px}}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="header-content">
-
-    <img
-      src="/images/tcl-logo.svg"
-      class="brand-logo"
-      alt="TCL">
-
-    <div class="header-text">
-      <h1>Employee Offboarding Control</h1>
-
-      <div class="header-department">
-        Human Resources
-      </div>
-
-      <p>
-        Access revocation with evidence,
-        dual validation and an immutable audit log
-      </p>
-    </div>
-
-    <div id="week_indicator" class="week-indicator">
-      Calculating week...
-    </div>
-
-  </div>
+<div class="header-content">
+<img src="/images/tcl-logo.svg" class="brand-logo" alt="TCL">
+<div class="header-text">
+<h1>Employee Offboarding Control</h1>
+<div class="header-department">Human Resources</div>
+<p>Access revocation with evidence, dual validation and an immutable audit log</p>
+</div>
+<div id="week_indicator" class="week-indicator">Calculating week...</div>
+</div>
 </header>
-
 <main>
-
 <div class="card session-card">
-  <div class="session-info">
-    <div>
-      <strong>Signed-in user:</strong>
-      <span id="usuario_actual">Loading...</span>
-    </div>
-
-    <div id="roles_actuales" class="session-roles"></div>
-    <div id="perfil_actual" class="profile-label hidden"></div>
-  </div>
-
-  <div class="session-actions">
-    <button
-      id="btn_recargar"
-      type="button"
-      onclick="recargar()">
-      Refresh information
-    </button>
-
-    <form method="post" action="/logout">
-      <button type="submit" class="logout">
-        Sign out
-      </button>
-    </form>
-  </div>
+<div class="session-info">
+<div><strong>Signed-in user:</strong> <span id="usuario_actual">...</span></div>
+<div class="session-roles" id="roles_actuales"></div>
+<div id="perfil_actual" class="profile-label hidden"></div>
 </div>
-
-
+<div class="session-actions">
+<button id="btn_recargar" type="button" class="hidden" onclick="recargar()">&#8635; Refresh</button>
+<form action="/logout" method="post"><button type="submit" class="logout">Sign out</button></form>
+</div>
+</div>
 <div id="sin_permisos" class="card hidden">
-  <h2>No assigned profile</h2>
-  <p>
-    Your account is active, but it does not have an authorized profile.
-    Contact the Offboarding administrator.
-  </p>
+<h2>Access denied</h2>
+<p>Your account does not have any assigned profile. Contact an administrator.</p>
 </div>
-
 <div id="seccion_captura" class="card hidden">
-  <h2>Register employee offboarding</h2>
-  <p class="required-legend">
-    <span class="required-marker">*</span>
-    Required field. All other fields are optional.
-  </p>
-
-
-  <div class="grid">
-        <div>
-      <label>Employee number<span class="required-marker">*</span></label>
-      <input id="idf" autocomplete="off"
-             placeholder="Type number and press Enter"
-             required aria-required="true"
-             onblur="buscarEmpleado()"
-             onkeydown="if(event.key==='Enter'){event.preventDefault();buscarEmpleado()}">
-      <div id="idf_status" style="font-size:11px;margin-top:3px;min-height:15px"></div>
-    </div>
-
-    <div>
-      <label>Employee name<span class="required-marker">*</span></label>
-      <input id="n" autocomplete="off" placeholder="Auto-filled from employee number" required aria-required="true">
-    </div>
-
-    <div>
-      <label>Corporate email <span class="optional-marker">(optional)</span></label>
-      <input id="mail" type="email" autocomplete="off" placeholder="employee@company.com">
-    </div>
-
-    <div>
-      <label>Department<span class="required-marker">*</span></label>
-      <input id="dep" autocomplete="off" placeholder="Department" required aria-required="true">
-    </div>
-
-
-    <div>
-      <label>Building <span class="optional-marker">(optional)</span></label>
-
-      <input
-        id="building"
-        autocomplete="off"
-        placeholder="Ejemplo: Building A">
-    </div>
-
-    <div>
-      <label>Work area<span class="required-marker">*</span></label>
-
-      <input
-        id="work_area"
-        autocomplete="off"
-        placeholder="Example: Second floor - Finance" required aria-required="true">
-    </div>
-
-    <div>
-      <label>Direct manager<span class="required-marker">*</span></label>
-      <input id="jefe" autocomplete="off" placeholder="Manager name" required aria-required="true">
-    </div>
-
-    <div>
-      <label>Offboarding type<span class="required-marker">*</span></label>
-      <select id="tipo">
-        <option value="" selected disabled>Select a type</option>
-        <option value="RENUNCIA">Resignation</option>
-        <option value="DESPIDO">Termination</option>
-        <option value="FIN_DE_CONTRATO">End of contract</option>
-        <option value="JUBILACION">Retirement</option>
-        <option value="MUTUO_ACUERDO">Mutual agreement</option>
-        <option value="FALLECIMIENTO">Deceased</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Effective date<span class="required-marker">*</span></label>
-      <input id="fecha" type="datetime-local">
-    </div>
-
-    <div>
-      <label>Risk level <span class="optional-marker">(optional)</span></label>
-      <select id="riesgo">
-        <option value="" selected disabled>Select a risk level</option>
-        <option value="BAJO">Low</option>
-        <option value="NORMAL">Normal</option>
-        <option value="ALTO">High</option>
-        <option value="CRITICO">Critical</option>
-      </select>
-    </div>
-
-    <div>
-      <label>Confidential <span class="optional-marker">(optional)</span></label>
-      <select id="conf">
-        <option value="" selected disabled>Select an option</option>
-        <option value="false">No</option>
-        <option value="true">Yes</option>
-      </select>
-    </div>
-  </div>
-
-
-  <fieldset class="selection-panel">
-    <legend>Equipment assigned to the employee <span class="optional-marker">(optional)</span></legend>
-
-    <p class="selection-help">
-      Seleccione los equipos que Human Resources tiene
-      registrados como asignados.
-    </p>
-
-    <div class="selection-options">
-      <label class="selection-option">
-        <input
-          id="eq_computer"
-          type="checkbox"
-          onchange="actualizarCamposAsignacion()">
-        Computer
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_phone"
-          type="checkbox"
-          onchange="actualizarCamposAsignacion()">
-        Phone
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_other_equip"
-          type="checkbox"
-          onchange="actualizarCamposAsignacion()">
-        Other equipment
-      </label>
-    </div>
-
-    <div
-      id="computer_details_container"
-      class="assignment-detail hidden">
-
-      <label>Computer identification <span class="optional-marker">(optional)</span></label>
-
-      <input
-        id="computer_details"
-        maxlength="250"
-        autocomplete="off"
-        placeholder="Type to search inventory..."
-        oninput="buscarInventario(this.value, 'computer_inv_result')">
-      <div id="computer_inv_result" class="inv-lookup-result"></div>
-    </div>
-
-    <div
-      id="phone_details_container"
-      class="assignment-detail hidden">
-
-      <label>Phone identification <span class="optional-marker">(optional)</span></label>
-
-      <input
-        id="phone_details"
-        maxlength="250"
-        autocomplete="off"
-        placeholder="Type to search inventory..."
-        oninput="buscarInventario(this.value, 'phone_inv_result')">
-      <div id="phone_inv_result" class="inv-lookup-result"></div>
-    </div>
-
-    <div
-      id="other_equip_container"
-      class="assignment-detail hidden">
-
-      <label>Other equipment <span class="optional-marker">(search inventory)</span></label>
-
-      <div id="other_equip_list"></div>
-
-      <div class="other-equip-row">
-        <input
-          id="other_equip_input"
-          maxlength="250"
-          autocomplete="off"
-          placeholder="Type to search inventory..."
-          oninput="buscarInventario(this.value, 'other_equip_inv_result')">
-        <button type="button" class="btn-add-equip" onclick="agregarOtroEquipo()">+</button>
-      </div>
-      <div id="other_equip_inv_result" class="inv-lookup-result"></div>
-    </div>
-  </fieldset>
-
-
-  <fieldset class="selection-panel">
-    <legend>Additional information <span class="optional-marker">(optional)</span></legend>
-
-    <p class="selection-help">
-      Select all that apply to this employee.
-    </p>
-
-    <div class="selection-options">
-      <label class="selection-option">
-        <input
-          id="eq_fingerprint"
-          type="checkbox">
-        Fingerprint registered
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_faceid"
-          type="checkbox">
-        Face ID registered
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_epp"
-          type="checkbox">
-        EPP assigned
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="eq_parking"
-          type="checkbox">
-        Parking access
-      </label>
-    </div>
-
-    <div class="assignment-detail">
-      <label>Employee category <span class="optional-marker">(optional)</span></label>
-      <select id="employee_category">
-        <option value="">-- Select --</option>
-        <option value="DIRECTO">Directo</option>
-        <option value="INDIRECTO">Indirecto</option>
-        <option value="STAFF">Staff</option>
-        <option value="TEMPORAL">Temporal</option>
-      </select>
-    </div>
-  </fieldset>
-  <fieldset class="selection-panel">
-    <legend>Employee access <span class="optional-marker">(optional)</span></legend>
-
-    <p class="selection-help">
-      Select all applicable access types.
-    </p>
-
-    <div class="selection-options">
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="offboarding-access"
-          value="WINDOWS">
-        Windows
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="offboarding-access"
-          value="OFFICE">
-        Office
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="offboarding-access"
-          value="SMES">
-        SMES
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="offboarding-access"
-          value="CMP">
-        CMP
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="offboarding-access"
-          value="VPN">
-        VPN
-      </label>
-
-      <label class="selection-option">
-        <input
-          id="access_other"
-          type="checkbox"
-          class="offboarding-access"
-          value="OTHER"
-          onchange="actualizarCamposAsignacion()">
-        Other
-      </label>
-    </div>
-
-    <div
-      id="other_access_container"
-      class="assignment-detail hidden">
-
-      <label>Specify other access <span class="optional-marker">(optional)</span></label>
-
-      <textarea
-        id="other_accesses"
-        rows="3"
-        maxlength="1000"
-        autocomplete="off"
-        placeholder="Additional systems, applications, portals, or permissions"></textarea>
-    </div>
-  </fieldset>
-
-  <label>Comments <span class="optional-marker">(optional)</span></label>
-  <textarea id="obs" autocomplete="off" rows="3"></textarea>
-
-  <button onclick="crearCase()">
-    Register offboarding
-  </button>
-
-  <div id="resultado_captura" class="notice"></div>
+<h2>Register new offboarding</h2>
+<p class="required-legend"><span class="required-marker">*</span> Required field</p>
+<div class="grid">
+<div>
+<label>Employee number<span class="required-marker">*</span></label>
+<input id="idf" autocomplete="off" placeholder="Employee number" required aria-required="true" onblur="buscarEmpleado()">
+<div id="idf_status" style="min-height:18px;margin-top:4px;font-size:12px"></div>
 </div>
-
-
+<div>
+<label>Employee name <span class="optional-marker">(auto)</span></label>
+<input id="n" autocomplete="off" placeholder="Full name" required aria-required="true">
+</div>
+<div>
+<label>Corporate email <span class="optional-marker">(optional)</span></label>
+<input id="mail" type="email" autocomplete="off" placeholder="user@company.com">
+</div>
+<div>
+<label>Department <span class="optional-marker">(auto)</span></label>
+<input id="dep" autocomplete="off" placeholder="Department" required aria-required="true">
+</div>
+<div>
+<label>Building <span class="optional-marker">(optional)</span></label>
+<input id="building" autocomplete="off" placeholder="Ejemplo: Building A">
+</div>
+<div>
+<label>Position <span class="optional-marker">(auto)</span></label>
+<input id="position" autocomplete="off" placeholder="Auto-filled from employee number" readonly>
+</div>
+<div>
+<label>Shift <span class="optional-marker">(auto)</span></label>
+<input id="shift" autocomplete="off" placeholder="Auto-filled from employee number" readonly>
+</div>
+<div>
+<label>Work area <span class="optional-marker">(auto)</span></label>
+<input id="work_area" autocomplete="off" placeholder="Example: Second floor - Finance" required aria-required="true">
+</div>
+<div>
+<label>Direct manager <span class="optional-marker">(auto)</span></label>
+<input id="jefe" autocomplete="off" placeholder="Manager name" required aria-required="true">
+</div>
+<div>
+<label>Offboarding type<span class="required-marker">*</span></label>
+<select id="tipo">
+<option value="" selected disabled>Select a type</option>
+<option value="RENUNCIA">Resignation</option>
+<option value="DESPIDO">Termination</option>
+<option value="FIN_DE_CONTRATO">End of contract</option>
+<option value="JUBILACION">Retirement</option>
+<option value="MUTUO_ACUERDO">Mutual agreement</option>
+<option value="FALLECIMIENTO">Deceased</option>
+</select>
+</div>
+<div>
+<label>Effective date<span class="required-marker">*</span></label>
+<input id="fecha" type="datetime-local">
+</div>
+<div>
+<label>Risk level <span class="optional-marker">(optional)</span></label>
+<select id="riesgo">
+<option value="" selected disabled>Select a risk level</option>
+<option value="BAJO">Low</option>
+<option value="NORMAL">Normal</option>
+<option value="ALTO">High</option>
+<option value="CRITICO">Critical</option>
+</select>
+</div>
+<div>
+<label>Confidential <span class="optional-marker">(optional)</span></label>
+<select id="conf">
+<option value="" selected disabled>Select an option</option>
+<option value="false">No</option>
+<option value="true">Yes</option>
+</select>
+</div>
+</div>
+<fieldset class="selection-panel">
+<legend>Equipment assigned to the employee <span class="optional-marker">(optional)</span></legend>
+<p class="selection-help">Select the equipment that Human Resources has registered as assigned.</p>
+<div class="selection-options">
+<label class="selection-option"><input id="eq_computer" type="checkbox" onchange="actualizarCamposAsignacion()"> Computer</label>
+<label class="selection-option"><input id="eq_phone" type="checkbox" onchange="actualizarCamposAsignacion()"> Phone</label>
+</div>
+<div id="computer_details_container" class="assignment-detail hidden">
+<label>Computer identification <span class="optional-marker">(optional)</span></label>
+<input id="computer_details" maxlength="250" autocomplete="off" placeholder="Type to search inventory..." oninput="buscarInventario(this.value, 'computer_inv_result')">
+<div id="computer_inv_result" class="inv-lookup-result"></div>
+</div>
+<div id="phone_details_container" class="assignment-detail hidden">
+<label>Phone identification <span class="optional-marker">(optional)</span></label>
+<input id="phone_details" maxlength="250" autocomplete="off" placeholder="Type to search inventory..." oninput="buscarInventario(this.value, 'phone_inv_result')">
+<div id="phone_inv_result" class="inv-lookup-result"></div>
+</div>
+<div id="other_equip_container" class="assignment-detail hidden">
+<label>Other equipment <span class="optional-marker">(search inventory)</span></label>
+<div id="other_equip_list"></div>
+<div class="other-equip-row">
+<input id="other_equip_input" maxlength="250" autocomplete="off" placeholder="Type to search inventory..." oninput="buscarInventario(this.value, 'other_equip_inv_result')">
+<button type="button" class="btn-add-equip" onclick="agregarOtroEquipo()">+</button>
+</div>
+<div id="other_equip_inv_result" class="inv-lookup-result"></div>
+</div>
+</fieldset>
+<fieldset class="selection-panel">
+<legend>Additional information <span class="optional-marker">(optional)</span></legend>
+<p class="selection-help">Select all that apply to this employee.</p>
+<div class="selection-options">
+<label class="selection-option"><input id="eq_fingerprint" type="checkbox"> Fingerprint registered</label>
+<label class="selection-option"><input id="eq_faceid" type="checkbox"> Face ID registered</label>
+<label class="selection-option"><input id="eq_epp" type="checkbox"> EPP assigned</label>
+<label class="selection-option"><input id="eq_parking" type="checkbox"> Parking access</label>
+</div>
+<div class="assignment-detail">
+<label>Employee category <span class="optional-marker">(optional)</span></label>
+<select id="employee_category">
+<option value="">-- Select --</option>
+<option value="DIRECTO">Directo</option>
+<option value="INDIRECTO">Indirecto</option>
+<option value="STAFF">Staff</option>
+<option value="TEMPORAL">Temporal</option>
+</select>
+</div>
+</fieldset>
+<fieldset class="selection-panel">
+<legend>Employee access <span class="optional-marker">(optional)</span></legend>
+<p class="selection-help">Select all applicable access types.</p>
+<div class="selection-options">
+<label class="selection-option"><input type="checkbox" class="offboarding-access" value="WINDOWS"> Windows</label>
+<label class="selection-option"><input type="checkbox" class="offboarding-access" value="OFFICE"> Office</label>
+<label class="selection-option"><input type="checkbox" class="offboarding-access" value="SMES"> SMES</label>
+<label class="selection-option"><input type="checkbox" class="offboarding-access" value="CMP"> CMP</label>
+<label class="selection-option"><input type="checkbox" class="offboarding-access" value="VPN"> VPN</label>
+<label class="selection-option"><input id="access_other" type="checkbox" class="offboarding-access" value="OTHER" onchange="actualizarCamposAsignacion()"> Other</label>
+</div>
+<div id="other_access_container" class="assignment-detail hidden">
+<label>Specify other access <span class="optional-marker">(optional)</span></label>
+<textarea id="other_accesses" rows="3" maxlength="1000" autocomplete="off" placeholder="Additional systems, applications, portals, or permissions"></textarea>
+</div>
+</fieldset>
+<label>Comments <span class="optional-marker">(optional)</span></label>
+<textarea id="obs" autocomplete="off" rows="3"></textarea>
+<button type="button" onclick="limpiarCaptura()" style="background:var(--text-secondary)">Clear form</button>
+<button onclick="crearCase()">Register offboarding</button>
+<div id="resultado_captura" class="notice"></div>
+</div>
 <div id="seccion_registros_rh" class="card hidden">
-  <h2>Records created during this session</h2>
-
-  <p style="font-size:12px;color:#66788c;margin-top:-5px">
-    Each registered offboarding case will be added as a new row.
-  </p>
-
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Hora</th>
-          <th>Case</th>
-          <th>Employee</th>
-          <th>Identifier</th>
-          <th>Department</th>
-          <th>Building</th>
-          <th>Area</th>
-          <th>Offboarding type</th>
-          <th>Effective date</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody id="tabla_registros_rh">
-        <tr>
-          <td colspan="10" class="empty-row">
-            No offboardings registered in this session yet.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<h2>Records created during this session</h2>
+<p style="font-size:12px;color:var(--text-muted);margin-top:-5px">Each registered offboarding case will be added as a new row.</p>
+<div class="table-wrapper">
+<table>
+<thead><tr><th>Hora</th><th>Case</th><th>Employee</th><th>Identifier</th><th>Department</th><th>Building</th><th>Area</th><th>Offboarding type</th><th>Effective date</th><th>Status</th></tr></thead>
+<tbody id="tabla_registros_rh"><tr><td colspan="10" class="empty-row">No offboardings registered in this session yet.</td></tr></tbody>
+</table>
 </div>
-
-
+</div>
 <div id="seccion_usuarios" class="card hidden">
-  <h2>User administration</h2>
-  <p class="required-legend">
-    <span class="required-marker">*</span>
-    Required field
-  </p>
-
-
-  <div class="grid">
-    <div>
-      <label>Username<span class="required-marker">*</span></label>
-      <input id="nu_user" autocomplete="off" placeholder="first.last">
-    </div>
-
-    <div>
-      <label>Full name<span class="required-marker">*</span></label>
-      <input id="nu_nombre" autocomplete="off" placeholder="First name Last name">
-    </div>
-
-    <div>
-      <label>Email <span class="optional-marker">(optional)</span></label>
-      <input id="nu_mail" autocomplete="off" placeholder="user@company.com">
-    </div>
-
-    <div>
-      <label>Temporary password<span class="required-marker">*</span></label>
-      <input id="nu_pass" type="password" autocomplete="new-password"
-        placeholder="At least 12 characters">
-
-      <button
-        class="mini"
-        type="button"
-        onclick="generarPass()">
-        Generate
-      </button>
-    </div>
-  </div>
-
-  <label>Assigned profiles<span class="required-marker">*</span></label>
-
-  <div style="font-size:13px;line-height:1.9;padding:6px 0">
-
-    <label style="display:inline-block;margin-right:20px;font-weight:400">
-      <input
-        type="checkbox"
-        class="rol"
-        value="RECURSOS_HUMANOS"
-        style="width:auto">
-      <b>Human Resources</b> -- capture only
-    </label>
-
-    <label style="display:inline-block;margin-right:20px;font-weight:400">
-      <input
-        type="checkbox"
-        class="rol"
-        value="IT_ENGINEER"
-        style="width:auto">
-      <b>IT Engineer</b> -- processes tasks
-    </label>
-
-    <label style="display:inline-block;margin-right:20px;font-weight:400">
-      <input
-        type="checkbox"
-        class="rol"
-        value="CONTROL_ACCESOS"
-        style="width:auto">
-      <b>Access Control</b> -- biometrics and physical access
-    </label>
-
-    <label style="display:inline-block;margin-right:20px;font-weight:400">
-      <input
-        type="checkbox"
-        class="rol"
-        value="AUDITOR"
-        style="width:auto">
-      <b>Auditor</b> -- read-only
-    </label>
-
-    <label style="display:inline-block;margin-right:20px;font-weight:400">
-      <input
-        type="checkbox"
-        class="rol"
-        value="ADMIN"
-        style="width:auto">
-      <b>Administrator</b> -- full control
-    </label>
-  </div>
-
-  <div
-    id="nu_aviso"
-    style="font-size:12px;color:#a52314;font-weight:600;min-height:17px">
-  </div>
-
-  <button onclick="crearUsername()">
-    Create user
-  </button>
-
-  <div class="table-wrapper" style="margin-top:18px">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Username</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Profiles</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tabla_usuarios"></tbody>
-    </table>
-  </div>
+<h2>User administration</h2>
+<p class="required-legend"><span class="required-marker">*</span> Required field</p>
+<div class="grid">
+<div><label>Username<span class="required-marker">*</span></label><input id="nu_user" autocomplete="off" placeholder="first.last"></div>
+<div><label>Full name<span class="required-marker">*</span></label><input id="nu_nombre" autocomplete="off" placeholder="First name Last name"></div>
+<div><label>Email <span class="optional-marker">(optional)</span></label><input id="nu_mail" autocomplete="off" placeholder="user@company.com"></div>
+<div><label>Temporary password<span class="required-marker">*</span></label><input id="nu_pass" type="password" autocomplete="new-password" placeholder="At least 12 characters"><button class="mini" type="button" onclick="generarPass()">Generate</button></div>
 </div>
-
-
+<label>Assigned profiles<span class="required-marker">*</span></label>
+<div style="font-size:13px;line-height:1.9;padding:6px 0">
+<label style="display:inline-block;margin-right:20px;font-weight:400"><input type="checkbox" class="rol" value="RECURSOS_HUMANOS" style="width:auto"> <b>Human Resources</b> -- capture only</label>
+<label style="display:inline-block;margin-right:20px;font-weight:400"><input type="checkbox" class="rol" value="IT_ENGINEER" style="width:auto"> <b>IT Engineer</b> -- processes tasks</label>
+<label style="display:inline-block;margin-right:20px;font-weight:400"><input type="checkbox" class="rol" value="CONTROL_ACCESOS" style="width:auto"> <b>Access Control</b> -- biometrics and physical access</label>
+<label style="display:inline-block;margin-right:20px;font-weight:400"><input type="checkbox" class="rol" value="AUDITOR" style="width:auto"> <b>Auditor</b> -- read-only</label>
+<label style="display:inline-block;margin-right:20px;font-weight:400"><input type="checkbox" class="rol" value="ADMIN" style="width:auto"> <b>Administrator</b> -- full control</label>
+</div>
+<div id="nu_aviso" style="font-size:12px;color:var(--danger);font-weight:600;min-height:17px"></div>
+<button onclick="crearUsername()">Create user</button>
+<div class="table-wrapper" style="margin-top:18px">
+<table>
+<thead><tr><th>#</th><th>Username</th><th>Name</th><th>Email</th><th>Profiles</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody id="tabla_usuarios"></tbody>
+</table>
+</div>
+</div>
 <div id="modal_usuario" class="modal-overlay hidden">
-  <div class="modal-panel">
-    <h2>Edit user</h2>
-    <p class="required-legend">
-      <span class="required-marker">*</span>
-      Required field
-    </p>
-
-
-    <input id="eu_id" type="hidden">
-
-    <div class="grid">
-      <div>
-        <label>Username</label>
-        <input id="eu_username" disabled>
-      </div>
-
-      <div>
-        <label>Full name<span class="required-marker">*</span></label>
-        <input id="eu_nombre" maxlength="150">
-      </div>
-
-      <div>
-        <label>Email <span class="optional-marker">(optional)</span></label>
-        <input
-          id="eu_mail"
-          type="email"
-          maxlength="150">
-      </div>
-
-      <div>
-        <label class="selection-option">
-          <input id="eu_enabled" type="checkbox">
-          Active account
-        </label>
-      </div>
-    </div>
-
-    <label>Assigned profiles</label>
-
-    <div class="selection-options">
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="eu_rol"
-          value="RECURSOS_HUMANOS">
-        Human Resources
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="eu_rol"
-          value="IT_ENGINEER">
-        IT Engineer
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="eu_rol"
-          value="CONTROL_ACCESOS">
-        Access Control
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="eu_rol"
-          value="AUDITOR">
-        Auditor
-      </label>
-
-      <label class="selection-option">
-        <input
-          type="checkbox"
-          class="eu_rol"
-          value="ADMIN">
-        Administrator
-      </label>
-    </div>
-
-    <hr>
-
-    <h3>Reset password</h3>
-
-    <p style="font-size:12px;color:#66788c">
-      Leave these fields empty if you do not want to change the password.
-    </p>
-
-    <div class="password-grid">
-      <div>
-        <label>New password</label>
-        <input
-          id="eu_password"
-          type="password"
-          autocomplete="new-password">
-      </div>
-
-      <div>
-        <label>Confirm password</label>
-        <input
-          id="eu_password_confirm"
-          type="password"
-          autocomplete="new-password">
-      </div>
-    </div>
-
-    <div id="eu_aviso" class="notice"></div>
-
-    <div class="modal-actions">
-      <button
-        type="button"
-        class="logout"
-        onclick="cerrarEditUsername()">
-        Cancel
-      </button>
-
-      <button
-        type="button"
-        onclick="guardarEditUsername()">
-        Save changes
-      </button>
-    </div>
-  </div>
+<div class="modal-panel">
+<h2>Edit user</h2>
+<p class="required-legend"><span class="required-marker">*</span> Required field</p>
+<input id="eu_id" type="hidden">
+<div class="grid">
+<div><label>Username</label><input id="eu_username" disabled></div>
+<div><label>Full name<span class="required-marker">*</span></label><input id="eu_nombre" maxlength="150"></div>
+<div><label>Email <span class="optional-marker">(optional)</span></label><input id="eu_mail" type="email" maxlength="150"></div>
+<div><label class="selection-option"><input id="eu_enabled" type="checkbox"> Active account</label></div>
 </div>
-
-
-
-<div id="seccion_destinatarios" class="card hidden">
-  <h2>Notification recipients</h2>
-  <p style="font-size:12px;color:#66788c;margin-top:-5px">
-    When an offboarding is registered, an email notification will be sent to all active recipients below.
-  </p>
-
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-    <div>
-      <label>Email<span class="required-marker">*</span></label>
-      <input id="nr_email" type="email" autocomplete="off" placeholder="user@tcl.com">
-    </div>
-    <div>
-      <label>Description <span class="optional-marker">(optional)</span></label>
-      <input id="nr_desc" autocomplete="off" placeholder="e.g. IT Manager">
-    </div>
-  </div>
-
-  <div id="nr_aviso" style="font-size:12px;color:#a52314;font-weight:600;min-height:17px"></div>
-
-  <button onclick="crearDestinatario()">Add recipient</button>
-
-  <div class="table-wrapper" style="margin-top:18px">
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Email</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tabla_destinatarios"></tbody>
-    </table>
-  </div>
+<label>Assigned profiles</label>
+<div class="selection-options">
+<label class="selection-option"><input type="checkbox" class="eu_rol" value="RECURSOS_HUMANOS"> Human Resources</label>
+<label class="selection-option"><input type="checkbox" class="eu_rol" value="IT_ENGINEER"> IT Engineer</label>
+<label class="selection-option"><input type="checkbox" class="eu_rol" value="CONTROL_ACCESOS"> Access Control</label>
+<label class="selection-option"><input type="checkbox" class="eu_rol" value="AUDITOR"> Auditor</label>
+<label class="selection-option"><input type="checkbox" class="eu_rol" value="ADMIN"> Administrator</label>
 </div>
-
+<hr>
+<h3>Reset password</h3>
+<p style="font-size:12px;color:var(--text-muted)">Leave these fields empty if you do not want to change the password.</p>
+<div class="password-grid">
+<div><label>New password</label><input id="eu_password" type="password" autocomplete="new-password"></div>
+<div><label>Confirm password</label><input id="eu_password_confirm" type="password" autocomplete="new-password"></div>
+</div>
+<div id="eu_aviso" class="notice"></div>
+<div class="modal-actions">
+<button type="button" class="logout" onclick="cerrarEditUsername()">Cancel</button>
+<button type="button" onclick="guardarEditUsername()">Save changes</button>
+</div>
+</div>
+</div>
 <div id="seccion_casos" class="card hidden">
-  <h2 id="titulo_casos">Tasks</h2>
-  <div id="casos">Loading...</div>
+<h2 id="titulo_casos">Tasks</h2>
+<div id="casos">Loading...</div>
 </div>
-
 <div id="seccion_auditoria" class="card hidden">
-
-  <div class="collapsible-card-header">
-
-    <button
-      id="btn_audit_toggle"
-      type="button"
-      class="audit-toggle"
-      aria-expanded="false"
-      title="Expand audit log"
-      onclick="toggleAuditoria()">
-
-      <span class="audit-arrow">&#9654;</span>
-    </button>
-
-    <h2>Audit log</h2>
-
-    <span id="audit_count" class="case-count">
-      0 events
-    </span>
-  </div>
-
-  <div id="audit_body" class="audit-body hidden">
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Week</th>
-            <th>Date</th>
-            <th>Actor</th>
-            <th>Action</th>
-            <th>Entity</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-
-        <tbody id="audit"></tbody>
-      </table>
-    </div>
-  </div>
+<div class="collapsible-card-header">
+<button id="btn_audit_toggle" type="button" class="audit-toggle" aria-expanded="false" title="Expand audit log" onclick="toggleAuditoria()"><span class="audit-arrow">&#9654;</span></button>
+<h2>Audit log</h2>
+<span id="audit_count" class="case-count">0 events</span>
 </div>
-
+<div id="audit_body" class="audit-body hidden">
+<div class="table-wrapper">
+<table>
+<thead><tr><th>#</th><th>Week</th><th>Date</th><th>Actor</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead>
+<tbody id="audit"></tbody>
+</table>
+</div>
+</div>
+</div>
 <div id="seccion_log" class="card hidden">
-  <h2>Session activity</h2>
-  <div id="log"></div>
+<h2>Session activity</h2>
+<div id="log"></div>
 </div>
-
 </main>
 <script>
 const $ = id => document.getElementById(id);
-
 let rolesActuales = new Set();
 let usuarioActual = '';
-
-
 function obtenerSemanaISO(valor) {
-  const fecha = valor
-    ? new Date(valor)
-    : new Date();
-
-  const fechaUTC = new Date(
-    Date.UTC(
-      fecha.getFullYear(),
-      fecha.getMonth(),
-      fecha.getDate()
-    )
-  );
-
+  const fecha = valor ? new Date(valor) : new Date();
+  const fechaUTC = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
   const dia = fechaUTC.getUTCDay() || 7;
-
-  fechaUTC.setUTCDate(
-    fechaUTC.getUTCDate() + 4 - dia
-  );
-
-  const inicioAnio = new Date(
-    Date.UTC(
-      fechaUTC.getUTCFullYear(),
-      0,
-      1
-    )
-  );
-
-  const semana = Math.ceil(
-    (
-      (
-        fechaUTC -
-        inicioAnio
-      ) / 86400000 + 1
-    ) / 7
-  );
-
-  return {
-    week: semana,
-    year: fechaUTC.getUTCFullYear()
-  };
+  fechaUTC.setUTCDate(fechaUTC.getUTCDate() + 4 - dia);
+  const inicioAnio = new Date(Date.UTC(fechaUTC.getUTCFullYear(), 0, 1));
+  const semana = Math.ceil(((fechaUTC - inicioAnio) / 86400000 + 1) / 7);
+  return { week: semana, year: fechaUTC.getUTCFullYear() };
 }
-
 function textoSemanaISO(valor) {
   const resultado = obtenerSemanaISO(valor);
-
-  return 'S' +
-    String(resultado.week).padStart(2, '0') +
-    ' \u00b7 ' +
-    resultado.year;
+  return 'S' + String(resultado.week).padStart(2, '0') + ' \u00b7 ' + resultado.year;
 }
-
 function actualizarIndicadorSemana() {
   const resultado = obtenerSemanaISO();
-
   const indicador = $('week_indicator');
-
-  if (!indicador) {
-    return;
-  }
-
-  indicador.textContent =
-    'Week ' +
-    resultado.week +
-    ' \u00b7 ' +
-    resultado.year;
+  if (!indicador) return;
+  indicador.textContent = 'Week ' + resultado.week + ' \u00b7 ' + resultado.year;
 }
-
 function toggleAuditoria() {
   const seccion = $('seccion_auditoria');
   const cuerpo = $('audit_body');
   const boton = $('btn_audit_toggle');
-
-  if (!seccion || !cuerpo || !boton) {
-    return;
-  }
-
+  if (!seccion || !cuerpo || !boton) return;
   const expandir = cuerpo.classList.contains('hidden');
-
-  cuerpo.classList.toggle(
-    'hidden',
-    !expandir
-  );
-
-  seccion.classList.toggle(
-    'expanded',
-    expandir
-  );
-
-  boton.setAttribute(
-    'aria-expanded',
-    expandir ? 'true' : 'false'
-  );
-
-  boton.setAttribute(
-    'title',
-    expandir
-      ? 'Collapse audit log'
-      : 'Expand audit log'
-  );
+  cuerpo.classList.toggle('hidden', !expandir);
+  seccion.classList.toggle('expanded', expandir);
+  boton.setAttribute('aria-expanded', expandir ? 'true' : 'false');
+  boton.setAttribute('title', expandir ? 'Collapse audit log' : 'Expand audit log');
 }
-
-
-function tieneRol(rol) {
-  return rolesActuales.has(rol);
-}
-
+function tieneRol(rol) { return rolesActuales.has(rol); }
 function mostrar(id, visible) {
   const elemento = $(id);
-
-  if (!elemento) {
-    return;
-  }
-
+  if (!elemento) return;
   elemento.classList.toggle('hidden', !visible);
 }
-
 function esc(valor) {
-  return (valor == null ? '' : String(valor))
-    .replace(/[<>&]/g, caracter => ({
-      '<': '&lt;',
-      '>': '&gt;',
-      '&': '&amp;'
-    }[caracter]));
+  return (valor == null ? '' : String(valor)).replace(/[<>&]/g, caracter => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[caracter]));
 }
-
 function log(mensaje, clase) {
   const contenedor = $('log');
-
-  if (!contenedor) {
-    return;
-  }
-
+  if (!contenedor) return;
   const linea = document.createElement('div');
-
-  if (clase) {
-    linea.className = clase;
-  }
-
-  linea.textContent =
-    new Date().toLocaleTimeString() + '  ' + mensaje;
-
+  if (clase) linea.className = clase;
+  linea.textContent = new Date().toLocaleTimeString() + '  ' + mensaje;
   contenedor.prepend(linea);
 }
-
 async function api(path, method, body) {
   const respuesta = await fetch(path, {
     method: method || 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined
   });
-
   if (respuesta.status === 401) {
     window.location.replace('/login.html?expired');
-
-    return {
-      status: 401,
-      data: null
-    };
+    return { status: 401, data: null };
   }
-
   let data = null;
-
-  try {
-    data = await respuesta.json();
-  }
-  catch (error) {
-    data = null;
-  }
-
-  return {
-    status: respuesta.status,
-    data: data
-  };
+  try { data = await respuesta.json(); } catch (error) { data = null; }
+  return { status: respuesta.status, data: data };
 }
-
-
 function claveRegistrosRH() {
   const usuario = usuarioActual || 'desconocido';
-
   return 'offboarding.rh.session.' + usuario.toLowerCase();
 }
-
 function obtenerRegistrosRH() {
   try {
-    const contenido = sessionStorage.getItem(
-      claveRegistrosRH()
-    );
-
-    if (!contenido) {
-      return [];
-    }
-
+    const contenido = sessionStorage.getItem(claveRegistrosRH());
+    if (!contenido) return [];
     const registros = JSON.parse(contenido);
-
-    return Array.isArray(registros)
-      ? registros
-      : [];
-  }
-  catch (error) {
-    console.error(
-      'Unable to read RH records',
-      error
-    );
-
-    return [];
-  }
+    return Array.isArray(registros) ? registros : [];
+  } catch (error) { return []; }
 }
-
 function guardarRegistrosRH(registros) {
-  try {
-    sessionStorage.setItem(
-      claveRegistrosRH(),
-      JSON.stringify(registros)
-    );
-  }
-  catch (error) {
-    console.error(
-      'Unable to save RH records',
-      error
-    );
-  }
+  try { sessionStorage.setItem(claveRegistrosRH(), JSON.stringify(registros)); } catch (error) { }
 }
-
 function agregarRegistroRH(caso, solicitud) {
-  if (!tieneRol('RECURSOS_HUMANOS')) {
-    return;
-  }
-
+  if (!tieneRol('RECURSOS_HUMANOS')) return;
   const registros = obtenerRegistrosRH();
-
   registros.unshift({
     registeredAt: new Date().toISOString(),
     caseNumber: caso.caseNumber || '-',
     employeeName: solicitud.employeeName || '-',
-    employeeIdentifier:
-      solicitud.employeeIdentifier || '-',
+    employeeIdentifier: solicitud.employeeIdentifier || '-',
     department: solicitud.department || '-',
     building: solicitud.building || '-',
     workArea: solicitud.workArea || '-',
-    terminationType:
-      solicitud.terminationType || '-',
-    effectiveAt:
-      solicitud.effectiveAt || null,
+    terminationType: solicitud.terminationType || '-',
+    effectiveAt: solicitud.effectiveAt || null,
     status: caso.status || 'REGISTRADA'
   });
-
-  guardarRegistrosRH(
-    registros.slice(0, 100)
-  );
-
+  guardarRegistrosRH(registros.slice(0, 100));
   renderizarRegistrosRH();
 }
-
 function renderizarRegistrosRH() {
   const tabla = $('tabla_registros_rh');
-
-  if (!tabla) {
-    return;
-  }
-
+  if (!tabla) return;
   const registros = obtenerRegistrosRH();
-
   if (!registros.length) {
     tabla.innerHTML = '<tr><td colspan="10" class="empty-row">No offboardings registered in this session yet.</td></tr>';
     return;
   }
-
   tabla.innerHTML = registros.map(registro => '<tr>' +
     '<td>' + new Date(registro.registeredAt).toLocaleTimeString() + '</td>' +
     '<td><b>' + esc(registro.caseNumber) + '</b></td>' +
@@ -1707,252 +522,106 @@ function renderizarRegistrosRH() {
     '<td>' + esc(registro.workArea || '-') + '</td>' +
     '<td>' + esc(registro.terminationType) + '</td>' +
     '<td>' + (registro.effectiveAt ? new Date(registro.effectiveAt).toLocaleString() : '-') + '</td>' +
-    '<td><span class="pill ' + esc(registro.status) + '">' + esc(registro.status) + '</span></td>' +
-    '</tr>'
+    '<td><span class="pill ' + esc(registro.status) + '">' + esc(registro.status) + '</span></td></tr>'
   ).join('');
 }
-
-
 function nombrePerfil() {
-  if (tieneRol('ADMIN')) {
-    return 'Administrator';
-  }
-
-  if (tieneRol('RECURSOS_HUMANOS')) {
-    return 'Human Resources \u2014 capture only';
-  }
-
-  if (tieneRol('IT_ENGINEER')) {
-    return 'IT Engineer \u2014 task processing';
-  }
-
-  if (tieneRol('CONTROL_ACCESOS')) {
-    return 'Access Control \u2014 biometrics and physical access';
-  }
-
-  if (tieneRol('AUDITOR')) {
-    return 'Auditor \u2014 read-only';
-  }
-
+  if (tieneRol('ADMIN')) return 'Administrator';
+  if (tieneRol('RECURSOS_HUMANOS')) return 'Human Resources \u2014 capture only';
+  if (tieneRol('IT_ENGINEER')) return 'IT Engineer \u2014 task processing';
+  if (tieneRol('CONTROL_ACCESOS')) return 'Access Control \u2014 biometrics and physical access';
+  if (tieneRol('AUDITOR')) return 'Auditor \u2014 read-only';
   return 'No authorized profile';
 }
-
 function aplicarPermisos() {
   const esAdmin = tieneRol('ADMIN');
   const esRH = tieneRol('RECURSOS_HUMANOS');
   const esEngineer = tieneRol('IT_ENGINEER');
   const esAuditor = tieneRol('AUDITOR');
   const esControlAccesos = tieneRol('CONTROL_ACCESOS');
-
-  const tienePerfil =
-    esAdmin ||
-    esRH ||
-    esEngineer ||
-    esAuditor ||
-    esControlAccesos;
-
+  const tienePerfil = esAdmin || esRH || esEngineer || esAuditor || esControlAccesos;
   mostrar('perfil_actual', true);
   $('perfil_actual').textContent = nombrePerfil();
-
   mostrar('sin_permisos', !tienePerfil);
   mostrar('seccion_captura', esAdmin || esRH);
-
-  mostrar(
-    'seccion_registros_rh',
-    esRH && !esAdmin
-  );
-
+  mostrar('seccion_registros_rh', esRH && !esAdmin);
   mostrar('seccion_usuarios', esAdmin);
-  mostrar('seccion_destinatarios', esAdmin);
   mostrar('seccion_casos', esAdmin || esEngineer || esAuditor || esControlAccesos);
   mostrar('seccion_auditoria', esAdmin || esAuditor);
   mostrar('seccion_log', esAdmin || esEngineer || esControlAccesos);
-
-  mostrar(
-    'btn_recargar',
-    esAdmin || esEngineer || esAuditor || esControlAccesos
-  );
-
+  mostrar('btn_recargar', esAdmin || esEngineer || esAuditor || esControlAccesos);
   if (esControlAccesos && !esAdmin && !esEngineer) {
-    $('titulo_casos').textContent =
-      'Tasks \u2014 Access Control';
-  }
-  else if (esAuditor && !esAdmin) {
-    $('titulo_casos').textContent =
-      'Tasks \u2014 read-only';
-  }
-  else if (esEngineer && !esAdmin) {
-    $('titulo_casos').textContent =
-      'Tasks \u2014 IT Engineer';
-  }
-  else {
-    $('titulo_casos').textContent =
-      'Tasks';
+    $('titulo_casos').textContent = 'Tasks \u2014 Access Control';
+  } else if (esAuditor && !esAdmin) {
+    $('titulo_casos').textContent = 'Tasks \u2014 read-only';
+  } else if (esEngineer && !esAdmin) {
+    $('titulo_casos').textContent = 'Tasks \u2014 IT Engineer';
+  } else {
+    $('titulo_casos').textContent = 'Tasks';
   }
 }
-
 async function cargarSesion() {
   const respuesta = await api('/api/auth/me');
-
-  if (respuesta.status !== 200 || !respuesta.data) {
-    return false;
-  }
-
-  usuarioActual =
-    respuesta.data.username || 'Username';
-
-  $('usuario_actual').textContent =
-    usuarioActual;
-
-  const roles = Array.isArray(respuesta.data.roles)
-    ? respuesta.data.roles
-    : [];
-
+  if (respuesta.status !== 200 || !respuesta.data) return false;
+  usuarioActual = respuesta.data.username || 'Username';
+  $('usuario_actual').textContent = usuarioActual;
+  const roles = Array.isArray(respuesta.data.roles) ? respuesta.data.roles : [];
   rolesActuales = new Set(roles);
-
-  $('roles_actuales').textContent = roles.length
-    ? 'Profiles: ' + roles.join(', ')
-    : 'No assigned profiles';
-
+  $('roles_actuales').textContent = roles.length ? 'Profiles: ' + roles.join(', ') : 'No assigned profiles';
   aplicarPermisos();
   renderizarRegistrosRH();
-
   return true;
 }
-
-
-/* ---- Sistemas que Control de Accesos puede gestionar ---- */
-const ACCESS_CONTROL_SYSTEMS = new Set([
-  'Accesos fisicos',
-  'Accesos f\u00edsicos',
-  'Control de accesos',
-  'Biom\u00e9tricos'
-]);
-
-function esTaskDeControlAccesos(tarea) {
-  return ACCESS_CONTROL_SYSTEMS.has(tarea.systemName);
-}
-
-
+const ACCESS_CONTROL_SYSTEMS = new Set(['Accesos fisicos', 'Accesos f\u00edsicos', 'Control de accesos', 'Biom\u00e9tricos']);
+function esTaskDeControlAccesos(tarea) { return ACCESS_CONTROL_SYSTEMS.has(tarea.systemName); }
 function accionesTask(tarea) {
   const esAdmin = tieneRol('ADMIN');
   const esEngineer = tieneRol('IT_ENGINEER');
   const esControlAccesos = tieneRol('CONTROL_ACCESOS');
-
-  const puedeCompletarGeneral = esAdmin || esEngineer;
-  const puedeCompletarAccesos = esControlAccesos && esTaskDeControlAccesos(tarea);
-  const puedeComplete = puedeCompletarGeneral || puedeCompletarAccesos;
-
-  const puedeValidarGeneral = esAdmin;
-  const puedeValidarAccesos = esControlAccesos && esTaskDeControlAccesos(tarea);
-  const puedeValidar = puedeValidarGeneral || puedeValidarAccesos;
-
+  const puedeComplete = esAdmin || esEngineer || (esControlAccesos && esTaskDeControlAccesos(tarea));
+  const puedeValidar = esAdmin || (esControlAccesos && esTaskDeControlAccesos(tarea));
   const botones = [];
-
   if (puedeComplete && tarea.status === 'PENDIENTE') {
-    botones.push(
-      '<button class="mini ok" onclick="completar(' + tarea.id + ')">Complete</button>'
-    );
+    botones.push('<button class="mini ok" onclick="completar(' + tarea.id + ')">Complete</button>');
   }
-
-  if (
-    puedeValidar &&
-    tarea.critical &&
-    tarea.status === 'COMPLETADA'
-  ) {
-    botones.push(
-      '<button class="mini val" onclick="validarActive(' + tarea.id + ')">Validate</button>'
-    );
+  if (puedeValidar && tarea.critical && tarea.status === 'COMPLETADA') {
+    botones.push('<button class="mini val" onclick="validarActive(' + tarea.id + ')">Validate</button>');
   }
-
-  if (
-    esAdmin &&
-    (
-      tarea.status === 'COMPLETADA' ||
-      tarea.status === 'VALIDADA' ||
-      tarea.status === 'NO_APLICA'
-    )
-  ) {
-    botones.push(
-      '<button class="mini reopen" onclick="reabrir(' + tarea.id + ')">Reopen</button>'
-    );
+  if (esAdmin && (tarea.status === 'COMPLETADA' || tarea.status === 'VALIDADA' || tarea.status === 'NO_APLICA')) {
+    botones.push('<button class="mini reopen" onclick="reabrir(' + tarea.id + ')">Reopen</button>');
   }
-
-  return botones.length
-    ? botones.join('')
-    : '<span style="color:#78899b">Read-only</span>';
+  return botones.length ? botones.join('') : '<span style="color:var(--text-muted)">Read-only</span>';
 }
-
 function toggleCase(id) {
-  const caso = document.getElementById(
-    'caso-' + id
-  );
-
-  if (!caso) {
-    return;
-  }
-
-  const expandido =
-    caso.classList.toggle('expanded');
-
+  const caso = document.getElementById('caso-' + id);
+  if (!caso) return;
+  const expandido = caso.classList.toggle('expanded');
   const boton = caso.querySelector('.case-toggle');
-
   if (boton) {
-    boton.setAttribute(
-      'aria-expanded',
-      expandido ? 'true' : 'false'
-    );
-
-    boton.setAttribute(
-      'title',
-      expandido
-        ? 'Collapse case'
-        : 'Expand case'
-    );
+    boton.setAttribute('aria-expanded', expandido ? 'true' : 'false');
+    boton.setAttribute('title', expandido ? 'Collapse case' : 'Expand case');
   }
 }
-
+</script>
+<script>
 async function cargarCases() {
   const casosAbiertos = new Set(
-    Array.from(
-      document.querySelectorAll('.caso.expanded')
-    ).map(elemento => elemento.dataset.caseId)
+    Array.from(document.querySelectorAll('.caso.expanded')).map(elemento => elemento.dataset.caseId)
   );
-
   const respuesta = await api('/api/offboardings');
-
   if (respuesta.status !== 200) {
-    $('casos').innerHTML =
-      'Unable to load cases. HTTP ' +
-      respuesta.status;
-
-    log(
-      'GET /api/offboardings -> ' + respuesta.status,
-      'err'
-    );
-
+    $('casos').innerHTML = 'Unable to load cases. HTTP ' + respuesta.status;
+    log('GET /api/offboardings -> ' + respuesta.status, 'err');
     return;
   }
-
   if (!respuesta.data.length) {
-    $('casos').innerHTML =
-      'No cases registered.';
-
+    $('casos').innerHTML = 'No cases registered.';
     return;
   }
-
   $('casos').innerHTML = respuesta.data.map(function(caso) {
-    var tareas = (caso.tasks || [])
-      .sort(function(a, b) { return a.id - b.id; });
-
-    var tareasPendientes = tareas.filter(
-      function(tarea) { return tarea.status === 'PENDIENTE'; }
-    ).length;
-
-    var estaAbierto = casosAbiertos.has(
-      String(caso.id)
-    );
-
+    var tareas = (caso.tasks || []).sort(function(a, b) { return a.id - b.id; });
+    var tareasPendientes = tareas.filter(function(tarea) { return tarea.status === 'PENDIENTE'; }).length;
+    var estaAbierto = casosAbiertos.has(String(caso.id));
     return '<div id="caso-' + caso.id + '" data-case-id="' + caso.id + '" class="caso ' + (estaAbierto ? 'expanded' : '') + '">' +
       '<div class="caso-h">' +
         '<div class="case-header">' +
@@ -1981,9 +650,7 @@ async function cargarCases() {
         '</div>' +
       '</div>' +
       '<div class="caso-body">' +
-        '<div class="table-wrapper">' +
         '<div class="case-details-grid">' +
-          '<div class="detail-group"><span class="detail-label">Employee #</span><span class="detail-value" style="font-weight:700;font-size:15px;color:#12263f">' + esc(caso.employeeIdentifier || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Manager</span><span class="detail-value">' + esc(caso.managerName || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Category</span><span class="detail-value">' + esc(caso.employeeCategory || '-') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Computer</span><span class="detail-value">' + (caso.computerAssigned ? '\u2705 ' + esc(caso.computerDetails || '') : '\u2014') + '</span></div>' +
@@ -1994,22 +661,19 @@ async function cargarCases() {
           '<div class="detail-group"><span class="detail-label">Parking</span><span class="detail-value">' + (caso.parkingAccess ? '\u2705' : '\u2014') + '</span></div>' +
           '<div class="detail-group"><span class="detail-label">Observations</span><span class="detail-value">' + esc(caso.observations || '-') + '</span></div>' +
         '</div>' +
+        '<div class="table-wrapper">' +
           '<table>' +
-            '<thead><tr>' +
-              '<th>System</th><th>Task</th><th>Due</th><th>Status</th><th>Evidence</th><th>Completed by</th><th>Validated by</th><th>Actions</th>' +
-            '</tr></thead>' +
+            '<thead><tr><th>System</th><th>Task</th><th>Critical</th><th>Status</th><th>Completed by</th><th>Validated by</th><th>Actions</th></tr></thead>' +
             '<tbody>' +
               tareas.map(function(tarea) {
                 return '<tr>' +
-                  '<td>' + esc(tarea.systemName) + (tarea.critical ? ' <span class="crit">*</span>' : '') + '</td>' +
+                  '<td>' + esc(tarea.systemName) + '</td>' +
                   '<td>' + esc(tarea.taskName) + '</td>' +
-                  '<td>' + new Date(tarea.dueAt).toLocaleString() + '</td>' +
+                  '<td>' + (tarea.critical ? '<span class="crit">Yes</span>' : 'No') + '</td>' +
                   '<td><span class="pill ' + esc(tarea.status) + '">' + esc(tarea.status) + '</span></td>' +
-                  '<td>' + esc(tarea.evidenceReference || '-') + '</td>' +
-                  '<td>' + esc(tarea.completedBy || '-') + '</td>' +
-                  '<td>' + esc(tarea.validatedBy || '-') + '</td>' +
-                  '<td>' + accionesTask(tarea) + '</td>' +
-                '</tr>';
+                  '<td>' + esc(tarea.completedBy || '') + '</td>' +
+                  '<td>' + esc(tarea.validatedBy || '') + '</td>' +
+                  '<td>' + accionesTask(tarea) + '</td></tr>';
               }).join('') +
             '</tbody>' +
           '</table>' +
@@ -2018,1372 +682,375 @@ async function cargarCases() {
     '</div>';
   }).join('');
 }
-
-async function cargarAudit() {
-  const respuesta = await api('/api/audit');
-
-  if (respuesta.status !== 200) {
-    $('audit').innerHTML =
-      '<tr><td colspan="7">Unable to load audit log. HTTP ' + respuesta.status + '</td></tr>';
-    return;
-  }
-
-  const eventos = Array.isArray(respuesta.data)
-    ? respuesta.data
-    : [];
-
-  const contador = $('audit_count');
-
-  if (contador) {
-    contador.textContent =
-      eventos.length +
-      (eventos.length === 1
-        ? ' event'
-        : ' events');
-  }
-
-  if (!eventos.length) {
-    $('audit').innerHTML =
-      '<tr><td colspan="7" class="empty-row">No audit events.</td></tr>';
-    return;
-  }
-
-  $('audit').innerHTML = eventos.map(function(evento) {
-    return '<tr>' +
-      '<td>' + evento.id + '</td>' +
-      '<td><span class="pill NORMAL">' + textoSemanaISO(evento.occurredAt) + '</span></td>' +
-      '<td>' + new Date(evento.occurredAt).toLocaleString() + '</td>' +
-      '<td><b>' + esc(evento.actor) + '</b></td>' +
-      '<td>' + esc(evento.action) + '</td>' +
-      '<td>' + esc(evento.entityType) + ' #' + (evento.entityId == null ? '-' : evento.entityId) + '</td>' +
-      '<td>' + esc(evento.details) + '</td>' +
-    '</tr>';
-  }).join('');
-}
-
+</script>
+<script>
 async function completar(id) {
-  if (
-    !tieneRol('ADMIN') &&
-    !tieneRol('IT_ENGINEER') &&
-    !tieneRol('CONTROL_ACCESOS')
-  ) {
-    return;
+  if (!confirm('Mark this task as completed?')) return;
+  const r = await api('/api/tasks/' + id + '/complete', 'PATCH', {});
+  if (r.status === 200) {
+    log('Task ' + id + ' completed');
+    cargarCases();
+    cargarAuditoria();
+  } else {
+    log('Error completing task ' + id + ': ' + (r.data ? r.data.message || r.status : r.status), 'err');
+    alert('Error: ' + (r.data ? r.data.message || r.status : r.status));
   }
-
-  const comentarios = prompt(
-      'Comments (e.g. Done, OK, Complete):',
-      'Done'
-    );
-
-    if (!comentarios) {
-      return;
-    }
-
-  const respuesta = await api(
-    '/api/tasks/' + id + '/complete',
-    'PATCH',
-    {
-      evidenceReference: comentarios,
-        comments: null
-    }
-  );
-
-  log(
-    'PATCH /api/tasks/' + id + '/complete -> ' + respuesta.status,
-    respuesta.status === 200 ? null : 'err'
-  );
-
-  if (respuesta.status !== 200 && respuesta.data && respuesta.data.detail) {
-    alert(respuesta.data.detail);
-  }
-
-  await recargar();
 }
-
-
+async function validarActive(id) {
+  if (!confirm('Validate this critical task?')) return;
+  const r = await api('/api/tasks/' + id + '/validate', 'PATCH', {});
+  if (r.status === 200) {
+    log('Task ' + id + ' validated');
+    cargarCases();
+    cargarAuditoria();
+  } else {
+    log('Error validating task ' + id + ': ' + (r.data ? r.data.message || r.status : r.status), 'err');
+    alert('Error: ' + (r.data ? r.data.message || r.status : r.status));
+  }
+}
 async function reabrir(id) {
-  if (!tieneRol('ADMIN')) {
-    return;
+  if (!confirm('Reopen this task? It will return to PENDING status.')) return;
+  const motivo = prompt('Reason for reopening (minimum 5 characters):', '');
+  if (motivo === null) return;
+  if (motivo.trim().length < 5) { alert('The reason must contain at least 5 characters.'); return; }
+  const r = await api('/api/tasks/' + id + '/reopen', 'PATCH', { reason: motivo.trim() });
+  if (r.status === 200) {
+    log('Task ' + id + ' reopened');
+    cargarCases();
+    cargarAuditoria();
+  } else {
+    log('Error reopening task ' + id + ': ' + (r.data ? r.data.message || r.status : r.status), 'err');
+    alert('Error: ' + (r.data ? r.data.message || r.status : r.status));
   }
-
-  const motivo = prompt(
-    'Enter the reason to reopen this task:',
-    ''
-  );
-
-  if (motivo === null) {
-    return;
-  }
-
-  const motivoLimpio = motivo.trim();
-
-  if (motivoLimpio.length < 5) {
-    alert(
-      'The reason must be at least 5 characters.'
-    );
-
-    return;
-  }
-
-  const confirmar = confirm(
-    'The task will return to PENDING status.\n\n' +
-    'It will need to be processed again.\n\n' +
-    'Do you want to continue?'
-  );
-
-  if (!confirmar) {
-    return;
-  }
-
-  const respuesta = await api(
-    '/api/tasks/' + id + '/reopen',
-    'PATCH',
-    {
-      reason: motivoLimpio
-    }
-  );
-
-  if (respuesta.status === 200) {
-    log(
-      'Task ' + id +
-      ' reopened successfully by ADMIN.'
-    );
-  }
-  else {
-    const detalle =
-      respuesta.data &&
-      (
-        respuesta.data.detail ||
-        respuesta.data.message
-      );
-
-    log(
-      detalle ||
-      (
-        'Unable to reopen task ' +
-        id +
-        '. HTTP ' +
-        respuesta.status
-      ),
-      'err'
-    );
-  }
-
-  await recargar();
 }
-
-async function validar(id) {
-  if (!tieneRol('ADMIN') && !tieneRol('CONTROL_ACCESOS')) {
-    return;
-  }
-
-  const respuesta = await api(
-    '/api/tasks/' + id + '/validate',
-    'PATCH'
-  );
-
-  if (respuesta.status === 200) {
-    log(
-      'Task ' + id + ' validated by ' + respuesta.data.validatedBy
-    );
-  }
-  else if (respuesta.status === 403) {
-    log(
-      'Validation must be performed by a different person than the one who completed the task.',
-      'warn'
-    );
-  }
-  else {
-    log(
-      'Error validating task ' + id + ': HTTP ' + respuesta.status,
-      'err'
-    );
-  }
-
-  await recargar();
-}
-
-function limpiarCaptura() {
-  $('n').value = '';
-  $('idf').value = '';
-  $('mail').value = '';
-  $('dep').value = '';
-  $('building').value = '';
-  $('work_area').value = '';
-  $('jefe').value      = '';
-  $('obs').value = '';
-  $('eq_computer').checked = false;
-  $('eq_phone').checked = false;
-  $('computer_details').value = '';
-  $('eq_fingerprint').checked = false;
-  $('eq_faceid').checked = false;
-  $('eq_epp').checked = false;
-  $('eq_parking').checked = false;
-  $('employee_category').value = '';
-  $('phone_details').value = '';
-  $('access_other').checked = false;
-  $('other_accesses').value = '';
-
-  document
-    .querySelectorAll('.offboarding-access')
-    .forEach(function(control) {
-      control.checked = false;
-    });
-
-  actualizarCamposAsignacion();
-
-  $('tipo').value = '';
-  $('conf').value = '';
-  $('riesgo').value = '';
-  $('fecha').value = '';
-
-  const resultado = $('resultado_captura');
-
-  if (resultado) {
-    resultado.className = 'notice';
-    resultado.textContent = '';
-  }
-
-  ['n', 'dep', 'work_area', 'jefe'].forEach(function(id) {
-    $(id).style.backgroundColor = '';
-    $(id).readOnly = false;
-  });
-  const idfStatus = $('idf_status');
-  if (idfStatus) { idfStatus.innerHTML = ''; }
-
-  $('idf').focus();
-}
-
-
 function actualizarCamposAsignacion() {
-  const computerSelected =
-    $('eq_computer').checked;
-
-  const phoneSelected =
-    $('eq_phone').checked;
-
-  const otherSelected =
-    $('access_other').checked;
-
-  var oeEl = $('eq_other_equip');
-  var otherEquipSelected = oeEl ? oeEl.checked : false;
-
-  mostrar(
-    'computer_details_container',
-    computerSelected
-  );
-
-  mostrar(
-    'phone_details_container',
-    phoneSelected
-  );
-
-  mostrar(
-    'other_access_container',
-    otherSelected
-  );
-
-  mostrar(
-    'other_equip_container',
-    otherEquipSelected
-  );
-
-  if (!computerSelected) {
-    $('computer_details').value = '';
-    var cr = $('computer_inv_result'); if (cr) cr.innerHTML = '';
-  }
-
-  if (!phoneSelected) {
-    $('phone_details').value = '';
-    var pr = $('phone_inv_result'); if (pr) pr.innerHTML = '';
-  }
-
-  if (!otherSelected) {
-    $('other_accesses').value = '';
-  }
-
-  if (!otherEquipSelected) {
-    var oi = $('other_equip_input'); if (oi) oi.value = '';
-    var oer = $('other_equip_inv_result'); if (oer) oer.innerHTML = '';
-    _otherEquipItems = [];
-    if (typeof renderOtherEquipList === 'function') renderOtherEquipList();
-  }
+  mostrar('computer_details_container', $('eq_computer').checked);
+  mostrar('phone_details_container', $('eq_phone').checked);
+  mostrar('other_access_container', $('access_other') && $('access_other').checked);
 }
-
-
-function obtenerAccesosSeleccionados() {
-  return Array
-    .from(
-      document.querySelectorAll(
-        '.offboarding-access:checked'
-      )
-    )
-    .map(function(control) { return control.value; });
+function autoFillFecha() {
+    var ahora = new Date();
+    ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+    $('fecha').value = ahora.toISOString().slice(0, 16);
 }
-
-
+function limpiarCaptura() {
+  ['idf','n','mail','dep','building','position','shift','work_area','jefe','obs'].forEach(function(id) { $(id).value = ''; $(id).classList.remove('auto-filled'); });
+  $('tipo').selectedIndex = 0;
+  autoFillFecha();
+  $('riesgo').selectedIndex = 0;
+  $('conf').selectedIndex = 0;
+  $('employee_category').selectedIndex = 0;
+  ['eq_computer','eq_phone','eq_fingerprint','eq_faceid','eq_epp','eq_parking'].forEach(function(id) { $(id).checked = false; });
+  document.querySelectorAll('.offboarding-access').forEach(function(cb) { cb.checked = false; });
+  ['computer_details','phone_details'].forEach(function(id) { if ($(id)) $(id).value = ''; });
+  if ($('other_accesses')) $('other_accesses').value = '';
+  if ($('other_equip_input')) $('other_equip_input').value = '';
+  if ($('other_equip_list')) $('other_equip_list').innerHTML = '';
+  ['computer_inv_result','phone_inv_result','other_equip_inv_result'].forEach(function(id) { if ($(id)) $(id).innerHTML = ''; });
+  $('idf_status').innerHTML = '';
+  actualizarCamposAsignacion();
+  var aviso = $('resultado_captura');
+  aviso.className = 'notice';
+  aviso.textContent = '';
+}
 async function crearCase() {
-  const resultado = $('resultado_captura');
-
-  resultado.className = 'notice';
-  resultado.textContent = '';
-
-  const requiredFields = [
-    { id: 'n', label: 'Employee name' },
-    { id: 'idf', label: 'Employee number or identifier' },
-    { id: 'dep', label: 'Department' },
-    { id: 'work_area', label: 'Work area' },
-    { id: 'jefe', label: 'Direct manager' },
-    { id: 'riesgo', label: 'Risk level' }
-  ];
-
-  const missingFields =
-    requiredFields.filter(function(field) {
-      var control = $(field.id);
-      return !String(control.value || '').trim();
-    });
-
-  if (missingFields.length) {
-    resultado.className = 'notice error';
-    resultado.textContent =
-      'Complete the required fields: '
-      + missingFields
-          .map(function(field) { return field.label; })
-          .join(', ')
-      + '.';
-
-    var firstControl = $(missingFields[0].id);
-    firstControl.focus();
-    firstControl.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
-
+  var aviso = $('resultado_captura');
+  aviso.className = 'notice';
+  aviso.textContent = '';
+  var idf = $('idf').value.trim();
+  var nombre = $('n').value.trim();
+  var tipo = $('tipo').value;
+  var fecha = $('fecha').value;
+  if (!idf || !nombre || !tipo || !fecha) {
+    aviso.className = 'notice error';
+    aviso.textContent = 'Please fill in all required fields: employee number, name, type and date.';
     return;
   }
-
-  const corporateEmail = $('mail').value.trim();
-  const fecha = $('fecha').value;
-  const accesosSeleccionados = obtenerAccesosSeleccionados();
-
-  const solicitud = {
-    employeeName: $('n').value.trim(),
-    employeeIdentifier: $('idf').value.trim(),
-    corporateEmail: corporateEmail || null,
-    department: $('dep').value.trim(),
+  var accesos = [];
+  document.querySelectorAll('.offboarding-access:checked').forEach(function(cb) { accesos.push(cb.value); });
+  var otherEquipItems = document.querySelectorAll('#other_equip_list .other-equip-item .equip-info');
+  var otherEquipList = [];
+  otherEquipItems.forEach(function(el) { if (el.textContent.trim()) otherEquipList.push(el.textContent.trim()); });
+  var solicitud = {
+    employeeIdentifier: idf,
+    employeeName: nombre,
+    email: $('mail').value.trim() || null,
+    department: $('dep').value.trim() || null,
     building: $('building').value.trim() || null,
-    workArea: $('work_area').value.trim(),
-    managerName: $('jefe').value.trim(),
-    terminationType: $('tipo').value || 'NO_ESPECIFICADO',
-    effectiveAt: fecha
-      ? new Date(fecha).toISOString()
-      : new Date().toISOString(),
-    riskLevel: $('riesgo').value || 'NORMAL',
+    position: $('position').value.trim() || null,
+    shift: $('shift').value.trim() || null,
+    workArea: $('work_area').value.trim() || null,
+    managerName: $('jefe').value.trim() || null,
+    terminationType: tipo,
+    effectiveAt: fecha ? new Date(fecha).toISOString() : new Date().toISOString(),
+    riskLevel: $('riesgo').value || null,
     confidential: $('conf').value === 'true',
     computerAssigned: $('eq_computer').checked,
-    computerDetails: $('computer_details').value.trim() || null,
+    computerDetails: $('computer_details') ? $('computer_details').value.trim() || null : null,
     phoneAssigned: $('eq_phone').checked,
-    phoneDetails: $('phone_details').value.trim() || null,
+    phoneDetails: $('phone_details') ? $('phone_details').value.trim() || null : null,
     fingerprintRegistered: $('eq_fingerprint').checked,
     faceidRegistered: $('eq_faceid').checked,
     eppAssigned: $('eq_epp').checked,
     parkingAccess: $('eq_parking').checked,
-    employeeCategory: $('employee_category').value.trim() || null,
-    accesses: accesosSeleccionados,
-    otherAccesses: (function(){
-      var parts = [];
-      if (window._otherEquipItems && window._otherEquipItems.length) {
-        parts.push('[Equipment] ' + window._otherEquipItems.join(', '));
-      }
-      var oa = $('other_accesses').value.trim();
-      if (oa) parts.push('[Access] ' + oa);
-      return parts.length ? parts.join(' | ') : null;
-    })(),
+    employeeCategory: $('employee_category').value || null,
+    accessTypes: accesos.length ? accesos : null,
+    otherAccesses: $('other_accesses') ? $('other_accesses').value.trim() || null : null,
+    otherEquipment: otherEquipList.length ? otherEquipList : null,
     observations: $('obs').value.trim() || null
   };
-
-  const respuesta = await api(
-    '/api/offboardings',
-    'POST',
-    solicitud
-  );
-
-  if (respuesta.status === 201) {
-    agregarRegistroRH(
-      respuesta.data,
-      solicitud
-    );
-
-    resultado.className = 'notice ok';
-    resultado.textContent =
-      'Offboarding registered successfully. Case: '
-      + respuesta.data.caseNumber;
-
+  var r = await api('/api/offboardings', 'POST', solicitud);
+  if (r.status === 200 || r.status === 201) {
+    aviso.className = 'notice ok';
+    aviso.textContent = 'Case ' + (r.data.caseNumber || '') + ' registered successfully.';
+    log('Case created: ' + (r.data.caseNumber || r.data.id));
+    agregarRegistroRH(r.data, solicitud);
     limpiarCaptura();
-
-    if (tieneRol('ADMIN')) {
-      await cargarCases();
+    aviso.className = 'notice ok';
+    aviso.textContent = 'Case ' + (r.data.caseNumber || '') + ' registered successfully.';
+    if (tieneRol('ADMIN') || tieneRol('IT_ENGINEER') || tieneRol('AUDITOR') || tieneRol('CONTROL_ACCESOS')) {
+      cargarCases();
+      cargarAuditoria();
     }
-  }
-  else {
-    resultado.className = 'notice error';
-    resultado.textContent =
-      respuesta.data && respuesta.data.detail
-        ? respuesta.data.detail
-        : 'Error registering the offboarding. HTTP '
-          + respuesta.status;
-  }
-}
-
-
-function generarPass() {
-  const mayusculas = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  const minusculas = 'abcdefghijkmnopqrstuvwxyz';
-  const numeros = '23456789';
-  const simbolos = '#$%&*+-';
-  const todos = mayusculas + minusculas + numeros + simbolos;
-
-  let password = '';
-
-  password += mayusculas[Math.floor(Math.random() * mayusculas.length)];
-  password += minusculas[Math.floor(Math.random() * minusculas.length)];
-  password += numeros[Math.floor(Math.random() * numeros.length)];
-  password += simbolos[Math.floor(Math.random() * simbolos.length)];
-
-  for (let i = 0; i < 12; i++) {
-    password += todos[Math.floor(Math.random() * todos.length)];
-  }
-
-  $('nu_pass').type = 'text';
-  $('nu_pass').value = password;
-}
-
-async function crearUsername() {
-  if (!tieneRol('ADMIN')) {
-    return;
-  }
-
-  const roles = Array
-    .from(document.querySelectorAll('.rol:checked'))
-    .map(function(control) { return control.value; });
-
-  const aviso = $('nu_aviso');
-  aviso.textContent = '';
-
-  const username = $('nu_user').value.trim();
-  const fullName = $('nu_nombre').value.trim();
-  const email = $('nu_mail').value.trim();
-  const password = $('nu_pass').value;
-
-  const missingFields = [];
-
-  if (!username) { missingFields.push('Username'); }
-  if (!fullName) { missingFields.push('Full name'); }
-  if (!password) { missingFields.push('Temporary password'); }
-  if (!roles.length) { missingFields.push('Profiles'); }
-
-  if (missingFields.length) {
-    aviso.textContent =
-      'Complete the required fields: '
-      + missingFields.join(', ')
-      + '.';
-    return;
-  }
-
-  if (
-    typeof passwordSegura === 'function'
-    && !passwordSegura(password)
-  ) {
-    aviso.textContent =
-      'Password must contain 12 to 100 characters, including an uppercase letter, lowercase letter, number, and symbol.';
-    return;
-  }
-
-  const respuesta = await api(
-    '/api/users',
-    'POST',
-    {
-      username: username,
-      fullName: fullName,
-      email: email || null,
-      password: password,
-      roles: roles
-    }
-  );
-
-  if (respuesta.status === 201) {
-    alert(
-      'User created successfully.\n\n'
-      + 'Username: ' + username + '\n'
-      + 'Password: ' + password + '\n\n'
-      + 'This password will not be shown again.'
-    );
-
-    $('nu_user').value = '';
-    $('nu_nombre').value = '';
-    $('nu_mail').value = '';
-    $('nu_pass').value = '';
-    $('nu_pass').type = 'password';
-
-    document
-      .querySelectorAll('.rol:checked')
-      .forEach(function(control) {
-        control.checked = false;
-      });
-
-    await cargarUsernames();
-    await cargarAudit();
-  }
-  else {
-    aviso.textContent =
-      respuesta.data && respuesta.data.detail
-        ? respuesta.data.detail
-        : 'Unable to create user. HTTP '
-          + respuesta.status;
-  }
-}
-
-
-let usuariosAdministrados = [];
-
-
-async function cargarUsernames() {
-  const respuesta = await api('/api/users');
-  const tabla = $('tabla_usuarios');
-
-  if (respuesta.status !== 200) {
-    tabla.innerHTML =
-      '<tr><td colspan="7">Unable to load users. HTTP ' + respuesta.status + '</td></tr>';
-    return;
-  }
-
-  const usuarios = Array.isArray(respuesta.data)
-    ? respuesta.data
-    : respuesta.data.content || [];
-
-  usuariosAdministrados = usuarios;
-
-  tabla.innerHTML = usuarios.map(function(usuario) {
-    return '<tr>' +
-      '<td>' + usuario.id + '</td>' +
-      '<td><b>' + esc(usuario.username) + '</b></td>' +
-      '<td>' + esc(usuario.fullName) + '</td>' +
-      '<td>' + (usuario.email ? esc(usuario.email) : '<span class="no-email">No email</span>') + '</td>' +
-      '<td>' + (usuario.roles || []).map(function(rol) { return '<span class="pill NORMAL">' + esc(rol) + '</span>'; }).join(' ') + '</td>' +
-      '<td>' + (usuario.enabled === false ? '<span class="pill CRITICO">INACTIVE</span>' : '<span class="pill VALIDADA">ACTIVE</span>') + '</td>' +
-      '<td class="user-actions"><button type="button" class="mini" onclick="abrirEditUsername(' + usuario.id + ')">Edit</button></td>' +
-    '</tr>';
-  }).join('');
-}
-
-
-function passwordSegura(password) {
-  return (
-    password.length >= 12 &&
-    password.length <= 100 &&
-    /[a-z]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /\d/.test(password) &&
-    /[^A-Za-z0-9]/.test(password) &&
-    !/\s/.test(password)
-  );
-}
-
-
-function abrirEditUsername(id) {
-  const usuario = usuariosAdministrados.find(
-    function(item) { return Number(item.id) === Number(id); }
-  );
-
-  if (!usuario) {
-    alert('User not found.');
-    return;
-  }
-
-  $('eu_id').value = usuario.id;
-  $('eu_username').value = usuario.username;
-  $('eu_nombre').value = usuario.fullName || '';
-  $('eu_mail').value = usuario.email || '';
-  $('eu_enabled').checked =
-    usuario.enabled !== false;
-  $('eu_password').value = '';
-  $('eu_password_confirm').value = '';
-
-  const roles = new Set(usuario.roles || []);
-
-  document
-    .querySelectorAll('.eu_rol')
-    .forEach(function(control) {
-      control.checked = roles.has(control.value);
-    });
-
-  $('eu_aviso').className = 'notice';
-  $('eu_aviso').textContent = '';
-
-  mostrar('modal_usuario', true);
-}
-
-
-function cerrarEditUsername() {
-  mostrar('modal_usuario', false);
-}
-
-
-async function guardarEditUsername() {
-  const aviso = $('eu_aviso');
-
-  aviso.className = 'notice';
-  aviso.textContent = '';
-
-  const id = $('eu_id').value;
-  const fullName = $('eu_nombre').value.trim();
-  const email = $('eu_mail').value.trim();
-
-  const roles = Array
-    .from(document.querySelectorAll('.eu_rol:checked'))
-    .map(function(control) { return control.value; });
-
-  const password = $('eu_password').value;
-  const passwordConfirm = $('eu_password_confirm').value;
-
-  if (!fullName) {
-    aviso.className = 'notice error';
-    aviso.textContent = 'Complete the required field: Full name.';
-    return;
-  }
-
-  if (!roles.length) {
-    aviso.className = 'notice error';
-    aviso.textContent = 'Assign at least one profile.';
-    return;
-  }
-
-  if (password || passwordConfirm) {
-    if (password !== passwordConfirm) {
-      aviso.className = 'notice error';
-      aviso.textContent = 'Password confirmation does not match.';
-      return;
-    }
-
-    if (!passwordSegura(password)) {
-      aviso.className = 'notice error';
-      aviso.textContent = 'Password must include uppercase, lowercase, number, and symbol.';
-      return;
-    }
-  }
-
-  const actualizacion = await api(
-    '/api/users/' + encodeURIComponent(id),
-    'PUT',
-    {
-      fullName: fullName,
-      email: email || null,
-      enabled: $('eu_enabled').checked,
-      roles: roles
-    }
-  );
-
-  if (actualizacion.status !== 200) {
-    aviso.className = 'notice error';
-    aviso.textContent =
-      actualizacion.data && actualizacion.data.detail
-        ? actualizacion.data.detail
-        : 'Unable to update user. HTTP '
-          + actualizacion.status;
-    return;
-  }
-
-  if (password) {
-    const cambioPassword = await api(
-      '/api/users/'
-        + encodeURIComponent(id)
-        + '/password',
-      'PUT',
-      {
-        password: password
-      }
-    );
-
-    if (cambioPassword.status !== 204) {
-      aviso.className = 'notice error';
-      aviso.textContent =
-        cambioPassword.data &&
-        cambioPassword.data.detail
-          ? cambioPassword.data.detail
-          : 'Data updated, but password could not be changed. HTTP '
-            + cambioPassword.status;
-
-      await cargarUsernames();
-      await cargarAudit();
-      return;
-    }
-  }
-
-  cerrarEditUsername();
-
-  await cargarUsernames();
-  await cargarAudit();
-
-  alert(
-    password
-      ? 'User and password updated successfully.'
-      : 'User updated successfully.'
-  );
-}
-
-
-async function validarActive(taskId) {
-  if (!tieneRol('ADMIN') && !tieneRol('CONTROL_ACCESOS')) {
-    alert('Only an administrator or Access Control can validate this task.');
-    return;
-  }
-
-  // Detectar systemName de la tarea desde la tabla
-  var tareaSystem = null;
-  document.querySelectorAll('tr').forEach(function(fila) {
-    if (tareaSystem) return;
-    var btn = fila.querySelector('button[onclick*="validarActive(' + taskId + ')"]');
-    if (btn) {
-      var celdas = fila.querySelectorAll('td');
-      if (celdas.length > 0) {
-        tareaSystem = celdas[0].textContent.replace(/\s*\*\s*$/, '').trim();
-      }
-    }
-  });
-
-  var ASSET_SYSTEMS = ['Equipo de c\u00f3mputo', 'Telefon\u00eda', 'Telefonia', 'Activos asignados'];
-  var esActivo = ASSET_SYSTEMS.indexOf(tareaSystem) !== -1;
-
-  var respuesta;
-
-  if (esActivo) {
-    var activoRecibido = confirm('Do you confirm that the asset was physically received?');
-    if (!activoRecibido) return;
-
-    var inventarioActualizado = confirm('Do you confirm that the inventory was updated?');
-    if (!inventarioActualizado) return;
-
-    var comentarios = prompt('Comments (optional):', 'Done');
-    if (comentarios === null) return;
-
-    respuesta = await api(
-      '/api/tasks/' + encodeURIComponent(taskId) + '/validate',
-      'PATCH',
-      {
-        assetReceived: true,
-        inventoryUpdated: true,
-        inventoryReference: comentarios.trim() || 'Validated',
-        validationComments: comentarios.trim() || null
-      }
-    );
   } else {
-    var confirmado = confirm('Do you confirm this task has been validated?');
-    if (!confirmado) return;
-
-    respuesta = await api(
-      '/api/tasks/' + encodeURIComponent(taskId) + '/validate',
-      'PATCH',
-      {
-        assetReceived: true,
-        inventoryUpdated: true,
-        inventoryReference: 'Validated',
-        validationComments: null
-      }
-    );
-  }
-
-  if (respuesta.status === 200) {
-    alert('Task validated successfully.');
-    await cargarCases();
-    await cargarAudit();
-  }
-  else {
-    alert(
-      respuesta.data && respuesta.data.detail
-        ? respuesta.data.detail
-        : 'Unable to validate the task. HTTP ' + respuesta.status
-    );
+    aviso.className = 'notice error';
+    aviso.textContent = 'Error: ' + (r.data ? r.data.message || r.status : r.status);
+    log('Error creating case: ' + (r.data ? r.data.message || r.status : r.status), 'err');
   }
 }
-
-
-async function recargar() {
-  const tareas = [];
-
-  if (
-    tieneRol('ADMIN') ||
-    tieneRol('IT_ENGINEER') ||
-    tieneRol('AUDITOR') ||
-    tieneRol('CONTROL_ACCESOS')
-  ) {
-    tareas.push(cargarCases());
-  }
-
-  if (
-    tieneRol('ADMIN') ||
-    tieneRol('AUDITOR')
-  ) {
-    tareas.push(cargarAudit());
-  }
-
-  if (tieneRol('ADMIN')) {
-    tareas.push(cargarUsernames());
-    tareas.push(cargarDestinatarios());
-  }
-
-  await Promise.all(tareas);
-}
-
-
 async function buscarEmpleado() {
-  const campo = $('idf');
-  const numero = (campo.value || '').trim();
-  const status = $('idf_status');
-  const autoCampos = ['n', 'dep', 'work_area', 'jefe'];
-
-  if (!numero) {
-    if (status) status.innerHTML = '';
-    autoCampos.forEach(function(id) {
-      $(id).style.backgroundColor = '';
-      $(id).readOnly = false;
-    });
-    return;
-  }
-
-  if (isNaN(numero)) {
-    if (status) status.innerHTML = '<span style="color:#a52314">Enter a numeric employee number</span>';
-    return;
-  }
-
-  if (status) status.innerHTML = '<span style="color:#5a6b7f">Searching...</span>';
-
+  var idf = $('idf').value.trim();
+  var estado = $('idf_status');
+  if (!idf) { estado.innerHTML = ''; return; }
+  estado.innerHTML = '<span style="color:var(--text-muted)">Searching...</span>';
   try {
-    const resp = await api('/api/premployees/by-num/' + encodeURIComponent(numero));
-
-    if (resp.status === 200 && resp.data) {
-      const emp = resp.data;
-      $('n').value        = emp.employeeName || '';
-      $('dep').value       = emp.deptName  || emp.deptCode      || '';
-      $('work_area').value = emp.areaName  || emp.areaCode    || '';
-      $('jefe').value      = emp.superName || emp.superCode || '';
-
-      autoCampos.forEach(function(id) {
-        $(id).style.backgroundColor = '#eef6ed';
-        $(id).readOnly = true;
-      });
-
-      if (status) status.innerHTML = '<span style="color:#146c42">&#10003; ' + esc(emp.employeeName) + '</span>';
-      log('Employee ' + numero + ' found: ' + (emp.employeeName || '-'));
+    var r = await api('/api/premployees/by-num/' + encodeURIComponent(idf));
+    if (r.status === 200 && r.data) {
+      estado.innerHTML = '<span style="color:var(--success)">\u2705 Found: ' + esc(r.data.employeeName || '') + '</span>';
+      if (r.data.employeeName) { $('n').value = r.data.employeeName; $('n').classList.add('auto-filled'); }
+      if (r.data.deptName) { $('dep').value = r.data.deptName; $('dep').classList.add('auto-filled'); }
+      if (r.data.rollName) { $('position').value = r.data.rollName; $('position').classList.add('auto-filled'); }
+      if (r.data.turnName) { $('shift').value = r.data.turnName; $('shift').classList.add('auto-filled'); }
+      if (r.data.areaName) { $('work_area').value = r.data.areaName; $('work_area').classList.add('auto-filled'); }
+      if (r.data.superName) { $('jefe').value = r.data.superName; $('jefe').classList.add('auto-filled'); }
+    } else if (r.status === 404) {
+      estado.innerHTML = '<span style="color:var(--warning)">\u26a0 Not found in directory. Fill manually.</span>';
     } else {
-      autoCampos.forEach(function(id) {
-        $(id).style.backgroundColor = '';
-        $(id).readOnly = false;
-      });
-      if (status) status.innerHTML = '<span style="color:#a86e00">Not found - fill fields manually</span>';
-      log('Employee ' + numero + ' not found in premployee.', 'warn');
+      estado.innerHTML = '<span style="color:var(--danger)">Lookup error (' + r.status + ')</span>';
     }
   } catch (e) {
-    autoCampos.forEach(function(id) {
-      $(id).style.backgroundColor = '';
-      $(id).readOnly = false;
-    });
-    if (status) status.innerHTML = '<span style="color:#a52314">Connection error</span>';
-    log('Error looking up employee: ' + e.message, 'err');
+    estado.innerHTML = '<span style="color:var(--danger)">Connection error</span>';
   }
 }
-
-function setDefaultFecha() {
-  const campo = $('fecha');
-  if (campo && !campo.value) {
-    const ahora = new Date();
-    ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
-    campo.value = ahora.toISOString().slice(0, 16);
-  }
+var _invTimers = {};
+function buscarInventario(valor, resultadoId) {
+  var contenedor = $(resultadoId);
+  if (!contenedor) return;
+  if (!valor || valor.trim().length < 2) { contenedor.innerHTML = ''; return; }
+  if (_invTimers[resultadoId]) clearTimeout(_invTimers[resultadoId]);
+  _invTimers[resultadoId] = setTimeout(async function() {
+    try {
+      var r = await api('/api/inventory/lookup?q=' + encodeURIComponent(valor.trim()));
+      if (r.status === 200 && r.data) {
+        if (r.data.found) {
+          var statusClass = (r.data.status || '').toLowerCase().replace(/[\s_]+/g, '-');
+          if (!['on-use','inactive','available'].includes(statusClass)) statusClass = 'other';
+          contenedor.innerHTML = '<div class="inv-tag found" style="cursor:pointer" onclick="seleccionarAsset(this,\x27' + resultadoId + '\x27)">' +
+            '<span class="inv-icon">\u2705</span>' +
+            '<span class="inv-field">' + esc(r.data.assetTag || valor) + '</span>' +
+            '<span class="inv-sep">|</span>' +
+            '<span>' + esc(r.data.description || '') + '</span>' +
+            '<span class="inv-tag-status ' + statusClass + '">' + esc(r.data.status || '') + '</span>' +
+            '</div>';
+        } else {
+          contenedor.innerHTML = '<div class="inv-tag not-found"><span class="inv-icon">\u26a0</span> Not found in inventory</div>';
+        }
+      } else { contenedor.innerHTML = ''; }
+    } catch (e) { contenedor.innerHTML = ''; }
+  }, 400);
 }
-
-async function iniciar() {
-  actualizarIndicadorSemana();
-  limpiarCaptura();
-  setDefaultFecha();
-
-  const sesionValida = await cargarSesion();
-
-  if (!sesionValida) {
-    return;
+function seleccionarAsset(tag, rid) {
+    var campo = tag.querySelector('.inv-field').textContent;
+    var spans = tag.querySelectorAll('span');
+    var desc = spans[3] ? spans[3].textContent : '';
+    var texto = campo + ' | ' + desc;
+    var m = {'computer_inv_result':'computer_details','phone_inv_result':'phone_details','other_equip_inv_result':'other_equip_input'};
+    var iid = m[rid];
+    if (iid && document.getElementById(iid)) { document.getElementById(iid).value = texto.trim(); document.getElementById(iid).classList.add('auto-filled'); }
+    tag.style.outline = '2px solid var(--success)';
+    tag.style.background = '#d1fae5';
   }
-
-  await recargar();
+  function agregarOtroEquipo() {
+  var input = $('other_equip_input');
+  var lista = $('other_equip_list');
+  var invResult = $('other_equip_inv_result');
+  if (!input || !lista) return;
+  var valor = input.value.trim();
+  if (!valor) return;
+  var item = document.createElement('div');
+  item.className = 'other-equip-item';
+  item.innerHTML = '<span class="equip-info">' + esc(valor) + '</span><button type="button" class="btn-remove-equip" onclick="this.parentElement.remove()">\u00d7</button>';
+  lista.appendChild(item);
+  input.value = '';
+  if (invResult) invResult.innerHTML = '';
 }
-
-iniciar();
-
-
-
-/* ============================================================
-   NOTIFICATION RECIPIENTS (admin only)
-   ============================================================ */
-
-let destinatariosData = [];
-
-async function cargarDestinatarios() {
-  const resp = await api('/api/notification-recipients');
-  const tabla = $('tabla_destinatarios');
-
-  if (resp.status !== 200) {
-    tabla.innerHTML =
-      '<tr><td colspan="5">Unable to load recipients. HTTP ' + resp.status + '</td></tr>';
-    return;
-  }
-
-  destinatariosData = Array.isArray(resp.data) ? resp.data : [];
-
-  if (!destinatariosData.length) {
-    tabla.innerHTML =
-      '<tr><td colspan="5" class="empty-row">No recipients configured. Notifications will not be sent.</td></tr>';
-    return;
-  }
-
-  tabla.innerHTML = destinatariosData.map(function(r) {
+</script>
+<script>
+async function cargarUsuarios() {
+  var r = await api('/api/users');
+  if (r.status !== 200) { log('Error loading users: ' + r.status, 'err'); return; }
+  var tabla = $('tabla_usuarios');
+  if (!tabla) return;
+  if (!r.data || !r.data.length) { tabla.innerHTML = '<tr><td colspan="7" class="empty-row">No users registered.</td></tr>'; return; }
+  tabla.innerHTML = r.data.map(function(u, i) {
+    var rolesTexto = (u.roles || []).join(', ') || '-';
+    var emailTexto = u.email ? esc(u.email) : '<span class="no-email">No email</span>';
     return '<tr>' +
-      '<td>' + r.id + '</td>' +
-      '<td><b>' + esc(r.email) + '</b></td>' +
-      '<td>' + esc(r.description || '-') + '</td>' +
-      '<td>' + (r.active
-        ? '<span class="pill VALIDADA">ACTIVE</span>'
-        : '<span class="pill CRITICO">INACTIVE</span>') + '</td>' +
-      '<td class="user-actions">' +
-        '<button type="button" class="mini" onclick="toggleDestinatario(' + r.id + ',' + r.active + ')">' +
-          (r.active ? 'Disable' : 'Enable') +
-        '</button>' +
-        '<button type="button" class="mini logout" onclick="eliminarDestinatario(' + r.id + ')">Delete</button>' +
-      '</td>' +
-    '</tr>';
+      '<td>' + (i + 1) + '</td>' +
+      '<td><b>' + esc(u.username) + '</b></td>' +
+      '<td>' + esc(u.fullName || '-') + '</td>' +
+      '<td>' + emailTexto + '</td>' +
+      '<td>' + esc(rolesTexto) + '</td>' +
+      '<td>' + (u.enabled ? '<span class="pill VALIDADA">Active</span>' : '<span class="pill PENDIENTE">Disabled</span>') + '</td>' +
+      '<td class="user-actions"><button class="mini" onclick="abrirEditUsername(' + u.id + ')">Edit</button></td></tr>';
   }).join('');
 }
-
-async function crearDestinatario() {
-  var aviso = $('nr_aviso');
+async function crearUsername() {
+  var aviso = $('nu_aviso');
   aviso.textContent = '';
-
-  var email = $('nr_email').value.trim();
-  if (!email) {
-    aviso.textContent = 'Email is required.';
-    return;
+  var user = $('nu_user').value.trim();
+  var nombre = $('nu_nombre').value.trim();
+  var pass = $('nu_pass').value;
+  var mail = $('nu_mail').value.trim();
+  var roles = [];
+  document.querySelectorAll('.rol:checked').forEach(function(cb) { roles.push(cb.value); });
+  if (!user || !nombre || !pass) { aviso.textContent = 'Username, full name and password are required.'; return; }
+  if (pass.length < 12) { aviso.textContent = 'Password must be at least 12 characters.'; return; }
+  if (!roles.length) { aviso.textContent = 'Select at least one profile.'; return; }
+  var r = await api('/api/users', 'POST', { username: user, fullName: nombre, password: pass, email: mail || null, roles: roles });
+  if (r.status === 200 || r.status === 201) {
+    log('User created: ' + user);
+    $('nu_user').value = '';
+    $('nu_nombre').value = '';
+    $('nu_pass').value = '';
+    $('nu_mail').value = '';
+    document.querySelectorAll('.rol:checked').forEach(function(cb) { cb.checked = false; });
+    aviso.textContent = '';
+    cargarUsuarios();
+    cargarAuditoria();
+  } else {
+    aviso.textContent = 'Error: ' + (r.data ? r.data.message || r.status : r.status);
+    log('Error creating user: ' + (r.data ? r.data.message || r.status : r.status), 'err');
   }
-
-  var desc = $('nr_desc').value.trim();
-
-  var resp = await api('/api/notification-recipients', 'POST', {
-    email: email,
-    description: desc || null,
-    active: true
+}
+function generarPass() {
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#%&*';
+  var pass = '';
+  for (var i = 0; i < 16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  $('nu_pass').type = 'text';
+  $('nu_pass').value = pass;
+  setTimeout(function() { $('nu_pass').type = 'password'; }, 5000);
+}
+async function abrirEditUsername(id) {
+  var r = await api('/api/users/' + id);
+  if (r.status !== 200 || !r.data) { alert('Error loading user'); return; }
+  var u = r.data;
+  $('eu_id').value = u.id;
+  $('eu_username').value = u.username;
+  $('eu_nombre').value = u.fullName || '';
+  $('eu_mail').value = u.email || '';
+  $('eu_enabled').checked = u.enabled !== false;
+  $('eu_password').value = '';
+  $('eu_password_confirm').value = '';
+  var avisoEdit = $('eu_aviso');
+  avisoEdit.className = 'notice';
+  avisoEdit.textContent = '';
+  document.querySelectorAll('.eu_rol').forEach(function(cb) {
+    cb.checked = (u.roles || []).includes(cb.value);
   });
-
-  if (resp.status === 201) {
-    $('nr_email').value = '';
-    $('nr_desc').value = '';
-    await cargarDestinatarios();
-    await cargarAudit();
+  mostrar('modal_usuario', true);
+}
+function cerrarEditUsername() { mostrar('modal_usuario', false); }
+async function guardarEditUsername() {
+  var aviso = $('eu_aviso');
+  aviso.className = 'notice';
+  aviso.textContent = '';
+  var id = $('eu_id').value;
+  var nombre = $('eu_nombre').value.trim();
+  var mail = $('eu_mail').value.trim();
+  var enabled = $('eu_enabled').checked;
+  var pass = $('eu_password').value;
+  var passConfirm = $('eu_password_confirm').value;
+  var roles = [];
+  document.querySelectorAll('.eu_rol:checked').forEach(function(cb) { roles.push(cb.value); });
+  if (!nombre) { aviso.className = 'notice error'; aviso.textContent = 'Full name is required.'; return; }
+  if (!roles.length) { aviso.className = 'notice error'; aviso.textContent = 'Select at least one profile.'; return; }
+  if (pass && pass.length < 12) { aviso.className = 'notice error'; aviso.textContent = 'Password must be at least 12 characters.'; return; }
+  if (pass && pass !== passConfirm) { aviso.className = 'notice error'; aviso.textContent = 'Passwords do not match.'; return; }
+  var body = { fullName: nombre, email: mail || null, enabled: enabled, roles: roles };
+  if (pass) body.password = pass;
+  var r = await api('/api/users/' + id, 'PUT', body);
+  if (r.status === 200) {
+    log('User updated: ' + $('eu_username').value);
+    cerrarEditUsername();
+    cargarUsuarios();
+    cargarAuditoria();
   } else {
-    aviso.textContent = resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to add recipient. HTTP ' + resp.status;
+    aviso.className = 'notice error';
+    aviso.textContent = 'Error: ' + (r.data ? r.data.message || r.status : r.status);
   }
 }
-
-async function toggleDestinatario(id, currentActive) {
-  var r = destinatariosData.find(function(x) { return x.id === id; });
-  if (!r) return;
-
-  var resp = await api('/api/notification-recipients/' + id, 'PUT', {
-    email: r.email,
-    description: r.description,
-    active: !currentActive
-  });
-
-  if (resp.status === 200) {
-    await cargarDestinatarios();
-    await cargarAudit();
-  } else {
-    alert(resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to update recipient.');
-  }
+async function cargarAuditoria() {
+  if (!tieneRol('ADMIN') && !tieneRol('AUDITOR')) return;
+  var r = await api('/api/audit');
+  if (r.status !== 200) { log('Error loading audit: ' + r.status, 'err'); return; }
+  var tabla = $('audit');
+  var contador = $('audit_count');
+  if (!tabla) return;
+  var datos = r.data || [];
+  if (contador) contador.textContent = datos.length + ' event' + (datos.length !== 1 ? 's' : '');
+  if (!datos.length) { tabla.innerHTML = '<tr><td colspan="7" class="empty-row">No audit events.</td></tr>'; return; }
+  tabla.innerHTML = datos.map(function(e, i) {
+    return '<tr>' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td>' + esc(e.weekLabel || textoSemanaISO(e.timestamp)) + '</td>' +
+      '<td>' + new Date(e.timestamp).toLocaleString() + '</td>' +
+      '<td>' + esc(e.actor || '-') + '</td>' +
+      '<td>' + esc(e.action || '-') + '</td>' +
+      '<td>' + esc(e.entity || '-') + '</td>' +
+      '<td style="max-width:300px;word-break:break-word">' + esc(e.details || '-') + '</td></tr>';
+  }).join('');
 }
-
-async function eliminarDestinatario(id) {
-  if (!confirm('Remove this recipient permanently?')) return;
-
-  var resp = await api('/api/notification-recipients/' + id, 'DELETE');
-
-  if (resp.status === 204) {
-    await cargarDestinatarios();
-    await cargarAudit();
-  } else {
-    alert(resp.data && resp.data.detail
-      ? resp.data.detail
-      : 'Unable to delete recipient.');
-  }
+async function recargar() {
+  log('Refreshing data...');
+  await Promise.all([cargarCases(), cargarAuditoria(), tieneRol('ADMIN') ? cargarUsuarios() : Promise.resolve()]);
+  log('Refresh complete');
 }
-
-setInterval(function() {
-  recargar();
-}, 15000);
+async function init() {
+  actualizarIndicadorSemana();
+  autoFillFecha();
+  var sesionOk = await cargarSesion();
+  if (!sesionOk) return;
+  log('Session loaded: ' + usuarioActual);
+  if (tieneRol('ADMIN') || tieneRol('IT_ENGINEER') || tieneRol('AUDITOR') || tieneRol('CONTROL_ACCESOS')) {
+    await cargarCases();
+    log('Cases loaded');
+  }
+  if (tieneRol('ADMIN') || tieneRol('AUDITOR')) {
+    await cargarAuditoria();
+    log('Audit loaded');
+  }
+  if (tieneRol('ADMIN')) {
+    await cargarUsuarios();
+    log('Users loaded');
+  }
+  setInterval(function() {
+    if (tieneRol('ADMIN') || tieneRol('IT_ENGINEER') || tieneRol('AUDITOR') || tieneRol('CONTROL_ACCESOS')) cargarCases();
+    if (tieneRol('ADMIN') || tieneRol('AUDITOR')) cargarAuditoria();
+  }, 30000);
+}
+init();
 </script>
-
-
-<script>
-(function () {
-  const exactTranslations = {
-    'RENUNCIA': 'Resignation',
-    'DESPIDO': 'Termination',
-    'FIN_DE_CONTRATO': 'End of contract',
-    'JUBILACION': 'Retirement',
-    'MUTUO_ACUERDO': 'Mutual agreement',
-    'FALLECIMIENTO': 'Deceased',
-    'NO_ESPECIFICADO': 'Not specified',
-
-    'BAJO': 'Low',
-    'NORMAL': 'Normal',
-    'ALTO': 'High',
-    'CRITICO': 'Critical',
-
-    'PROGRAMADA': 'Scheduled',
-    'EN_PROCESO': 'In progress',
-    'COMPLETADA': 'Completed',
-    'VALIDADA': 'Validated',
-    'REABIERTA': 'Reopened',
-    'NO_APLICA': 'Not applicable',
-    'PENDIENTE': 'Pending',
-
-    'ACTIVO': 'Active',
-    'INACTIVO': 'Inactive',
-
-    'RECURSOS HUMANOS': 'Human Resources',
-    'CONTROL_ACCESOS': 'Access Control',
-
-    'CREADO': 'Created',
-    'ACTUALIZADO': 'Updated',
-    'COMPLETADO': 'Completed',
-    'REABIERTO': 'Reopened'
-  };
-
-  const phraseTranslations = [
-    ['Baja registrada correctamente.', 'Offboarding registered successfully.'],
-    ['Completa los campos obligatorios:', 'Complete the required fields:'],
-    ['Error registrando la baja.', 'Error registering the offboarding.'],
-    ['No fue posible cargar', 'Unable to load'],
-    ['No fue posible localizar', 'Unable to locate'],
-    ['Usuario creado correctamente.', 'User created successfully.'],
-    ['Usuario actualizado correctamente.', 'User updated successfully.'],
-    ['Contrase\u00f1a actualizada correctamente.', 'Password updated successfully.']
-  ];
-
-  function translateVisibleText(value) {
-    if (!value) {
-      return value;
-    }
-
-    const trimmed = value.trim();
-
-    if (exactTranslations[trimmed]) {
-      return value.replace(
-        trimmed,
-        exactTranslations[trimmed]
-      );
-    }
-
-    let translated = value;
-
-    for (const translation of phraseTranslations) {
-      translated = translated.replace(
-        translation[0],
-        translation[1]
-      );
-    }
-
-    return translated;
-  }
-
-  function translateNode(node) {
-    if (!node) {
-      return;
-    }
-
-    if (node.nodeType === Node.TEXT_NODE) {
-      const parent = node.parentElement;
-
-      if (
-        !parent
-        || parent.matches(
-          'script, style, input, textarea, option'
-        )
-      ) {
-        return;
-      }
-
-      const translated =
-        translateVisibleText(node.nodeValue);
-
-      if (translated !== node.nodeValue) {
-        node.nodeValue = translated;
-      }
-
-      return;
-    }
-
-    if (node.nodeType !== Node.ELEMENT_NODE) {
-      return;
-    }
-
-    if (node.matches('script, style')) {
-      return;
-    }
-
-    for (
-      const child
-      of node.childNodes
-    ) {
-      translateNode(child);
-    }
-  }
-
-  translateNode(document.body);
-
-  const observer = new MutationObserver(
-    function(mutations) {
-      for (const mutation of mutations) {
-        if (
-          mutation.type === 'characterData'
-        ) {
-          translateNode(mutation.target);
-          continue;
-        }
-
-        for (
-          const addedNode
-          of mutation.addedNodes
-        ) {
-          translateNode(addedNode);
-        }
-      }
-    }
-  );
-
-  observer.observe(
-    document.body,
-    {
-      childList: true,
-      subtree: true,
-      characterData: true
-    }
-  );
-})();
-</script>
-
 </body>
 </html>
-<script>
-/* ============================================================
-   INVENTORY LOOKUP  +  CLEAR FORM BUTTON
-   ============================================================ */
-(function () {
 
-  /* ---------- inventory data cache ---------- */
-  var _inventoryData = null;
-  var _inventoryLoading = false;
-  var _inventoryCallbacks = [];
-
-  function loadInventory(cb) {
-    if (_inventoryData) { cb(_inventoryData); return; }
-    _inventoryCallbacks.push(cb);
-    if (_inventoryLoading) return;
-    _inventoryLoading = true;
-
-    fetch('/inventory.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        _inventoryData = Array.isArray(data) ? data : [];
-        _inventoryCallbacks.forEach(function (fn) { fn(_inventoryData); });
-        _inventoryCallbacks = [];
-      })
-      .catch(function () {
-        _inventoryData = [];
-        _inventoryCallbacks.forEach(function (fn) { fn([]); });
-        _inventoryCallbacks = [];
-      });
-  }
-
-  /* ---------- search helper ---------- */
-  function searchInventory(query, items) {
-    var q = (query || '').trim().toLowerCase();
-    if (!q || q.length < 2) return [];
-
-    return items.filter(function (item) {
-      return (
-        (item.tag    && item.tag.toLowerCase().indexOf(q) !== -1) ||
-        (item.id     && item.id.toLowerCase().indexOf(q) !== -1) ||
-        (item.serial && item.serial.toLowerCase().indexOf(q) !== -1) ||
-        (item.model  && item.model.toLowerCase().indexOf(q) !== -1) ||
-        (item.user   && item.user.toLowerCase().indexOf(q) !== -1)
-      );
-    }).slice(0, 8);
-  }
-
-  /* ---------- render a result tag ---------- */
-  function statusClass(s) {
-    if (!s) return 'other';
-    var l = s.toLowerCase();
-    if (l === 'on use' || l.indexOf('activ') !== -1 || l.indexOf('asigna') !== -1) return 'on-use';
-    if (l.indexOf('inactiv') !== -1 || l.indexOf('baja') !== -1 || l.indexOf('decomm') !== -1) return 'inactive';
-    if (l.indexOf('available') !== -1 || l.indexOf('disponible') !== -1) return 'available';
-    return 'other';
-  }
-
-  function renderTag(item) {
-    return '<span class="inv-tag found">' +
-      '<span class="inv-icon">&#9989;</span>' +
-      '<span class="inv-field">' + esc(item.tag || item.id || '-') + '</span>' +
-      '<span class="inv-sep">|</span>' +
-      esc(item.model || '-') +
-      '<span class="inv-sep">|</span>' +
-      esc(item.serial || '-') +
-      '<span class="inv-sep">|</span>' +
-      esc(item.user || '-') +
-      '<span class="inv-sep">|</span>' +
-      '<span class="inv-tag-status ' + statusClass(item.status) + '">' + esc(item.status || '-') + '</span>' +
-    '</span>';
-  }
-
-  function renderNotFound(query) {
-    return '<span class="inv-tag not-found">' +
-      '<span class="inv-icon">&#9888;</span>' +
-      ' No match for "<b>' + esc(query) + '</b>"' +
-    '</span>';
-  }
-
-  /* ---------- global buscarInventario ---------- */
-  window.buscarInventario = function (value, resultContainerId) {
-    var container = document.getElementById(resultContainerId);
-    if (!container) return;
-
-    var q = (value || '').trim();
-    if (q.length < 2) { container.innerHTML = ''; return; }
-
-    loadInventory(function (items) {
-      var results = searchInventory(q, items);
-      if (results.length === 0) {
-        container.innerHTML = renderNotFound(q);
-      } else if (results.length === 1) {
-        container.innerHTML = renderTag(results[0]);
-      } else {
-        // Show clickable list
-        container.innerHTML = results.map(function (item, idx) {
-          return '<div class="inv-result-option" data-idx="' + idx + '" ' +
-            'style="cursor:pointer;padding:4px 8px;border-bottom:1px solid #eee;font-size:.82rem" ' +
-            'onmouseenter="this.style.background=\'#e3f2fd\'" ' +
-            'onmouseleave="this.style.background=\'\'">' +
-            '<b>' + esc(item.tag || item.id || '-') + '</b> &mdash; ' +
-            esc(item.model || '') + ' &mdash; ' +
-            esc(item.user || '') + ' &mdash; ' +
-            '<span class="inv-tag-status ' + statusClass(item.status) + '">' + esc(item.status || '-') + '</span>' +
-          '</div>';
-        }).join('');
-
-        // Click to select
-        container.querySelectorAll('.inv-result-option').forEach(function (el) {
-          el.addEventListener('click', function () {
-            var i = parseInt(el.getAttribute('data-idx'));
-            var selected = results[i];
-            if (!selected) return;
-
-            // Find the input that triggered this
-            var input = container.previousElementSibling;
-            while (input && input.tagName !== 'INPUT') {
-              input = input.previousElementSibling;
-            }
-            if (input) {
-              input.value = selected.tag || selected.id || '';
-            }
-            container.innerHTML = renderTag(selected);
-          });
-        });
-      }
-    });
-  };
-
-  /* ---------- Other equipment list ---------- */
-  window._otherEquipItems = window._otherEquipItems || [];
-
-  window.renderOtherEquipList = function () {
-    var list = document.getElementById('other_equip_list');
-    if (!list) return;
-
-    if (!window._otherEquipItems.length) {
-      list.innerHTML = '';
-      return;
-    }
-
-    list.innerHTML = window._otherEquipItems.map(function (text, idx) {
-      return '<div class="other-equip-item">' +
-        '<span class="equip-info">' + esc(text) + '</span>' +
-        '<button type="button" class="btn-remove-equip" onclick="removeOtherEquip(' + idx + ')">&times;</button>' +
-      '</div>';
-    }).join('');
-  };
-
-  window.agregarOtroEquipo = function () {
-    var input = document.getElementById('other_equip_input');
-    if (!input) return;
-    var val = input.value.trim();
-    if (!val) return;
-
-    window._otherEquipItems.push(val);
-    input.value = '';
-    var r = document.getElementById('other_equip_inv_result');
-    if (r) r.innerHTML = '';
-    window.renderOtherEquipList();
-  };
-
-  window.removeOtherEquip = function (idx) {
-    window._otherEquipItems.splice(idx, 1);
-    window.renderOtherEquipList();
-  };
-
-  /* ---------- CLEAR FORM BUTTON ---------- */
-  var captureSection = document.getElementById('seccion_captura');
-  if (captureSection) {
-    // Find the "Register offboarding" button
-    var registerBtn = captureSection.querySelector('button[onclick="crearCase()"]');
-    if (registerBtn) {
-      var clearBtn = document.createElement('button');
-      clearBtn.type = 'button';
-      clearBtn.textContent = 'Clear form';
-      clearBtn.style.cssText = 'background:#6b7280;margin-left:10px';
-      clearBtn.onmouseover = function () { clearBtn.style.background = '#4b5563'; };
-      clearBtn.onmouseout = function () { clearBtn.style.background = '#6b7280'; };
-      clearBtn.onclick = function () {
-        limpiarCaptura();
-        setDefaultFecha();
-        // Also clear inventory results
-        ['computer_inv_result', 'phone_inv_result', 'other_equip_inv_result'].forEach(function (id) {
-          var el = document.getElementById(id);
-          if (el) el.innerHTML = '';
-        });
-        window._otherEquipItems = [];
-        window.renderOtherEquipList();
-      };
-      registerBtn.parentNode.insertBefore(clearBtn, registerBtn.nextSibling);
-    }
-  }
-
-  /* ---------- helper (reuse from main script) ---------- */
-  function esc(v) {
-    return (v == null ? '' : String(v))
-      .replace(/[<>&]/g, function (c) {
-        return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c];
-      });
-  }
-
-})();
-</script>

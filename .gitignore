@@ -3,3 +3,11 @@ target/
 *.iml
 .env
 evidence/.env
+service/*.jar
+service/*.jar.*
+service/logs/
+service/app.log
+service/*.next
+*.bak_*
+backup_frontend_*/
+rescate_ui_*/

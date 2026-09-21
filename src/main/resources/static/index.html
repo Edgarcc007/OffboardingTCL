@@ -139,8 +139,167 @@ tr:hover td{background:#f8fafc}
 .other-equip-item .btn-remove-equip:hover{color:#991b1b}
 @media(max-width:700px){header{padding:16px 18px}.header-content{flex-wrap:wrap}.brand-logo{width:90px}.week-indicator{width:100%;text-align:center}.card{padding:18px 16px}main{padding:0 12px}}
 </style>
+<style id="ob-recovered-ui">
+:root {
+    --bg-dark:#f3f3f3;
+    --bg-mid:#e8e8e8;
+    --bg-card:#ffffff;
+    --text-primary:#242424;
+    --text-secondary:#595959;
+    --text-muted:#737373;
+    --accent:#343434;
+    --accent-hover:#171717;
+    --accent-blue:#525252;
+    --accent-blue-hover:#333333;
+    --border:#dcdcdc;
+    --border-light:#eeeeee;
+    --info:#454545;
+    --info-bg:#eeeeee;
+    --radius:12px;
+    --radius-sm:7px;
+    --radius-pill:8px;
+    --shadow-card:0 3px 15px rgba(0,0,0,.035);
+    --shadow-hover:0 5px 20px rgba(0,0,0,.06);
+}
+html { scroll-behavior:smooth; }
+body { background:#f3f3f3; }
+body::before,body::after { display:none; }
+
+#ob-sidebar {
+    position:fixed;
+    inset:0 auto 0 0;
+    width:258px;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+    background:#191919;
+    color:#f5f5f5;
+    border-right:1px solid #333;
+    padding:30px 18px 20px;
+    overflow-y:auto;
+}
+.ob-brand { text-align:center; padding:4px 0 25px; }
+.ob-brand img { width:184px; height:auto; max-width:100%; }
+.ob-brand strong {
+    display:block;
+    margin-top:18px;
+    font-size:18px;
+    letter-spacing:.4px;
+}
+.ob-brand small {
+    display:block;
+    margin-top:6px;
+    color:#aaa;
+    font-size:12px;
+}
+.ob-nav { display:flex; flex-direction:column; gap:7px; }
+.ob-nav a {
+    color:#ddd;
+    text-decoration:none;
+    padding:12px 14px;
+    border:1px solid transparent;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+.ob-nav a:hover,.ob-nav a:focus-visible {
+    background:#303030;
+    border-color:#494949;
+    color:white;
+}
+.ob-nav a[hidden] { display:none!important; }
+
+.ob-footer {
+    margin-top:auto;
+    padding-top:28px;
+    text-align:center;
+}
+.ob-footer-inner { border-top:1px solid #393939; padding-top:18px; }
+.ob-footer strong { display:block; font-size:12px; font-weight:500; }
+.ob-footer small { display:block; margin-top:5px; font-size:10px; color:#aaa; }
+
+body > header {
+    margin-left:258px;
+    background:#fff;
+    border-bottom:1px solid #dedede;
+    padding:24px 30px;
+}
+.header-content { max-width:1480px; }
+.header-content > .brand-logo { display:none; }
+header h1 { color:#242424; font-size:23px; }
+header p { color:#737373; }
+.header-department { color:#555; }
+.week-indicator {
+    color:#444;
+    background:#f4f4f4;
+    border:1px solid #ddd;
+    backdrop-filter:none;
+}
+body > main {
+    margin:24px 28px 40px 286px;
+    padding:0;
+    max-width:none;
+}
+.card { scroll-margin-top:20px; }
+.session-card { background:#fff; backdrop-filter:none; }
+.session-actions .logout {
+    color:#444;
+    border:1px solid #ccc;
+    background:#f5f5f5;
+}
+.session-actions .logout:hover { background:#e7e7e7; border-color:#aaa; }
+button:hover { box-shadow:0 3px 10px rgba(0,0,0,.12); }
+input:focus,select:focus,textarea:focus {
+    border-color:#666;
+    box-shadow:0 0 0 3px rgba(0,0,0,.07);
+}
+#log { background:#222; border-color:#333; color:#ddd; }
+
+@media(max-width:1000px) {
+    #ob-sidebar { width:218px; padding-left:14px; padding-right:14px; }
+    .ob-brand img { width:164px; }
+    body > header { margin-left:218px; padding:20px; }
+    body > main { margin-left:238px; margin-right:20px; }
+}
+@media(max-width:760px) {
+    #ob-sidebar { position:relative; width:100%; padding:18px; }
+    .ob-brand { padding-bottom:14px; }
+    .ob-brand img { width:145px; }
+    .ob-brand strong { margin-top:10px; }
+    .ob-nav { flex-direction:row; flex-wrap:wrap; gap:4px; }
+    .ob-nav a { padding:9px 10px; font-size:12px; }
+    .ob-footer { padding-top:16px; }
+    .ob-footer-inner { padding-top:12px; }
+    body > header { margin-left:0; padding:18px; }
+    body > main { margin:18px 12px 30px; }
+    .session-actions { flex-wrap:wrap; }
+}
+</style>
 </head>
 <body>
+<aside id="ob-sidebar" aria-label="Main navigation">
+    <div class="ob-brand">
+        <img src="/images/tcl-logo.svg" alt="TCL">
+        <strong>Offboarding</strong>
+        <small>Employee Offboarding Control</small>
+    </div>
+
+    <nav class="ob-nav">
+        <a hidden href="#seccion_captura" data-ob-section="seccion_captura">Register offboarding</a>
+        <a hidden href="#seccion_registros_rh" data-ob-section="seccion_registros_rh">Session records</a>
+        <a hidden href="#seccion_casos" data-ob-section="seccion_casos">Cases and tasks</a>
+        <a hidden href="#seccion_usuarios" data-ob-section="seccion_usuarios">Users</a>
+        <a hidden href="#seccion_auditoria" data-ob-section="seccion_auditoria">Audit log</a>
+        <a hidden href="#seccion_log" data-ob-section="seccion_log">Activity</a>
+    </nav>
+
+    <div class="ob-footer">
+        <div class="ob-footer-inner">
+            <strong>TCL Moma Manufacturing</strong>
+            <small>Developed by Edgar Carrasco</small>
+        </div>
+    </div>
+</aside>
 <header>
 <div class="header-content">
 <img src="/images/tcl-logo.svg" class="brand-logo" alt="TCL">
@@ -1050,6 +1209,42 @@ async function init() {
   }, 30000);
 }
 init();
+</script>
+<script id="ob-navigation">
+(function () {
+    const links = document.querySelectorAll('[data-ob-section]');
+
+    function updateNavigation() {
+        links.forEach(function (link) {
+            const section = document.getElementById(link.dataset.obSection);
+            link.hidden = !section || section.classList.contains('hidden');
+        });
+    }
+
+    const observer = new MutationObserver(updateNavigation);
+
+    links.forEach(function (link) {
+        const section = document.getElementById(link.dataset.obSection);
+        if (section) {
+            observer.observe(section, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+    });
+
+    updateNavigation();
+
+    // Usa el mismo cierre de sesion real del formulario original.
+    const logoutForm = document.querySelector('.session-actions form[action="/logout"]');
+    if (logoutForm) {
+        const switchButton = document.createElement('button');
+        switchButton.type = 'submit';
+        switchButton.className = 'logout';
+        switchButton.textContent = 'Switch user';
+        logoutForm.appendChild(switchButton);
+    }
+})();
 </script>
 </body>
 </html>

@@ -19,10 +19,20 @@ import com.empresa.offboarding.repository.TaskTemplateRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
@@ -39,6 +49,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class OffboardingService {
+
+    private static final Logger log = LoggerFactory.getLogger(OffboardingService.class);
 
     private final OffboardingCaseRepository caseRepository;
     private final OffboardingTaskRepository taskRepository;
@@ -343,11 +355,15 @@ public class OffboardingService {
                         + " - "
                         + saved.getEmployeeName();
 
-                notificationService.sendOffboardingNotification(
+                try {
+            notificationService.sendOffboardingNotification(
                         List.of(row),
                         subject,
                         recipients
                 );
+        } catch (Exception e) {
+            log.warn("Notificacion externa falló (no bloqueante): {}", e.getMessage());
+        }
             }
         } catch (Exception e) {
             log.warn("No se pudo enviar notificacion para caso {}: {}",
@@ -835,3 +851,4 @@ public class OffboardingService {
         );
     }
 }
+

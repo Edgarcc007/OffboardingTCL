@@ -1,4 +1,4 @@
-﻿-- Evidencia especÃ­fica de recepciÃ³n de activos.
+-- Evidencia especÃ­fica de recepciÃ³n de activos.
 
 ALTER TABLE offboarding_task
     ADD COLUMN asset_received

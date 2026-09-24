@@ -1,4 +1,4 @@
-﻿-- UbicaciÃ³n fÃ­sica del escritorio del empleado.
+-- UbicaciÃ³n fÃ­sica del escritorio del empleado.
 --
 -- department representa el departamento organizacional.
 -- building y work_area representan la ubicaciÃ³n fÃ­sica.

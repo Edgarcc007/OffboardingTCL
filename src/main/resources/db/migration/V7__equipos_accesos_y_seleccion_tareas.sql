@@ -1,4 +1,4 @@
-﻿ALTER TABLE offboarding_case
+ALTER TABLE offboarding_case
     ADD COLUMN computer_assigned BOOLEAN NOT NULL DEFAULT FALSE,
     ADD COLUMN computer_details VARCHAR(250),
     ADD COLUMN phone_assigned BOOLEAN NOT NULL DEFAULT FALSE,

@@ -1,4 +1,4 @@
-﻿-- Eliminar temporalmente la restricciÃ³n anterior para poder
+-- Eliminar temporalmente la restricciÃ³n anterior para poder
 -- sustituir los nombres de los perfiles.
 ALTER TABLE app_user_role
     DROP CONSTRAINT IF EXISTS ck_app_user_role;

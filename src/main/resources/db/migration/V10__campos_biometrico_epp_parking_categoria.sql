@@ -1,4 +1,4 @@
-﻿-- V10: Campos adicionales de registro biométrico, EPP, estacionamiento, categoría y foto
+-- V10: Campos adicionales de registro biométrico, EPP, estacionamiento, categoría y foto
 ALTER TABLE offboarding_case ADD COLUMN fingerprint_registered BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE offboarding_case ADD COLUMN faceid_registered      BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE offboarding_case ADD COLUMN epp_assigned           BOOLEAN NOT NULL DEFAULT FALSE;

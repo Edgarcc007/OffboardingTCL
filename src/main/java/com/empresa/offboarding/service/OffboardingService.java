@@ -443,7 +443,13 @@ public class OffboardingService {
 
         String completedBy = task.getCompletedBy();
 
-        if (validatedBy != null
+        Authentication valAuth = SecurityContextHolder.getContext().getAuthentication();
+        boolean validatorIsAdmin = valAuth != null
+                && valAuth.getAuthorities().stream()
+                    .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+
+        if (!validatorIsAdmin
+                && validatedBy != null
                 && completedBy != null
                 && validatedBy.equalsIgnoreCase(
                     completedBy)) {
@@ -468,7 +474,13 @@ public class OffboardingService {
         }
 
         String inventoryReference =
-                request.inventoryReference().trim();
+                cleanNullable(request.inventoryReference());
+
+        if (inventoryReference == null) {
+            throw new IllegalArgumentException(
+                    "Debes indicar una referencia de la validacion"
+            );
+        }
 
         String validationComments =
                 cleanNullable(

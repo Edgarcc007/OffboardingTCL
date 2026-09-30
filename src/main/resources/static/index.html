@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -275,6 +275,29 @@ input:focus,select:focus,textarea:focus {
     .session-actions { flex-wrap:wrap; }
 }
 </style>
+<style id="ob-recipients-style-v1">
+.ob-tab-inactive { display:none!important; }
+.ob-nav a[aria-current="page"] {
+    background:#383838;
+    border-color:#555;
+    color:#fff;
+}
+#seccion_destinatarios .nr-delete {
+    background:#b91c1c;
+    color:#fff;
+}
+#seccion_destinatarios .nr-delete:hover { background:#991b1b; }
+#seccion_destinatarios button:disabled {
+    opacity:.55;
+    cursor:wait;
+    transform:none;
+}
+#seccion_destinatarios .nr-help {
+    color:var(--text-muted);
+    font-size:12px;
+    margin-bottom:12px;
+}
+</style>
 </head>
 <body>
 <aside id="ob-sidebar" aria-label="Main navigation">
@@ -289,6 +312,7 @@ input:focus,select:focus,textarea:focus {
         <a hidden href="#seccion_registros_rh" data-ob-section="seccion_registros_rh">Session records</a>
         <a hidden href="#seccion_casos" data-ob-section="seccion_casos">Cases and tasks</a>
         <a hidden href="#seccion_usuarios" data-ob-section="seccion_usuarios">Users</a>
+        <a hidden href="#seccion_destinatarios" data-ob-section="seccion_destinatarios">Notification recipients</a>
         <a hidden href="#seccion_auditoria" data-ob-section="seccion_auditoria">Audit log</a>
         <a hidden href="#seccion_log" data-ob-section="seccion_log">Activity</a>
     </nav>
@@ -489,7 +513,7 @@ input:focus,select:focus,textarea:focus {
 <div><label>Username<span class="required-marker">*</span></label><input id="nu_user" autocomplete="off" placeholder="first.last"></div>
 <div><label>Full name<span class="required-marker">*</span></label><input id="nu_nombre" autocomplete="off" placeholder="First name Last name"></div>
 <div><label>Email <span class="optional-marker">(optional)</span></label><input id="nu_mail" autocomplete="off" placeholder="user@company.com"></div>
-<div><label>Temporary password<span class="required-marker">*</span></label><input id="nu_pass" type="password" autocomplete="new-password" placeholder="At least 12 characters"><button class="mini" type="button" onclick="generarPass()">Generate</button></div>
+<div><label>Temporary password<span class="required-marker">*</span></label><input id="nu_pass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button class="mini" type="button" onclick="generarPass()">Generate</button></div>
 </div>
 <label>Assigned profiles<span class="required-marker">*</span></label>
 <div style="font-size:13px;line-height:1.9;padding:6px 0">
@@ -541,6 +565,49 @@ input:focus,select:focus,textarea:focus {
 </div>
 </div>
 </div>
+<div id="seccion_destinatarios" class="card hidden">
+  <h2>Notification recipients</h2>
+  <p class="nr-help">
+    When an offboarding is registered, an email notification will be sent
+    to all active recipients below.
+  </p>
+
+  <form id="nr_form">
+    <div class="grid">
+      <div>
+        <label for="nr_email">
+          Email<span class="required-marker">*</span>
+        </label>
+        <input id="nr_email" type="email" required maxlength="150"
+               autocomplete="off" placeholder="user@tcl.com">
+      </div>
+      <div>
+        <label for="nr_desc">
+          Description <span class="optional-marker">(optional)</span>
+        </label>
+        <input id="nr_desc" maxlength="200" autocomplete="off"
+               placeholder="e.g. IT Manager">
+      </div>
+    </div>
+    <button type="submit">Add recipient</button>
+  </form>
+
+  <div id="nr_aviso" class="notice" role="status" aria-live="polite"></div>
+
+  <div class="table-wrapper" style="margin-top:18px">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Email</th><th>Description</th>
+          <th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tabla_destinatarios">
+        <tr><td colspan="5" class="empty-row">Loading recipients...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 <div id="seccion_casos" class="card hidden">
 <h2 id="titulo_casos">Tasks</h2>
 <div id="casos">Loading...</div>
@@ -565,6 +632,362 @@ input:focus,select:focus,textarea:focus {
 <div id="log"></div>
 </div>
 </main>
+<script id="ob-recipients-v1">
+(function () {
+    "use strict";
+
+    const endpoint = "/api/notification-recipients";
+    const el = id => document.getElementById(id);
+    let busy = false;
+    let loading = null;
+
+    function admin() {
+        return typeof tieneRol === "function" && tieneRol("ADMIN");
+    }
+
+    function notice(message, error) {
+        const box = el("nr_aviso");
+        box.textContent = message || "";
+        box.className = message
+            ? "notice " + (error ? "error" : "ok")
+            : "notice";
+    }
+
+    function errorText(result) {
+        const d = result && result.data;
+        return d
+            ? d.detail || d.message || d.title || ("HTTP " + result.status)
+            : "HTTP " + (result ? result.status : "unknown");
+    }
+
+    function lockControls() {
+        document.querySelectorAll(
+            "#seccion_destinatarios button, #seccion_destinatarios input"
+        ).forEach(control => { control.disabled = busy; });
+    }
+
+    function emptyRow(message) {
+        const table = el("tabla_destinatarios");
+        table.replaceChildren();
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.className = "empty-row";
+        cell.textContent = message;
+        row.appendChild(cell);
+        table.appendChild(row);
+    }
+
+    function render(rows) {
+        const table = el("tabla_destinatarios");
+        table.replaceChildren();
+
+        if (!rows.length) {
+            emptyRow("No recipients configured.");
+            return;
+        }
+
+        rows.forEach(recipient => {
+            const row = document.createElement("tr");
+
+            function cell(value) {
+                const node = document.createElement("td");
+                node.textContent = value == null ? "" : String(value);
+                row.appendChild(node);
+                return node;
+            }
+
+            cell(recipient.id);
+            cell(recipient.email).style.fontWeight = "700";
+            cell(recipient.description || "-");
+
+            const status = document.createElement("span");
+            status.className = "pill " + (recipient.active ? "VALIDADA" : "CRITICO");
+            status.textContent = recipient.active ? "ACTIVE" : "INACTIVE";
+            cell("").appendChild(status);
+
+            const actions = cell("");
+            actions.className = "user-actions";
+
+            const toggle = document.createElement("button");
+            toggle.type = "button";
+            toggle.className = "mini";
+            toggle.textContent = recipient.active ? "Disable" : "Enable";
+
+            toggle.addEventListener("click", function () {
+                mutate(
+                    "PUT",
+                    endpoint + "/" + encodeURIComponent(recipient.id),
+                    {
+                        email: recipient.email,
+                        description: recipient.description || null,
+                        active: !recipient.active
+                    },
+                    200,
+                    "Recipient updated.",
+                    false
+                );
+            });
+
+            const remove = document.createElement("button");
+            remove.type = "button";
+            remove.className = "mini nr-delete";
+            remove.textContent = "Delete";
+
+            remove.addEventListener("click", function () {
+                if (!admin() || busy) return;
+
+                if (!confirm(
+                    "Remove this recipient permanently?\n\n" + recipient.email
+                )) return;
+
+                mutate(
+                    "DELETE",
+                    endpoint + "/" + encodeURIComponent(recipient.id),
+                    undefined,
+                    204,
+                    "Recipient deleted.",
+                    false
+                );
+            });
+
+            actions.append(toggle, remove);
+            table.appendChild(row);
+        });
+
+        lockControls();
+    }
+
+    async function load(force) {
+        if (!admin()) return false;
+        if (busy && !force) return false;
+        if (loading) return loading;
+
+        loading = (async function () {
+            try {
+                const result = await api(endpoint);
+
+                if (result.status !== 200 || !Array.isArray(result.data)) {
+                    throw new Error(errorText(result));
+                }
+
+                render(result.data);
+                notice("");
+                return true;
+            } catch (error) {
+                emptyRow("Unable to load recipients. Use Refresh to retry.");
+                notice(error.message || "Unable to load recipients.", true);
+                return false;
+            }
+        })();
+
+        try {
+            return await loading;
+        } finally {
+            loading = null;
+        }
+    }
+
+    window.cargarDestinatarios = function () {
+        return load(false);
+    };
+
+    async function mutate(method, path, body, expected, message, clearForm) {
+        if (!admin() || busy) return;
+
+        busy = true;
+        lockControls();
+        notice("");
+        let saved = false;
+
+        try {
+            if (loading) await loading;
+
+            let result;
+            try {
+                result = await api(path, method, body);
+            } catch (_) {
+                notice(
+                    "Connection lost. The result is unknown. " +
+                    "Refresh the list before retrying.",
+                    true
+                );
+                return;
+            }
+
+            if (result.status !== expected) {
+                notice(errorText(result), true);
+                return;
+            }
+
+            saved = true;
+
+            if (clearForm) el("nr_form").reset();
+
+            const refreshed = await load(true);
+
+            try {
+                await cargarAuditoria();
+            } catch (_) {}
+
+            notice(
+                refreshed
+                    ? message
+                    : message + " Refresh the page to update the list.",
+                !refreshed
+            );
+        } catch (error) {
+            notice(
+                saved
+                    ? "Change saved. Refresh the page to update the list."
+                    : error.message || "Unable to complete the operation.",
+                true
+            );
+        } finally {
+            busy = false;
+            lockControls();
+        }
+    }
+
+    function initialize() {
+        el("nr_form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!admin() || busy) return;
+
+            const email = el("nr_email");
+            email.value = email.value.trim();
+
+            if (!this.reportValidity()) return;
+
+            mutate(
+                "POST",
+                endpoint,
+                {
+                    email: email.value,
+                    description: el("nr_desc").value.trim() || null,
+                    active: true
+                },
+                201,
+                "Recipient added.",
+                true
+            );
+        });
+
+        const links = Array.from(
+            document.querySelectorAll("#ob-sidebar [data-ob-section]")
+        );
+
+        let selected = "";
+
+        function synchronize() {
+            const allowed = links.filter(function (link) {
+                const section = el(link.dataset.obSection);
+                return section && !section.classList.contains("hidden");
+            });
+
+            const requested = window.location.hash.slice(1);
+
+            const current = allowed.find(
+                link => link.dataset.obSection === requested
+            ) || allowed[0];
+
+            const next = current ? current.dataset.obSection : "";
+
+            links.forEach(function (link) {
+                const section = el(link.dataset.obSection);
+                if (!section) return;
+
+                const inactive = section.id !== next;
+
+                // Esta clase selecciona la pestaÃ±a.
+                // "hidden" se conserva exclusivamente para los permisos.
+                if (section.classList.contains("ob-tab-inactive") !== inactive) {
+                    section.classList.toggle("ob-tab-inactive", inactive);
+                }
+
+                if (section.id === next) {
+                    link.setAttribute("aria-current", "page");
+                } else {
+                    link.removeAttribute("aria-current");
+                }
+            });
+
+            if (next && window.location.hash !== "#" + next) {
+                history.replaceState(null, "", "#" + next);
+            }
+
+            if (next !== selected) {
+                selected = next;
+
+                if (next === "seccion_destinatarios") {
+                    load(false);
+                }
+
+                if (
+                    next === "seccion_auditoria" &&
+                    el("audit_body").classList.contains("hidden")
+                ) {
+                    toggleAuditoria();
+                }
+            }
+        }
+
+        links.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                if (
+                    event.button !== 0 ||
+                    event.ctrlKey || event.metaKey ||
+                    event.shiftKey || event.altKey
+                ) return;
+
+                const section = el(link.dataset.obSection);
+
+                if (!section || section.classList.contains("hidden")) {
+                    event.preventDefault();
+                    return;
+                }
+
+                event.preventDefault();
+
+                const hash = "#" + section.id;
+                if (window.location.hash !== hash) {
+                    history.pushState(null, "", hash);
+                }
+
+                synchronize();
+
+                document.querySelector("main").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            });
+        });
+
+        const observer = new MutationObserver(synchronize);
+
+        links.forEach(function (link) {
+            const section = el(link.dataset.obSection);
+            if (section) {
+                observer.observe(section, {
+                    attributes: true,
+                    attributeFilter: ["class"]
+                });
+            }
+        });
+
+        window.addEventListener("popstate", synchronize);
+        window.addEventListener("hashchange", synchronize);
+        synchronize();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initialize, { once: true });
+    } else {
+        initialize();
+    }
+})();
+</script>
 <script>
 const $ = id => document.getElementById(id);
 let rolesActuales = new Set();
@@ -628,6 +1051,9 @@ async function api(path, method, body) {
   }
   let data = null;
   try { data = await respuesta.json(); } catch (error) { data = null; }
+  if (respuesta.status >= 400 && data && typeof data === 'object') {
+    data.message = data.detail || data.message || data.title || ('HTTP ' + respuesta.status);
+  }
   return { status: respuesta.status, data: data };
 }
 function claveRegistrosRH() {
@@ -705,6 +1131,7 @@ function aplicarPermisos() {
   mostrar('seccion_captura', esAdmin || esRH);
   mostrar('seccion_registros_rh', esRH && !esAdmin);
   mostrar('seccion_usuarios', esAdmin);
+  mostrar('seccion_destinatarios', esAdmin);
   mostrar('seccion_casos', esAdmin || esEngineer || esAuditor || esControlAccesos);
   mostrar('seccion_auditoria', esAdmin || esAuditor);
   mostrar('seccion_log', esAdmin || esEngineer || esControlAccesos);
@@ -791,6 +1218,7 @@ async function cargarCases() {
             '<div class="case-summary-main">' +
               '<b>' + esc(caso.caseNumber) + '</b>' +
               '<span>' + esc(caso.employeeName) + '</span>' +
+              '<span class="pill NORMAL">Employee # ' + esc(caso.employeeIdentifier || '-') + '</span>' +
               '<span class="pill ' + esc(caso.riskLevel) + '">' + esc(caso.riskLevel) + '</span>' +
               '<span class="pill ' + esc(caso.status) + '">' + esc(caso.status) + '</span>' +
               (caso.confidential ? '<span class="pill CRITICO">CONFIDENTIAL</span>' : '') +
@@ -1071,8 +1499,19 @@ async function cargarUsuarios() {
       '<td>' + emailTexto + '</td>' +
       '<td>' + esc(rolesTexto) + '</td>' +
       '<td>' + (u.enabled ? '<span class="pill VALIDADA">Active</span>' : '<span class="pill PENDIENTE">Disabled</span>') + '</td>' +
-      '<td class="user-actions"><button class="mini" onclick="abrirEditUsername(' + u.id + ')">Edit</button></td></tr>';
+      '<td class="user-actions"><button class="mini" onclick="abrirEditUsername(' + u.id + ')">Edit</button>' +
+      '<button class="mini reopen" onclick="eliminarUsername(' + u.id + ', \'' + esc(u.username) + '\')">Delete</button></td></tr>';
   }).join('');
+}
+async function eliminarUsername(id, username) {
+  if (!confirm("Delete user \"" + username + "\"? This action cannot be undone.")) return;
+  var r = await api('/api/users/' + id, 'DELETE');
+  if (r.status === 204 || r.status === 200) {
+    log('User deleted: ' + username);
+    await cargarUsuarios();
+  } else {
+    log('Error deleting user: ' + (r.data ? r.data.message || r.status : r.status), 'err');
+  }
 }
 async function crearUsername() {
   var aviso = $('nu_aviso');
@@ -1182,7 +1621,7 @@ async function cargarAuditoria() {
 }
 async function recargar() {
   log('Refreshing data...');
-  await Promise.all([cargarCases(), cargarAuditoria(), tieneRol('ADMIN') ? cargarUsuarios() : Promise.resolve()]);
+  await Promise.all([cargarCases(), cargarAuditoria(), tieneRol('ADMIN') ? cargarUsuarios() : Promise.resolve(), tieneRol('ADMIN') ? cargarDestinatarios() : Promise.resolve()]);
   log('Refresh complete');
 }
 async function init() {
@@ -1202,6 +1641,7 @@ async function init() {
   if (tieneRol('ADMIN')) {
     await cargarUsuarios();
     log('Users loaded');
+    await cargarDestinatarios();
   }
   setInterval(function() {
     if (tieneRol('ADMIN') || tieneRol('IT_ENGINEER') || tieneRol('AUDITOR') || tieneRol('CONTROL_ACCESOS')) cargarCases();
@@ -1244,6 +1684,255 @@ init();
         switchButton.textContent = 'Switch user';
         logoutForm.appendChild(switchButton);
     }
+})();
+</script>
+<style>
+#ob-validation-dialog {
+    position:fixed;
+    inset:0;
+    margin:auto;
+    width:min(620px, calc(100vw - 32px));
+    max-height:85vh;
+    overflow:auto;
+    padding:24px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    background:#fff;
+    color:#242424;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+#ob-validation-dialog::backdrop { background:rgba(0,0,0,.55); }
+#ob-validation-dialog h2 { margin-bottom:14px; }
+#ob-validation-dialog .ob-description {
+    padding:12px;
+    border-radius:8px;
+    background:#f3f3f3;
+    white-space:pre-wrap;
+    margin-bottom:16px;
+}
+#ob-validation-dialog .ob-check {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin:16px 0;
+    text-transform:none;
+    letter-spacing:0;
+}
+#ob-validation-dialog .ob-check input {
+    width:auto;
+    flex-shrink:0;
+    margin-top:3px;
+}
+#ob-validation-dialog .ob-actions {
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+}
+#ob-validation-dialog .ob-error {
+    color:#a52314;
+    white-space:pre-wrap;
+    margin-top:12px;
+}
+</style>
+
+<script id="ob-validation-v1">
+(function () {
+    "use strict";
+
+    let validationOpen = false;
+
+    function errorText(result) {
+        const data = result && result.data;
+        return data
+            ? data.detail || data.message || data.title || ("HTTP " + result.status)
+            : "HTTP " + (result ? result.status : "unknown");
+    }
+
+    function requestValidation(task, employeeCase) {
+        return new Promise(function (resolve) {
+            const dialog = document.createElement("dialog");
+            dialog.id = "ob-validation-dialog";
+            dialog.setAttribute("aria-labelledby", "ob-validation-title");
+
+            dialog.innerHTML = `
+                <form>
+                    <h2 id="ob-validation-title">Validate task</h2>
+                    <div class="ob-description"></div>
+
+                    <label class="ob-check">
+                        <input name="received" type="checkbox" required>
+                        <span class="ob-received-label"></span>
+                    </label>
+
+                    <label class="ob-check">
+                        <input name="updated" type="checkbox" required>
+                        <span class="ob-updated-label"></span>
+                    </label>
+
+                    <label for="ob-validation-ref">Evidence / record reference *</label>
+                    <input id="ob-validation-ref" name="reference"
+                           maxlength="200" required autocomplete="off"
+                           placeholder="Ticket, inventory or access-control record">
+
+                    <label for="ob-validation-comments">Comments</label>
+                    <textarea id="ob-validation-comments" name="comments"
+                              maxlength="2000" rows="3"></textarea>
+
+                    <p class="ob-error" role="alert"></p>
+
+                    <div class="ob-actions">
+                        <button type="button" class="ob-cancel">Cancel</button>
+                        <button type="submit">Confirm validation</button>
+                    </div>
+                </form>
+            `;
+
+            const accessTask = esTaskDeControlAccesos(task);
+
+            dialog.querySelector(".ob-description").textContent =
+                employeeCase.caseNumber + " | Employee # " +
+                employeeCase.employeeIdentifier + "\n" +
+                employeeCase.employeeName + "\n" +
+                task.taskName + "\nCompleted by: " + task.completedBy;
+
+            dialog.querySelector(".ob-received-label").textContent = accessTask
+                ? "I verified that the indicated access revocation was executed."
+                : "I verified that the indicated equipment/assets were received.";
+
+            dialog.querySelector(".ob-updated-label").textContent = accessTask
+                ? "I verified that the corresponding access-control record was updated."
+                : "I verified that the corresponding inventory record was updated.";
+
+            const form = dialog.querySelector("form");
+            let payload = null;
+
+            dialog.querySelector(".ob-cancel").addEventListener("click", function () {
+                dialog.close();
+            });
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                if (!form.reportValidity()) return;
+
+                const reference = form.elements.namedItem("reference").value.trim();
+
+                if (!reference) {
+                    dialog.querySelector(".ob-error").textContent =
+                        "Enter a non-empty reference.";
+                    return;
+                }
+
+                payload = {
+                    assetReceived: form.elements.namedItem("received").checked,
+                    inventoryUpdated: form.elements.namedItem("updated").checked,
+                    inventoryReference: reference,
+                    validationComments:
+                        form.elements.namedItem("comments").value.trim() || null
+                };
+
+                dialog.close();
+            });
+
+            dialog.addEventListener("close", function () {
+                dialog.remove();
+                resolve(payload);
+            }, { once: true });
+
+            document.body.appendChild(dialog);
+            dialog.showModal();
+        });
+    }
+
+    // Sustituye solo la accion del boton Validate.
+    window.validarActive = async function (value) {
+        if (validationOpen) return;
+
+        const taskId = Number(value);
+        if (!Number.isSafeInteger(taskId) || taskId <= 0) return;
+
+        validationOpen = true;
+
+        try {
+            const response = await api("/api/offboardings");
+
+            if (response.status !== 200 || !Array.isArray(response.data)) {
+                throw new Error(errorText(response));
+            }
+
+            let task = null;
+            let employeeCase = null;
+
+            for (const item of response.data) {
+                const found = (item.tasks || []).find(
+                    candidate => Number(candidate.id) === taskId
+                );
+
+                if (found) {
+                    task = found;
+                    employeeCase = item;
+                    break;
+                }
+            }
+
+            if (!task) throw new Error("Task not found. Refresh the page.");
+
+            const permitted = tieneRol("ADMIN") ||
+                (tieneRol("CONTROL_ACCESOS") && esTaskDeControlAccesos(task));
+
+            if (!permitted) {
+                throw new Error("Your profile cannot validate this task.");
+            }
+
+            if (task.status !== "COMPLETADA") {
+                throw new Error("Only a COMPLETADA task can be validated.");
+            }
+
+            if (
+                task.completedBy &&
+                usuarioActual &&
+                task.completedBy.toLowerCase() === usuarioActual.toLowerCase()
+            ) {
+                throw new Error(
+                    "This task was completed by your account. " +
+                    "Another authorized person must validate it."
+                );
+            }
+
+            const payload = await requestValidation(task, employeeCase);
+            if (!payload) return;
+
+            let result;
+            try {
+                result = await api(
+                    "/api/tasks/" + taskId + "/validate",
+                    "PATCH",
+                    payload
+                );
+            } catch (_) {
+                throw new Error(
+                    "Connection lost. The result is unknown. " +
+                    "Refresh and check the task status before retrying."
+                );
+            }
+
+            if (result.status !== 200) {
+                throw new Error(errorText(result));
+            }
+
+            log("Task " + taskId + " validated.");
+
+            try {
+                await Promise.all([cargarCases(), cargarAuditoria()]);
+            } catch (_) {
+                alert("Validation saved. Refresh the page to update the lists.");
+            }
+
+        } catch (error) {
+            alert(error.message || "Unable to validate the task.");
+        } finally {
+            validationOpen = false;
+        }
+    };
 })();
 </script>
 </body>

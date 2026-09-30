@@ -11,3 +11,26 @@ service/*.next
 *.bak_*
 backup_frontend_*/
 rescate_ui_*/
+
+# Nunca subir backups locales
+*.bak
+application.properties.bak
+
+# Basura operativa - no subir
+cookies.txt
+*.log
+*.jar
+target/
+service/backups/
+service/*.exe
+deploy.ps1.*
+fix*.py
+fix*.ps1
+patch_*/
+release_*/
+maintenance-*/
+repair_logs_*/
+rescate_*/
+backup*/
+private-temp/
+service/*.xml

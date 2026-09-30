@@ -23,14 +23,14 @@ public record CreateUserRequest(
         @Size(max = 150, message = "El nombre no puede exceder 150 caracteres")
         String fullName,
 
-        @Email(message = "El correo no es válido")
+        @Email(message = "El correo no es vÃ¡lido")
         @Size(max = 150, message = "El correo no puede exceder 150 caracteres")
         String email,
 
-        @NotBlank(message = "La contraseña es obligatoria")
+        @NotBlank(message = "La contraseÃ±a es obligatoria")
         @Pattern(
-                regexp = "^(?=\\S{12,100}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).*$",
-                message = "Debe tener entre 12 y 100 caracteres, mayúscula, minúscula, número y símbolo"
+                regexp = "^(?=\\S{8,100}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).*$",
+                message = "Debe tener entre 8 y 100 caracteres, mayÃºscula, minÃºscula, nÃºmero y sÃ­mbolo"
         )
         String password,
 

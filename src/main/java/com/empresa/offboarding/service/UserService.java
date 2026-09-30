@@ -178,7 +178,7 @@ public class UserService {
                 request.password(),
                 user.getPasswordHash())) {
             throw new IllegalArgumentException(
-                    "La contraseña nueva debe ser diferente de la actual"
+                    "La contraseÃ±a nueva debe ser diferente de la actual"
             );
         }
 
@@ -194,6 +194,33 @@ public class UserService {
                 "AppUser",
                 user.getId(),
                 "username=" + user.getUsername()
+        );
+    }
+
+    public void delete(
+            Long userId,
+            String actor
+    ) {
+        AppUser user = requireUser(userId);
+
+        // Reusa la proteccion del ultimo admin:
+        // simular que queda deshabilitado y sin roles
+        protectLastAdministrator(
+                user,
+                false,
+                java.util.EnumSet.noneOf(AppRole.class));
+
+        String username = user.getUsername();
+        Long id = user.getId();
+
+        appUserRepository.delete(user);
+
+        auditService.record(
+                actor,
+                "USER_DELETED",
+                "AppUser",
+                id,
+                "username=" + username
         );
     }
 
@@ -229,7 +256,7 @@ public class UserService {
         if (activeAdministrators <= 1) {
             throw new IllegalStateException(
                     "No puedes desactivar o retirar el perfil "
-                            + "del último administrador activo"
+                            + "del Ãºltimo administrador activo"
             );
         }
     }

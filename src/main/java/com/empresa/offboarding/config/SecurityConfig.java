@@ -39,6 +39,11 @@ public class SecurityConfig {
                         /*
                          * Administracion de usuarios locales.
                          */
+                        .requestMatchers(
+                                "/api/notification-recipients",
+                                "/api/notification-recipients/**"
+                        ).hasRole("ADMIN")
+
                         .requestMatchers("/api/users/**")
                             .hasRole("ADMIN")
 

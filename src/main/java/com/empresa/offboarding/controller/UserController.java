@@ -66,4 +66,16 @@ public class UserController {
                 principal.getName()
         );
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Long id,
+            Principal principal
+    ) {
+        userService.delete(
+                id,
+                principal.getName()
+        );
+    }
 }

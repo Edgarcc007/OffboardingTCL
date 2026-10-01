@@ -1,0 +1,22 @@
+:root{font-family:Segoe UI,Arial,sans-serif;color:#183044;background:#eef2f6}
+*{box-sizing:border-box}body{margin:0}.top{background:#17365d;color:white;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;gap:15px}.top a{color:white}
+h1{font-size:25px;margin:6px 0}h2{font-size:18px;margin:0 0 12px}
+main{max-width:1550px;margin:auto;padding:20px}
+fieldset{border:0;padding:0;margin:0;min-width:0}legend{font-weight:700;margin-bottom:12px}
+.card{background:white;border:1px solid #d6dfe7;border-radius:10px;padding:18px;margin-bottom:15px}
+.notice{background:#fff1c7;border-left:5px solid #bc8400;padding:12px}
+.muted,small{color:#586b7c}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:14px 0}
+.grid label{display:flex;flex-direction:column;gap:5px}.grid .check,.check{display:flex;flex-direction:row;gap:8px;align-items:center}
+input:not([type=checkbox]),select,textarea{width:100%;padding:9px;border:1px solid #aab8c6;border-radius:5px;font:inherit}
+input[readonly]{background:#f0f4f8}textarea{min-height:75px;resize:vertical}input[type=checkbox]{width:18px;height:18px}
+button{padding:9px 13px;font:inherit;cursor:pointer;background:white;border:1px solid #aab8c6;border-radius:5px}
+button.primary{background:#1762a3;border-color:#1762a3;color:white}button:disabled{opacity:.5;cursor:not-allowed}
+.layout{display:grid;grid-template-columns:minmax(290px,34%) 1fr;gap:18px}
+.rows{max-height:650px;overflow:auto}.person{display:grid;grid-template-columns:25px 1fr;gap:8px;padding:10px;border-bottom:1px solid #e2e8ed}
+.person.active{background:#e7f2ff}.person.excluded{opacity:.6}.person button{text-align:left;border:0;background:transparent;padding:2px}
+.person strong,.person span{display:block}.state{font-size:13px;margin-top:5px}.bad{color:#a52020}.ok{color:#176c39}.pending{color:#8a5800}
+#message{white-space:pre-wrap;min-height:22px}#issues ul{padding-left:22px}
+#summary{font-weight:600}.source{font-size:12px;color:#6a487e}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.rows{max-height:320px}}
+@media(max-width:550px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}main{padding:12px}}

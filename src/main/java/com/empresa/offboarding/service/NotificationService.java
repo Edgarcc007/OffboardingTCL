@@ -207,4 +207,17 @@ public class NotificationService {
         sb.append("</html>");
         return sb.toString();
     }
+
+    /* BULK_LOCAL_EMAIL_BODY_R3 */
+    public String buildBulkOffboardingBody(
+            List<Map<String,Object>> data, String subject
+    ) {
+        if (data == null || data.isEmpty()) {
+            throw new IllegalArgumentException("No hay registros para el resumen.");
+        }
+        String fecha = LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return buildEmailBody(
+                buildHtmlTableLocally(data), subject, fecha, data.size());
+    }
 }

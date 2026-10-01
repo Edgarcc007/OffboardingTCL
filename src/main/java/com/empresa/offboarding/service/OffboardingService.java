@@ -58,8 +58,22 @@ public class OffboardingService {
 
     @Transactional
     public OffboardingResponse create(
-            CreateOffboardingRequest request,
-            String requestedBy
+            CreateOffboardingRequest request, String requestedBy
+    ) {
+        return createInternal(request, requestedBy, true);
+    }
+
+    /* BULK_CREATION_WITHOUT_INDIVIDUAL_MAIL_R3 */
+    @Transactional
+    public OffboardingResponse createForBulk(
+            CreateOffboardingRequest request, String requestedBy
+    ) {
+        return createInternal(request, requestedBy, false);
+    }
+
+    private OffboardingResponse createInternal(
+            CreateOffboardingRequest request, String requestedBy,
+            boolean sendIndividualNotification
     ) {
         Set<AccessType> accesses =
                 request.accesses() == null
@@ -312,7 +326,9 @@ public class OffboardingService {
                         + saved.getTasks().size()
         );
 
-        /* -- Notificacion automatica por correo -- */
+        if (sendIndividualNotification) {
+/* BULK_AFTER_COMMIT_NOTIFICATION */
+        Runnable sendNotification = () -> {
         try {
             String recipients = recipientService.getActiveRecipientsAsString();
 
@@ -353,7 +369,23 @@ public class OffboardingService {
             log.warn("No se pudo enviar notificacion para caso {}: {}",
                     saved.getCaseNumber(), e.getMessage());
         }
+        };
+        if (org.springframework.transaction.support.TransactionSynchronizationManager
+                .isSynchronizationActive()) {
+            org.springframework.transaction.support.TransactionSynchronizationManager
+                .registerSynchronization(
+                    new org.springframework.transaction.support.TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            sendNotification.run();
+                        }
+                    });
+        } else {
+            sendNotification.run();
+        }
 
+        
+        }
         return toResponse(saved);
     }
 
@@ -426,7 +458,7 @@ public class OffboardingService {
     ) {
         OffboardingTask task = requireTask(taskId);
 
-        if (!isAssetTask(task) && !isAccessControlTask(task)) {
+        if (!r4Admin() && !isAssetTask(task) && !isAccessControlTask(task)) {
             throw new IllegalStateException(
                     "Administrative validation only applies "
                             + "to assets and access control tasks"
@@ -443,13 +475,7 @@ public class OffboardingService {
 
         String completedBy = task.getCompletedBy();
 
-        Authentication valAuth = SecurityContextHolder.getContext().getAuthentication();
-        boolean validatorIsAdmin = valAuth != null
-                && valAuth.getAuthorities().stream()
-                    .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
-
-        if (!validatorIsAdmin
-                && validatedBy != null
+        if (!r4Admin() && validatedBy != null
                 && completedBy != null
                 && validatedBy.equalsIgnoreCase(
                     completedBy)) {
@@ -476,11 +502,7 @@ public class OffboardingService {
         String inventoryReference =
                 cleanNullable(request.inventoryReference());
 
-        if (inventoryReference == null) {
-            throw new IllegalArgumentException(
-                    "Debes indicar una referencia de la validacion"
-            );
-        }
+        /* OPTIONAL_VALIDATION_REFERENCE_R3: null representa referencia no proporcionada. */
 
         String validationComments =
                 cleanNullable(
@@ -531,6 +553,10 @@ public class OffboardingService {
             ReopenTaskRequest request,
             String reopenedBy
     ) {
+        if (!r4Admin()) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                "Solo ADMIN puede reabrir tareas.");
+        }
         OffboardingTask task = requireTask(taskId);
 
         if (task.getStatus()
@@ -735,16 +761,9 @@ public class OffboardingService {
         return ACCESS_CONTROL_SYSTEMS.contains(systemName);
     }
 
-    private boolean isAssetTask(
-            OffboardingTask task
-    ) {
-        String systemName =
-                task.getSystemName();
-
-        return "Equipo de c\u00f3mputo".equals(systemName)
-                || "Telefon\u00eda".equals(systemName)
-                || "Activos asignados".equals(systemName)
-                || "Telefonia".equals(systemName);
+    private boolean isAssetTask(OffboardingTask task) {
+        // R7_ASSET_NAMES
+        return AssetSystemNames.isAsset(task.getSystemName());
     }
 
     private boolean isTaskClosed(
@@ -845,5 +864,28 @@ public class OffboardingService {
                 task.getValidatedAt(),
                 task.getValidatedBy()
         );
+    }
+
+    /* R4_TASK_POLICY */
+    private boolean r4Admin() {
+        Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated()
+            && authentication.getAuthorities().stream()
+                .anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+    }
+
+    /* R8_REFRESH_AFTER_ADMIN_TASK */
+    @Transactional
+    public TaskResponse refreshAfterAdministrativeTask(Long caseId,Long taskId) {
+        OffboardingCase employeeCase=requireCase(caseId);
+        if(employeeCase.getStatus()!=CaseStatus.CANCELADA)
+            updateCaseStatus(employeeCase);
+
+        return employeeCase.getTasks().stream()
+            .filter(task->taskId.equals(task.getId()))
+            .map(this::toTaskResponse)
+            .findFirst()
+            .orElseThrow(()->new EntityNotFoundException("Task unavailable."));
     }
 }

@@ -197,6 +197,10 @@ public class NotificationService {
           .append(totalRegistros).append("</strong>\n");
         sb.append("      </div>\n");
         sb.append("      ").append(htmlTable).append("\n");
+        sb.append("      <p style=\"margin-top:20px;font-size:14px;\">")
+          .append("<a href=\"http://offboarding-control/login.html\" ")
+          .append("style=\"color:#1a3c6e;font-weight:bold;\">")
+          .append("Ingresar al portal de Offboarding</a></p>\n");
         sb.append("    </div>\n");
         sb.append("    <div class=\"footer\">\n");
         sb.append("      Generado automaticamente por OffboardingTCL ");
